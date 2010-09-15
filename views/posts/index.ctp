@@ -51,7 +51,7 @@
 					echo $this->element(
 						'modules/comment',
 						array(
-							'plugin' => 'comment',
+							'plugin' => 'comments',
 							'content' => $post,
 							'modelName' => 'Post',
 							'foreign_id' => $post['Post']['id']

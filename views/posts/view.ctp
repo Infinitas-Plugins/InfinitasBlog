@@ -16,71 +16,54 @@
      * @subpackage    blog.views.posts.view
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
-?>
-<h1><?php echo $post['Post']['title']; ?></h1>
-<p>
-	<small>
-		<?php
-			foreach(array('comments', 'date', 'views') as $param) {
-				switch($param) {
-					case 'date':
-						$temp[] = sprintf('%s: %s', __('Created', true), $this->Time->{$this->Blog->dateFormat}($post['Post']['created']));
-						break;
 
-					case 'comments':
-						$temp[] = sprintf('%s ( %s )', __('Comments', true), $post['Post']['comment_count']);
-						break;
+	$eventData = $this->Event->trigger('blogBeforeContentRender', array('_this' => $this, 'post' => $post));
+	?><div class="beforeEvent"><?php
+		foreach((array)$eventData['blogBeforeContentRender'] as $_plugin => $_data){
+			echo '<div class="'.$_plugin.'">'.$_data.'</div>';
+		}
+		?></div>
+		<div class="wrapper">
+			<div class="introduction <?php echo $this->layout; ?>">
+				<h2>
+					<?php
+						$eventData = $this->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $post));
+						$urlArray = current($eventData['slugUrl']);
+						echo $this->Html->link(
+							$post['Post']['title'],
+							$urlArray
+						);
+					?><span><?php echo $this->Time->niceShort($post['Post']['created']); ?></span>
+				</h2>
+				<div class="content <?php echo $this->layout; ?>">
+					<p><?php echo $this->Text->truncate($post['Post']['body'], 200, array('html' => true)); ?></p>
+				</div>
+			</div>
+			<?php
+				echo $this->element(
+					'modules/tags',
+					array(
+						'plugin' => 'blog',
+						'post' => $post
+					)
+				);
 
-					case 'views':
-						$temp[] = sprintf('%s ( %s )', __('Views', true), $post['Post']['views']);
-						break;
-				} // switch
-			}
-			if (!empty($temp)) {
-				echo implode(' :: ', $temp);
-			}
-		?>
-	</small>
-</p>
-<?php
-    if (
-        Configure::read('Blog.depreciate') &&
-        date( 'Y-m-d H:i:s', strtotime('- '.Configure::read( 'Blog.depreciate'))) > $post['Post']['modified']
-        ){
-        ?><h2><?php __('Depreciated'); ?> </h2><?php
-        echo __( 'This post is old, so the information may be a bit out-dated.', true );
-    }
-    echo $post['Post']['body'];
-
-    echo $this->Blog->pagination($post);
-
-    if (false && Configure::read('Blog.allow_comments')){
-        if (
-            !Configure::read('Blog.allow_comments') ||
-            date('Y-m-d H:i:s', strtotime('- '.Configure::read('Comments.time_limit'))) < $post['Post']['modified']
-        ){
-            ?>
-                <div id="comments">
-                    <?php
-                        if (empty($post['Comment'])){
-                            ?><h2><?php __('No Comments'); ?> </h2><?php
-                            echo '<p>'.__('There are no comments at this time, would you like to be the first?', true).'</p>';
-                        }
-                        else{
-                            foreach($post['Comment'] as $comment){
-                                $this->CommentLayout->setData($comment);
-                                echo $this->CommentLayout->showComment();
-                            }
-                        }
-
-                        echo $this->element('global/comment_add', array('fk' => $post['Post']['id']));
-                    ?>
-                </div>
-            <?php
-        }
-        else{
-            ?><h2><?php __('Closed for Comments'); ?> </h2><?php
-            echo __('Sorry, the comments for this post are closed. Why not check out some of our newer posts.', true);
-        }
-    }
-?>
+				echo $this->element(
+					'modules/comment',
+					array(
+						'plugin' => 'comments',
+						'content' => $post,
+						'modelName' => 'Post',
+						'foreign_id' => $post['Post']['id']
+					)
+				);
+			?>
+		</div>
+		<div class="afterEvent">
+			<?php
+				$eventData = $this->Event->trigger('blogAfterContentRender', array('_this' => $this, 'post' => $post));
+				foreach((array)$eventData['blogAfterContentRender'] as $_plugin => $_data){
+					echo '<div class="'.$_plugin.'">'.$_data.'</div>';
+				}
+			?>
+		</div>
