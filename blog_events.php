@@ -14,29 +14,17 @@
 				array(
 					'name' => 'warning no categories',
 					'type' => 'warning',
-					'url' => array(
-						'plugin' => 'categories',
-						'controlelr' => 'categories',
-						'action' => 'add'
-					)
+					'url' => array('plugin' => 'categories', 'controlelr' => 'categories', 'action' => 'add')
 				),
 				array(
 					'name' => 'Testing: error',
 					'type' => 'error',
-					'url' => array(
-						'plugin' => 'categories',
-						'controlelr' => 'categories',
-						'action' => 'index'
-					)
+					'url' => array('plugin' => 'categories', 'controlelr' => 'categories', 'action' => 'index')
 				),
 				array(
 					'name' => 'Testing: info',
 					'type' => 'info',
-					'url' => array(
-						'plugin' => 'categories',
-						'controlelr' => 'categories',
-						'action' => 'add'
-					)
+					'url' => array('plugin' => 'categories', 'controlelr' => 'categories', 'action' => 'add')
 				)
 			);
 		}
@@ -60,11 +48,7 @@
 			return array(
 				'name' => 'blog',
 				'config' => array(
-					'duration' => 3600,
-					'probability' => 100,
-					'prefix' => 'blog.',
-					'lock' => false,
-					'serialize' => true
+					'prefix' => 'blog.'
 				)
 			);
 		}
