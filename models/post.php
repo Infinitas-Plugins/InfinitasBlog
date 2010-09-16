@@ -55,16 +55,6 @@
 		);
 
 		public $belongsTo = array(
-			'Locker' => array(
-				'className' => 'Management.User',
-				'foreignKey' => 'locked_by',
-				'conditions' => '',
-				'fields' => array(
-					'Locker.id',
-					'Locker.username'
-				),
-				'order' => ''
-			),
 			'ParentPost' => array(
 				'className' => 'Blog.Post',
 				'foreignKey' => 'parent_id',
