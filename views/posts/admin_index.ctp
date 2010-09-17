@@ -88,7 +88,7 @@
                         <td>
                             <?php
                                 echo $this->Infinitas->status($post['Post']['active'], $post['Post']['id']),
-                                    $this->Infinitas->locked($post, 'Post');
+                                    $this->Locked->display($post);
                             ?>
                         </td>
                     </tr>

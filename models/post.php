@@ -22,6 +22,8 @@
 	class Post extends BlogAppModel {
 		public $name = 'Post';
 
+		public $lockable = true;
+
 		/**
 		 * always sort posts so newest is at the top
 		 */
