@@ -68,12 +68,14 @@
 				$post_ids = Set::extract('/Tagged/foreign_key', $post_ids);
 			}
 
+			$this->Post->virtualField['body'] = 'LEFT(`Post`.`body`, 250)';
+
 			$paginate = array(
 				'fields' => array(
 					'Post.id',
 					'Post.title',
 					'Post.slug',
-					'Post.body',
+					'body',
 					'Post.comment_count',
 					'Post.views',
 					'Post.created',
@@ -305,36 +307,14 @@
 		 * @return void
 		 */
 		public function admin_add() {
-			if (!empty($this->data)) {
-				$this->Post->create();
-				if ($this->Post->save($this->data)) {
-					$this->Session->setFlash('Your post has been saved.');
-					$this->redirect(array('action' => 'index'));
-				}
-			}
+			parent::admin_add();
 
 			$parents = $this->Post->getParentPosts();
 			$this->set(compact('tags', 'parents'));
 		}
 
 		public function admin_edit($id = null) {
-			if (!$id) {
-				$this->Session->setFlash(__('That post could not be found', true), true);
-				$this->redirect($this->referer());
-			}
-
-			if (!empty($this->data)) {
-				if ($this->Post->save($this->data)) {
-					$this->Session->setFlash(__('Your post has been saved.', true));
-					$this->redirect(array('action' => 'index'));
-				}
-
-				$this->Session->setFlash(__('Your post could not be saved.', true));
-			}
-
-			if ($id && empty($this->data)) {
-				$this->data = $this->Post->read(null, $id);
-			}
+			parent::admin_edit($id);
 
 			$parents = $this->Post->getParentPosts();
 			$this->set(compact('parents'));
@@ -353,9 +333,9 @@
 				array(
 					'conditions' => array(
 						'Post.slug' => $slug
-						)
 					)
-				);
+				)
+			);
 
 			$this->set(compact('post'));
 			$this->render('view');
