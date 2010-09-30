@@ -23,5 +23,6 @@
 	 $config['Blog'] = array(
 		 'allow_comments' => true,
 		 'allow_ratings' => true,
-		 'depreciate' => '6 months'
+		 'depreciate' => '6 months', // the time before the post is marked as old
+		 'preview' => 400 // the length of the text to show on index pages
 	 );

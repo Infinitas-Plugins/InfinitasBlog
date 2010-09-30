@@ -68,7 +68,7 @@
 				$post_ids = Set::extract('/Tagged/foreign_key', $post_ids);
 			}
 
-			$this->Post->virtualField['body'] = 'LEFT(`Post`.`body`, 250)';
+			$this->Post->virtualField['body'] = sprintf('LEFT(`Post`.`body`, %s)', Configure::read('Blog.preview') + 20);
 
 			$paginate = array(
 				'fields' => array(
