@@ -60,6 +60,9 @@
 			if(!isset($data['type'])){
 				$data['type'] = 'posts';
 			}
+
+			$data['data']['Post'] = isset($data['data']['Post']) ? $data['data']['Post'] : $data['data'];
+			
 			switch($data['type']){
 				case 'posts':
 					return array(
