@@ -281,7 +281,7 @@
 		 */
 		public function admin_index() {
 			$this->paginate['Post'] = array(
-				'contain' => array('Tag', 'Locker', 'Category')
+				'contain' => array('Tag', 'Category')
 			);
 			$posts = $this->paginate(null, $this->Filter->filter);
 
@@ -333,12 +333,7 @@
 			}
 
 			if ($id && empty($this->data)) {
-				$this->Post->recursive = 1;
-				$this->data = $this->Post->lock(null, $id);
-				if ($this->data === false) {
-					$this->Session->setFlash(__('The post is currently locked', true));
-					$this->redirect($this->referer());
-				}
+				$this->data = $this->Post->read(null, $id);
 			}
 
 			$parents = $this->Post->getParentPosts();
