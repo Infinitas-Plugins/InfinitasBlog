@@ -45,7 +45,6 @@
 			), '</h4>';
 
 			if (!empty($months)){
-				sort($months);
 				echo '<ul>';
 					foreach($months as $month){
 						echo '<li>', $this->Html->link(

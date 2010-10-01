@@ -70,6 +70,11 @@
 			),
 		);
 
+		public $virtualFields = array(
+			'created_year' => 'EXTRACT(YEAR FROM `Post`.`created`)',
+			'created_month' => 'EXTRACT(MONTH FROM `Post`.`created`)'
+		);
+
 		public function getParentPosts(){
 			return $this->find(
 				'list',
@@ -148,59 +153,40 @@
 		public function getDates() {
 			$dates = Cache::read('posts_dates');
 			if ($dates !== false) {
-				return $dates;
+				//return $dates;
 			}
 
-			$years = Cache::read('posts_dates_years');
-			if ($years === false) {
-				$years = $this->find(
-					'all',
-					array(
-						'fields' => array(
-							'DISTINCT year(`Post`.`created`) as year'
-						),
-						'conditions' => array(
-							'Post.active' => 1
-						),
-						'contain' => false
+			$dates = $this->find(
+				'all',
+				array(
+					'fields' => array(
+						'created_year',
+						'created_month'
+					),
+					'group' => array(
+						'created_year',
+						'created_month'
 					)
-				);
+				)
+			);
 
-				$years = Set::extract('{n}.{n}.year', $years);
-				Cache::write('posts_dates_years', $years, 'blog');
+			if(empty($dates)){
+				return array();
 			}
 
-			if (!is_array($years)) {
-				return false;
+			$years = array_flip(array_flip(Set::extract('/Post/created_year', $dates)));
+			rsort($years);
+
+			$return = array();
+			foreach($years as $year){
+				$months = Set::extract('/Post[created_year=2010]/created_month', $dates);
+				rsort($months);
+				$return[$year] = array_flip(array_flip($months));
 			}
+			
+			Cache::write('posts_dates', $return, 'blog');
 
-			foreach($years as $year) {
-				$months = $this->find(
-					'all',
-					array(
-						'fields' => array(
-							'DISTINCT month( Post.created ) as month'
-						),
-						'conditions' => array(
-							'Post.active' => 1
-						),
-						'contain' => false
-					)
-				);
-
-				$months = Set::extract('{n}.{n}.month', $months);
-
-				$m = array();
-				foreach($months as $month) {
-					$m[] = $month[0];
-				}
-
-				$dates[$year[0]] = $m;
-			}
-
-			Cache::write('posts_dates', $dates, 'blog');
-
-			return $dates;
+			return $return;
 		}
 
 		/**
