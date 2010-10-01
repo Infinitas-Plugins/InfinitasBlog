@@ -21,25 +21,22 @@
      */
 
 	if(!isset($postDates)){
-		$postDates = Cache::read('posts_dates', 'blog');
-
-		if($postDates === false){
-			$postDates = ClassRegistry::init('Blog.Post')->getDates();
-		}
+		$postDates = ClassRegistry::init('Blog.Post')->getDates();
 	}
 
 	if(empty($postDates)){
-		echo __('No popular posts found', true);
+		echo __('No posts found', true);
 		return;
 	}
 ?>
+<h3><?php echo __('Browse By Date', true); ?></h3>
 <ul>
 	<?php
 		foreach($postDates as $year => $months){
 			echo '<li><h4>', $this->Html->link(
 				$year,
 				array(
-					'plugin' => 'blogs',
+					'plugin' => 'blog',
 					'controller' => 'posts',
 					'action'  => 'index',
 					'all',
@@ -54,7 +51,7 @@
 						echo '<li>', $this->Html->link(
 							date('F', mktime(0,0,0,$month)),
 							array(
-								'plugin' => 'blogs',
+								'plugin' => 'blog',
 								'controller' => 'posts',
 								'action'  => 'index',
 								'all',
