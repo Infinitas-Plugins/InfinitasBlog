@@ -55,17 +55,53 @@
 		 * @param string $month used to find posts in a year and month needs year
 		 * @return
 		 */
-		public function index($tag = null, $year = null, $month = null) {
-			$post_ids = '';
-			if (isset($tag) && strtolower($tag) != 'all') {
-				$post_ids = $this->Post->Tagged->find(
-					'tagged',
+		public function index() {
+			$titleForLayout = $year = $month = $slug = null;
+
+			if(isset($this->params['year'])){
+				$year = $this->params['year'];
+				$titleForLayout = sprintf(__('Posts for the year %s', true), $year);
+				if(isset($this->params['pass'][0])){
+					$month = substr((int)$this->params['pass'][0], 0, 2);
+					$titleForLayout = sprintf(__('Posts in %s, %s', true), __(date('F', mktime(0, 0, 0, $month)), true), $year);
+				}
+			}
+			
+			else if(isset($this->params['tag'])){
+				$tag = $this->params['tag'];
+				if(empty($titleForLayout)){
+					$titleForLayout = __('Posts', true);
+				}
+				$titleForLayout = sprintf(__('%s related to %s', true), $titleForLayout, $tag);
+			}
+
+			$this->set('title_for_layout', $titleForLayout);
+			
+			$post_ids = array();
+			if (isset($tag)) {
+				$tag_id = ClassRegistry::init('Tags.Tag')->find(
+					'list',
 					array(
-						'by' => $tag,
-						//'model' => 'Blog.Post'
+						'fields' => array(
+							'Tag.id', 'Tag.id'
+						),
+						'conditions' => array(
+							'Tag.name' => $tag
+						)
 					)
 				);
-				$post_ids = Set::extract('/Tagged/foreign_key', $post_ids);
+
+				$post_ids = $this->Post->Tagged->find(
+					'list',
+					array(
+						'fields' => array(
+							'Tagged.foreign_key', 'Tagged.foreign_key'
+						),
+						'conditions' => array(
+							'Tagged.tag_id' => $tag_id
+						)
+					)
+				);
 			}
 
 			$this->Post->virtualField['body'] = sprintf('LEFT(`Post`.`body`, %s)', Configure::read('Blog.preview') + 20);
@@ -94,8 +130,7 @@
 					'Tag',
 					'ChildPost' => array(
 						'Category'
-					),
-					'PostComment'
+					)
 				)
 			);
 
