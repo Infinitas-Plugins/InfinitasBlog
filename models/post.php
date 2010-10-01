@@ -157,7 +157,7 @@
 					'all',
 					array(
 						'fields' => array(
-							'DISTINCT year( Post.created ) as year'
+							'DISTINCT year(`Post`.`created`) as year'
 						),
 						'conditions' => array(
 							'Post.active' => 1
@@ -442,7 +442,7 @@
 			}
 
 			$paginate['conditions'] += array(
-				$model.$created.' BETWEEN ? AND ?' => array($begin,$end)
+				$model . '.' . $created.' BETWEEN ? AND ?' => array($begin,$end)
 			);
 
 			return $paginate;
