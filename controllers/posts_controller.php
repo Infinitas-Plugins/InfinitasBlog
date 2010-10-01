@@ -154,19 +154,6 @@
 						'Post.active' => 1
 					),
 					'contain' => array(
-						'Comment' => array(
-							'fields' => array(
-								'Comment.id',
-								'Comment.name',
-								'Comment.email',
-								'Comment.website',
-								'Comment.comment',
-								'Comment.created'
-							),
-							'conditions' => array(
-								'Comment.active' => 1
-							)
-						),
 						'Category' => array(
 							'fields' => array(
 								'Category.id',
