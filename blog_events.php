@@ -74,6 +74,34 @@
 						'slug' => $data['data']['Post']['slug']
 					);
 					break;
+
+				case 'year':
+					return array(
+						'plugin' => 'blog',
+						'controller' => 'posts',
+						'action' => 'index',
+						'year' => $data['data']['year']
+					);
+					break;
+
+				case 'year_month':
+					return array(
+						'plugin' => 'blog',
+						'controller' => 'posts',
+						'action' => 'index',
+						'year' => $data['data']['year'],
+						$data['data']['month']
+					);
+					break;
+
+				case 'tag':
+					return array(
+						'plugin' => 'blog',
+						'controller' => 'posts',
+						'action' => 'index',
+						'tag' => $data['data']['tag']
+					);
+					break;
 			} // switch
 		}
 
