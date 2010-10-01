@@ -41,10 +41,11 @@
 				</div>
 				<?php
 					echo $this->element(
-						'modules/tags',
+						'modules/post_tag_cloud',
 						array(
 							'plugin' => 'blog',
-							'post' => $post
+							'tags' => $post['Tag'],
+							'title' => 'Tags'
 						)
 					);
 					
