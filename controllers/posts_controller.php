@@ -154,27 +154,10 @@
 						'Post.active' => 1
 					),
 					'contain' => array(
-						'Category' => array(
-							'fields' => array(
-								'Category.id',
-								'Category.title',
-								'Category.slug'
-							)
-						),
-						'ChildPost' => array(
-							'fields' => array(
-								'ChildPost.id',
-								'ChildPost.title',
-								'ChildPost.slug',
-							)
-						),
-						'ParentPost' => array(
-							'fields' => array(
-								'ParentPost.id',
-								'ParentPost.title',
-								'ParentPost.slug',
-							)
-						)
+						'Category',
+						'ChildPost',
+						'ParentPost',
+						'Tag'
 					)
 				)
 			);
