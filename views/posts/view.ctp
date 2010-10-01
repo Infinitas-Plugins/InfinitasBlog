@@ -33,7 +33,7 @@
 							$post['Post']['title'],
 							$urlArray
 						);
-					?><span><?php echo $this->Time->niceShort($post['Post']['created']); ?></span>
+					?><small><?php echo $this->Time->niceShort($post['Post']['created']); ?></small>
 				</h2>
 				<div class="content <?php echo $this->layout; ?>">
 					<p><?php echo $this->Text->truncate($post['Post']['body'], 200, array('html' => true)); ?></p>
