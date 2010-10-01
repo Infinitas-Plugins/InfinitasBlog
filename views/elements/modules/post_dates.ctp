@@ -28,41 +28,34 @@
 		echo __('No posts found', true);
 		return;
 	}
+
+	$lis = array();
+	foreach($postDates as $year => $months){
+		if (!empty($months)){
+			$_monthsLi = array();
+			foreach($months as $month){
+				$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year_month', 'data' => array('year' => $year, 'month' => $month)));
+				$_monthsLi[] = $this->Html->link(
+					date('F', mktime(0,0,0,$month)),
+					current($url['slugUrl'])
+				);
+			}
+
+			$months = sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $_monthsLi));
+		}
+
+		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year', 'data' => array('year' => $year)));
+
+		$lis[] = sprintf(
+			'<h4>%s</h4>%s',
+			$this->Html->link($year, current($url['slugUrl'])),
+			is_string($months) ? $months : ''
+		);
+	}
 ?>
 <h3><?php echo __('Browse By Date', true); ?></h3>
 <ul>
-	<?php
-		foreach($postDates as $year => $months){
-			echo '<li><h4>', $this->Html->link(
-				$year,
-				array(
-					'plugin' => 'blog',
-					'controller' => 'posts',
-					'action'  => 'index',
-					'all',
-					$year
-				)
-			), '</h4>';
-
-			if (!empty($months)){
-				echo '<ul>';
-					foreach($months as $month){
-						echo '<li>', $this->Html->link(
-							date('F', mktime(0,0,0,$month)),
-							array(
-								'plugin' => 'blog',
-								'controller' => 'posts',
-								'action'  => 'index',
-								'all',
-								$year,
-								$month
-							)
-						), '</li>';
-					}
-				echo '</ul>';
-			}
-
-			echo '</li>';
-		}
-	?>
+	<li>
+		<?php echo implode('</li><li>', $lis); ?>
+	</li>
 </ul>
