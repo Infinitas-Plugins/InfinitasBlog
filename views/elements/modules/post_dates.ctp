@@ -29,8 +29,13 @@
 		return;
 	}
 
+	?><h3><?php echo __('Browse By Date', true); ?></h3><?php
+
 	$lis = array();
 	foreach($postDates as $year => $months){
+		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year', 'data' => array('year' => $year)));
+		echo sprintf('<h4>%s</h4>%s', $this->Html->link($year, current($url['slugUrl'])), is_string($months) ? $months : '');
+		
 		if (!empty($months)){
 			$_monthsLi = array();
 			foreach($months as $month){
@@ -41,21 +46,7 @@
 				);
 			}
 
-			$months = sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $_monthsLi));
+			echo sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $_monthsLi));
 		}
-
-		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year', 'data' => array('year' => $year)));
-
-		$lis[] = sprintf(
-			'<h4>%s</h4>%s',
-			$this->Html->link($year, current($url['slugUrl'])),
-			is_string($months) ? $months : ''
-		);
 	}
 ?>
-<h3><?php echo __('Browse By Date', true); ?></h3>
-<ul>
-	<li>
-		<?php echo implode('</li><li>', $lis); ?>
-	</li>
-</ul>
