@@ -5,7 +5,12 @@
 				'name' => 'Blog',
 				'description' => 'Blogging platform',
 				'icon' => '/blog/img/icon.png',
-				'author' => 'Infinitas'
+				'author' => 'Infinitas',
+				'dashboard' => array(
+					'plugin' => 'blog',
+					'controller' => 'posts',
+					'action' => 'index'
+				)
 			);
 		}
 
