@@ -21,52 +21,32 @@
      */
 
 	if(!isset($postDates)){
-		$postDates = Cache::read('posts_dates', 'blog');
-
-		if($postDates === false){
-			$postDates = ClassRegistry::init('Blog.Post')->getDates();
-		}
+		$postDates = ClassRegistry::init('Blog.Post')->getDates();
 	}
 
 	if(empty($postDates)){
-		echo __('No popular posts found', true);
+		echo __('No posts found', true);
 		return;
 	}
-?>
-<ul>
-	<?php
-		foreach($postDates as $year => $months){
-			echo '<li><h4>', $this->Html->link(
-				$year,
-				array(
-					'plugin' => 'blogs',
-					'controller' => 'posts',
-					'action'  => 'index',
-					'all',
-					$year
-				)
-			), '</h4>';
 
-			if (!empty($months)){
-				sort($months);
-				echo '<ul>';
-					foreach($months as $month){
-						echo '<li>', $this->Html->link(
-							date('F', mktime(0,0,0,$month)),
-							array(
-								'plugin' => 'blogs',
-								'controller' => 'posts',
-								'action'  => 'index',
-								'all',
-								$year,
-								$month
-							)
-						), '</li>';
-					}
-				echo '</ul>';
+	?><h3><?php echo __('Browse By Date', true); ?></h3><?php
+
+	$lis = array();
+	foreach($postDates as $year => $months){
+		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year', 'data' => array('year' => $year)));
+		echo sprintf('<h4>%s</h4>%s', $this->Html->link($year, current($url['slugUrl'])), is_string($months) ? $months : '');
+		
+		if (!empty($months)){
+			$_monthsLi = array();
+			foreach($months as $month){
+				$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year_month', 'data' => array('year' => $year, 'month' => $month)));
+				$_monthsLi[] = $this->Html->link(
+					date('F', mktime(0,0,0,$month)),
+					current($url['slugUrl'])
+				);
 			}
 
-			echo '</li>';
+			echo sprintf('<ul><li>%s</li></ul>', implode('</li><li>', $_monthsLi));
 		}
-	?>
-</ul>
+	}
+?>

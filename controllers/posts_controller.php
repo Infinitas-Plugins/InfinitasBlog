@@ -55,25 +55,63 @@
 		 * @param string $month used to find posts in a year and month needs year
 		 * @return
 		 */
-		public function index($tag = null, $year = null, $month = null) {
-			$post_ids = '';
-			if (isset($tag) && strtolower($tag) != 'all') {
-				$post_ids = $this->Post->Tagged->find(
-					'tagged',
+		public function index() {
+			$titleForLayout = $year = $month = $slug = null;
+
+			if(isset($this->params['year'])){
+				$year = $this->params['year'];
+				$titleForLayout = sprintf(__('Posts for the year %s', true), $year);
+				if(isset($this->params['pass'][0])){
+					$month = substr((int)$this->params['pass'][0], 0, 2);
+					$titleForLayout = sprintf(__('Posts in %s, %s', true), __(date('F', mktime(0, 0, 0, $month)), true), $year);
+				}
+			}
+			
+			else if(isset($this->params['tag'])){
+				$tag = $this->params['tag'];
+				if(empty($titleForLayout)){
+					$titleForLayout = __('Posts', true);
+				}
+				$titleForLayout = sprintf(__('%s related to %s', true), $titleForLayout, $tag);
+			}
+
+			$this->set('title_for_layout', $titleForLayout);
+			
+			$post_ids = array();
+			if (isset($tag)) {
+				$tag_id = ClassRegistry::init('Tags.Tag')->find(
+					'list',
 					array(
-						'by' => $tag,
-						//'model' => 'Blog.Post'
+						'fields' => array(
+							'Tag.id', 'Tag.id'
+						),
+						'conditions' => array(
+							'Tag.name' => $tag
+						)
 					)
 				);
-				$post_ids = Set::extract('/Tagged/foreign_key', $post_ids);
+
+				$post_ids = $this->Post->Tagged->find(
+					'list',
+					array(
+						'fields' => array(
+							'Tagged.foreign_key', 'Tagged.foreign_key'
+						),
+						'conditions' => array(
+							'Tagged.tag_id' => $tag_id
+						)
+					)
+				);
 			}
+
+			$this->Post->virtualField['body'] = sprintf('LEFT(`Post`.`body`, %s)', Configure::read('Blog.preview') + 20);
 
 			$paginate = array(
 				'fields' => array(
 					'Post.id',
 					'Post.title',
 					'Post.slug',
-					'Post.body',
+					'body',
 					'Post.comment_count',
 					'Post.views',
 					'Post.created',
@@ -92,8 +130,7 @@
 					'Tag',
 					'ChildPost' => array(
 						'Category'
-					),
-					'PostComment'
+					)
 				)
 			);
 
@@ -152,40 +189,10 @@
 						'Post.active' => 1
 					),
 					'contain' => array(
-						'Comment' => array(
-							'fields' => array(
-								'Comment.id',
-								'Comment.name',
-								'Comment.email',
-								'Comment.website',
-								'Comment.comment',
-								'Comment.created'
-							),
-							'conditions' => array(
-								'Comment.active' => 1
-							)
-						),
-						'Category' => array(
-							'fields' => array(
-								'Category.id',
-								'Category.title',
-								'Category.slug'
-							)
-						),
-						'ChildPost' => array(
-							'fields' => array(
-								'ChildPost.id',
-								'ChildPost.title',
-								'ChildPost.slug',
-							)
-						),
-						'ParentPost' => array(
-							'fields' => array(
-								'ParentPost.id',
-								'ParentPost.title',
-								'ParentPost.slug',
-							)
-						)
+						'Category',
+						'ChildPost',
+						'ParentPost',
+						'Tag'
 					)
 				)
 			);
@@ -281,7 +288,7 @@
 		 */
 		public function admin_index() {
 			$this->paginate['Post'] = array(
-				'contain' => array('Tag', 'Locker', 'Category')
+				'contain' => array('Tag', 'Category')
 			);
 			$posts = $this->paginate(null, $this->Filter->filter);
 
@@ -305,41 +312,14 @@
 		 * @return void
 		 */
 		public function admin_add() {
-			if (!empty($this->data)) {
-				$this->Post->create();
-				if ($this->Post->save($this->data)) {
-					$this->Session->setFlash('Your post has been saved.');
-					$this->redirect(array('action' => 'index'));
-				}
-			}
+			parent::admin_add();
 
 			$parents = $this->Post->getParentPosts();
 			$this->set(compact('tags', 'parents'));
 		}
 
 		public function admin_edit($id = null) {
-			if (!$id) {
-				$this->Session->setFlash(__('That post could not be found', true), true);
-				$this->redirect($this->referer());
-			}
-
-			if (!empty($this->data)) {
-				if ($this->Post->save($this->data)) {
-					$this->Session->setFlash(__('Your post has been saved.', true));
-					$this->redirect(array('action' => 'index'));
-				}
-
-				$this->Session->setFlash(__('Your post could not be saved.', true));
-			}
-
-			if ($id && empty($this->data)) {
-				$this->Post->recursive = 1;
-				$this->data = $this->Post->lock(null, $id);
-				if ($this->data === false) {
-					$this->Session->setFlash(__('The post is currently locked', true));
-					$this->redirect($this->referer());
-				}
-			}
+			parent::admin_edit($id);
 
 			$parents = $this->Post->getParentPosts();
 			$this->set(compact('parents'));
@@ -358,9 +338,9 @@
 				array(
 					'conditions' => array(
 						'Post.slug' => $slug
-						)
 					)
-				);
+				)
+			);
 
 			$this->set(compact('post'));
 			$this->render('view');

@@ -20,14 +20,23 @@
 	 * Redistributions of files must retain the above copyright notice.
 	 */
 
-	 $config['Blog'] = array(
-		 'allow_comments' => true,
-		 'allow_ratings' => true,
-		 'depreciate' => '6 months', // the time before the post is marked as old
-		 'preview' => 400, // the length of the text to show on index pages
-		 'before' => array(
-		 ),
-		 'after' => array(
-			 'view_count'
-		 )
-	 );
+	$popularPosts = ClassRegistry::init('Blog.Post')->getMostViewed($config['limit']);
+?>
+<h4><?php echo __('Popular Posts', true); ?></h4>
+<?php
+	$links = array();
+	foreach($popularPosts as $post){
+		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $post));
+		$links[] = $this->Html->link(
+			$this->Text->truncate(strip_tags($post['Post']['title']), 75),
+			current($url['slugUrl']),
+			array(
+				'title' => $post['Post']['title']
+			)
+		);
+	}
+
+	if(!empty($links)){
+		?><ul class="popularPosts"><li><?php echo implode('</li><li>', $links); ?></li></ul><?php
+	}
+?>

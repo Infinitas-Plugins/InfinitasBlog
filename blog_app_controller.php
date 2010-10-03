@@ -37,12 +37,6 @@
 		 */
 		public function beforeFilter() {
 			parent::beforeFilter();
-
-			$this->set('postLatest', ClassRegistry::init('Blog.Post')->getLatest());
-			$this->set('postPending', ClassRegistry::init('Blog.Post')->getPending());
-			$this->set('postPopular', ClassRegistry::init('Blog.Post')->getPopular());
-
-			$this->set('commentCount', ClassRegistry::init('Comment.Comment')->getCounts('Post'));
 		}
 
 		/**

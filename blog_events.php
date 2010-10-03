@@ -60,6 +60,9 @@
 			if(!isset($data['type'])){
 				$data['type'] = 'posts';
 			}
+
+			$data['data']['Post'] = isset($data['data']['Post']) ? $data['data']['Post'] : $data['data'];
+			
 			switch($data['type']){
 				case 'posts':
 					return array(
@@ -69,6 +72,34 @@
 						'id' => $data['data']['Post']['id'],
 						'category' => isset($data['data']['Category']['slug']) ? $data['data']['Category']['slug'] : 'news-feed',
 						'slug' => $data['data']['Post']['slug']
+					);
+					break;
+
+				case 'year':
+					return array(
+						'plugin' => 'blog',
+						'controller' => 'posts',
+						'action' => 'index',
+						'year' => $data['data']['year']
+					);
+					break;
+
+				case 'year_month':
+					return array(
+						'plugin' => 'blog',
+						'controller' => 'posts',
+						'action' => 'index',
+						'year' => $data['data']['year'],
+						$data['data']['month']
+					);
+					break;
+
+				case 'tag':
+					return array(
+						'plugin' => 'blog',
+						'controller' => 'posts',
+						'action' => 'index',
+						'tag' => $data['data']['tag']
 					);
 					break;
 			} // switch
