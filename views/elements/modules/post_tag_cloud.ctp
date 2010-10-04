@@ -7,6 +7,7 @@
 		
 		// format is different of views / the find above
 		if(!isset($tags[0]['Tag'])){
+			$_tags = array();
 			foreach($tags as $tag){
 				$_tags[]['Tag'] = $tag;
 			}
