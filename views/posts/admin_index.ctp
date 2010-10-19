@@ -39,19 +39,16 @@
                         'class' => 'first',
                         'style' => 'width:25px;'
                     ),
-                    $this->Paginator->sort('title') => array(
-                        'style' => 'width:150px;'
-                    ),
-                    __('Introduction', true),
+                    $this->Paginator->sort('title'),
                     $paginator->sort(__('Category', true), 'Category.name') => array(
-                        'style' => 'width:150px;'
+                        'style' => 'width:130px;'
                     ),
                     __('Tags', true),
                     $paginator->sort('Comments','comment_count') => array(
                         'style' => 'width:50px;'
                     ),
                     $paginator->sort('views') => array(
-                        'style' => 'width:50px;'
+                        'style' => 'width:30px;'
                     ),
                     __('Status', true) => array(
                         'class' => 'actions'
@@ -66,7 +63,6 @@
                         <td title="<?php echo $post['Post']['slug']; ?>">
                             <?php echo $this->Html->link( $post['Post']['title'], array( 'action' => 'edit', $post['Post']['id'] ) ); ?>
                         </td>
-                        <td><?php echo $this->Text->truncate(strip_tags($post['Post']['body'])); ?>&nbsp;</td>
                         <td>
 							<?php
 								if(isset($post['Category']['title'])) {
