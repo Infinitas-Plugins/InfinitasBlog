@@ -61,7 +61,10 @@
                     <tr class="<?php echo $this->Blog->rowClass(); ?>">
                         <td><?php echo $this->Form->checkbox( $post['Post']['id'] ); ?>&nbsp;</td>
                         <td title="<?php echo $post['Post']['slug']; ?>">
-                            <?php echo $this->Html->link( $post['Post']['title'], array( 'action' => 'edit', $post['Post']['id'] ) ); ?>
+                            <?php
+								echo $this->Html->link($post['Post']['title'], array('action' => 'edit', $post['Post']['id']));
+								echo $this->Html->adminPreview($post['Post']);
+							?>
                         </td>
                         <td>
 							<?php
