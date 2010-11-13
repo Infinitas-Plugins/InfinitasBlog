@@ -161,7 +161,7 @@
 				$this->redirect($this->referer());
 			}
 
-			$post = $this->Post->getPostForView(
+			$post = $this->Post->getViewData(
 				array(
 					'Post.id' => $this->Post->getContentId($this->params['slug']),
 					'Post.active' => 1
@@ -178,23 +178,6 @@
 
 			$this->set(compact('post'));
 			$this->set('title_for_layout', $post['Post']['slug']);
-		}
-
-		public function preview($id = null){
-			if(!($id || $this->Session->read('Auth.User.group_id') === 1)){
-				$this->Session->setFlash('No post was found', true);
-				$this->redirect($this->referer());
-			}
-			
-			$post = $this->Post->getPostForView(
-				array(
-					'Post.id' => $id,
-					'Post.active' => 1
-				)
-			);
-
-			$this->set(compact('post'));
-			$this->render('view');
 		}
 
 		/**

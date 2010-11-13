@@ -113,7 +113,7 @@
 			);
 		}
 
-		public function getPostForView($conditions = array()){
+		public function getViewData($conditions = array()){
 			if(!$conditions){
 				return false;
 			}
