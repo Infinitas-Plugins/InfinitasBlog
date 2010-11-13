@@ -104,14 +104,9 @@
 				);
 			}
 
-			$this->Post->virtualField['body'] = sprintf('LEFT(`Post`.`body`, %s)', Configure::read('Blog.preview') + 20);
-
 			$paginate = array(
 				'fields' => array(
 					'Post.id',
-					'Post.title',
-					'Post.slug',
-					'body',
 					'Post.comment_count',
 					'Post.views',
 					'Post.created',
@@ -166,64 +161,40 @@
 				$this->redirect($this->referer());
 			}
 
-			$post = $this->Post->find(
-				'first',
+			$post = $this->Post->getPostForView(
 				array(
-					'fields' => array(
-						'Post.id',
-						'Post.title',
-						'Post.slug',
-						'Post.body',
-						'Post.active',
-						'Post.views',
-						'Post.comment_count',
-						'Post.rating',
-						'Post.rating_count',
-						'Post.created',
-						'Post.modified'
-					),
-					'conditions' => array(
-						'or' => array(
-							'Post.slug' => $this->params['slug']
-						),
-						'Post.active' => 1
-					),
-					'contain' => array(
-						'Category',
-						'ChildPost',
-						'ParentPost',
-						'Tag'
-					)
+					'Post.id' => $this->Post->getContentId($this->params['slug']),
+					'Post.active' => 1
 				)
 			);
 
-			if (!empty($post['ParentPost']['id'])) {
-				$post['ParentPost']['ChildPost'] = $this->Post->find(
-					'all',
-					array(
-						'conditions' => array(
-							'Post.parent_id' => $post['ParentPost']['id']
-						),
-						'fields' => array(
-							'Post.id',
-							'Post.title',
-							'Post.slug',
-						),
-						'contain' => false
-					)
-				);
-			}
-
 			/**
-			 * make sure there is something found and the post is active
+			 * make sure there is something found
 			 */
-			if (empty($post) || !$post['Post']['active']) {
+			if (empty($post)) {
 				$this->Session->setFlash('No post was found', true);
 				$this->redirect($this->referer());
 			}
 
 			$this->set(compact('post'));
 			$this->set('title_for_layout', $post['Post']['slug']);
+		}
+
+		public function preview($id = null){
+			if(!($id || $this->Session->read('Auth.User.group_id') === 1)){
+				$this->Session->setFlash('No post was found', true);
+				$this->redirect($this->referer());
+			}
+			
+			$post = $this->Post->getPostForView(
+				array(
+					'Post.id' => $id,
+					'Post.active' => 1
+				)
+			);
+
+			$this->set(compact('post'));
+			$this->render('view');
 		}
 
 		/**

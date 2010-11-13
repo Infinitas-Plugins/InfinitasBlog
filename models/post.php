@@ -24,11 +24,13 @@
 
 		public $lockable = true;
 
+		public $contentable = true;
+
 		/**
 		 * always sort posts so newest is at the top
 		 */
 		public $order = array(
-			'Post.created' => 'DESC',
+			'Post.created' => 'desc',
 		);
 
 		public $actsAs = array(
@@ -44,8 +46,8 @@
 				'conditions' => '',
 				'fields' => array(
 					'ChildPost.id',
-					'ChildPost.title',
-					'ChildPost.slug',
+					// 'ChildPost.title',
+					// 'ChildPost.slug',
 				),
 				'order' => '',
 				'limit' => '',
@@ -63,8 +65,8 @@
 				'conditions' => '',
 				'fields' => array(
 					'ParentPost.id',
-					'ParentPost.title',
-					'ParentPost.slug',
+					// 'ParentPost.title',
+					// 'ParentPost.slug',
 				),
 				'order' => ''
 			),
@@ -109,6 +111,54 @@
 					)
 				)
 			);
+		}
+
+		public function getPostForView($conditions = array()){
+			if(!$conditions){
+				return false;
+			}
+
+			$post = $this->find(
+				'first',
+				array(
+					'fields' => array(
+						'Post.id',
+						'Post.active',
+						'Post.views',
+						'Post.comment_count',
+						'Post.rating',
+						'Post.rating_count',
+						'Post.created',
+						'Post.modified'
+					),
+					'conditions' => $conditions,
+					'contain' => array(
+						'Category',
+						'ChildPost',
+						'ParentPost',
+						'Tag'
+					)
+				)
+			);
+
+			if (!empty($post['ParentPost']['id'])) {
+				$post['ParentPost']['ChildPost'] = $this->find(
+					'all',
+					array(
+						'conditions' => array(
+							'Post.parent_id' => $post['ParentPost']['id']
+						),
+						'fields' => array(
+							'Post.id',
+							'Post.title',
+							'Post.slug',
+						),
+						'contain' => false
+					)
+				);
+			}
+
+			return $post;
 		}
 
 		/**
