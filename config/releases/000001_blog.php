@@ -1,5 +1,5 @@
 <?php
-class R4cdc2222e7544419a3ce247a6318cd70 extends CakeRelease {
+class R4ce00a60a08843e28fb0120b6318cd70 extends CakeRelease {
 
 /**
  * Migration description
@@ -28,9 +28,6 @@ class R4cdc2222e7544419a3ce247a6318cd70 extends CakeRelease {
 			'create_table' => array(
 				'posts' => array(
 					'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
-					'title' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-					'slug' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-					'body' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 					'comment_count' => array('type' => 'integer', 'null' => false, 'default' => NULL),
 					'active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'key' => 'index'),
 					'views' => array('type' => 'integer', 'null' => false, 'default' => '0', 'key' => 'index'),
@@ -46,7 +43,7 @@ class R4cdc2222e7544419a3ce247a6318cd70 extends CakeRelease {
 						'PRIMARY' => array('column' => 'id', 'unique' => 1),
 						'category_id' => array('column' => 'category_id', 'unique' => 0),
 						'active' => array('column' => 'active', 'unique' => 0),
-						'most_views' => array('column' => array('views', 'id', 'title'), 'unique' => 0),
+						'most_views' => array('column' => array('views', 'id'), 'unique' => 0),
 					),
 					'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB'),
 				),
