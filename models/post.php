@@ -175,36 +175,6 @@
 		}
 
 		/**
-		 * clear un-used tags.
-		 *
-		 * Check if there are any tags that are only being used by this post, and
-		 * if there are remove them. keeps the tables tidy
-		 */
-		public function beforeDelete($return = null) {
-			$data = $this->read();
-
-			$PostsTag = ClassRegistry::init('Blog.PostsTag');
-			foreach($data['Tag'] as $tag) {
-				$count = $PostsTag->find(
-					'count',
-					array(
-						'conditions' => array(
-							'PostsTag.tag_id' => $tag['PostsTag']['tag_id']
-							)
-						)
-					);
-
-				if ($count === 1) {
-					if ($this->Tag->delete($tag['PostsTag']['tag_id'])) {
-						$PostsTag->delete($tag['PostsTag']['id']);
-					}
-				}
-			}
-
-			return true;
-		}
-
-		/**
 		 * Get years and months of all posts.
 		 *
 		 * The years are cached cos they wont change much so it saves a
