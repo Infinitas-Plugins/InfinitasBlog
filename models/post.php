@@ -69,7 +69,7 @@
 					// 'ParentPost.slug',
 				),
 				'order' => ''
-			),
+			)
 		);
 
 		public $virtualFields = array(
@@ -77,6 +77,12 @@
 			'created_month' => 'EXTRACT(MONTH FROM `Post`.`created`)'
 		);
 
+		/**
+		 * Get a list of possible parents for the post create page. Setting a
+		 * parent will make multi page posts
+		 *
+		 * @return array
+		 */
 		public function getParentPosts(){
 			return $this->find(
 				'list',
@@ -113,6 +119,13 @@
 			);
 		}
 
+		/**
+		 * General method for the view pages. Gets the required data and relations
+		 * and can be used for the admin preview also.
+		 *
+		 * @param array $conditions conditions for the find
+		 * @return array the data that was found
+		 */
 		public function getViewData($conditions = array()){
 			if(!$conditions){
 				return false;
