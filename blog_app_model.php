@@ -25,48 +25,4 @@
 		 * @access public
 		 */
 		public $tablePrefix = 'blog_';
-
-		/**
-		 * before saving
-		 */
-		public function beforeSave() {
-			parent::beforeSave();
-
-			$this->__clearCache();
-			return true;
-		}
-
-		/**
-		 * after delete
-		 */
-		public function afterDelete() {
-			parent::afterDelete();
-
-			$this->__clearCache();
-			return true;
-		}
-
-		/**
-		 * clear cache after data has changed
-		 */
-		private function __clearCache() {
-			App::import('Folder');
-
-			$Folder = new Folder(CACHE . 'blog');
-
-			$files = $Folder->read();
-
-			if (empty($files[1])) {
-				return true;
-			}
-
-			foreach($files[1] as $file) {
-				if ($file == 'empty') {
-					continue;
-				}
-				unlink(CACHE . 'blog' . DS . $file);
-			}
-
-			return true;
-		}
 	}
