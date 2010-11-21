@@ -265,6 +265,13 @@
 			return $posts;
 		}
 
+		/**
+		 * get a count of active vs inactive posts, used to show some stats around
+		 * the admin pages.
+		 *
+		 * @param  $model idk
+		 * @return array the counts
+		 */
 		public function getCounts($model = null) {
 			$cacheName = cacheName('posts_count', $model);
 			$counts = Cache::read($cacheName, 'blog');
@@ -295,32 +302,6 @@
 			Cache::write($cacheName, $counts, 'blog');
 
 			return $counts;
-		}
-
-		public function getPopular($limit = 10) {
-			$cacheName = cacheName('posts_popular', $limit);
-			$poular = Cache::read($cacheName, 'blog');
-
-			if($poular !== false){
-				return $poular;
-			}
-
-			$poular = $this->find(
-				'list',
-				array(
-					'conditions' => array(
-						'Post.active' => 1
-					),
-					'order' => array(
-						'Post.views' => 'DESC'
-					),
-					'limit' => $limit
-				)
-			);
-
-			Cache::write($cacheName, $poular, 'blog');
-
-			return $poular;
 		}
 
 		/**
@@ -370,7 +351,12 @@
 			return $pending;
 		}
 
-
+		/**
+		 * find posts with a certain tag.
+		 *
+		 * @param string $tag the tag to search for
+		 * @return array the ids of the posts that were found
+		 */
 		public function findPostsByTag($tag) {
 			$cacheName = cacheName('posts_by_tag', $tag);
 			$tags = Cache::read($cacheName, 'blog');
@@ -467,7 +453,7 @@
 			return $paginate;
 		}
 
-		/*
+		/**
 		 * Get count of tags.
 		 *
 		 * Used for things like generating the tag cloud.
@@ -483,27 +469,5 @@
 
 			Cache::write($cacheName, $tags, 'blog');
 			return $tags;
-		}
-
-		public function afterSave($created){
-			return $this->__dataChanged('afterSave');
-		}
-
-		public function afterDelete(){
-			return $this->__dataChanged('afterDelete');
-		}
-
-		private function __dataChanged($from){
-			App::import('Folder');
-			$Folder = new Folder(CACHE . 'shop');
-			$files = $Folder->read();
-
-			foreach($files[1] as $file){
-				if(strstr($file, 'tags_') != false){
-					Cache::delete($file, 'shop');
-				}
-			}
-
-			return true;
 		}
 	}
