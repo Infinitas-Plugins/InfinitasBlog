@@ -14,7 +14,7 @@
 			);
 		}
 
-		public function onRequireTodoList(&$event){
+		public function onRequireTodoList($event){
 			return array(
 				array(
 					'name' => 'warning no categories',
@@ -34,7 +34,7 @@
 			);
 		}
 
-		public function onAdminMenu(&$event){
+		public function onAdminMenu($event){
 			$menu['main'] = array(
 				'Dashboard' => array('controller' => 'posts', 'action' => 'dashboard'),
 				'Posts' => array('controller' => 'posts', 'action' => 'index'),
@@ -58,7 +58,7 @@
 			);
 		}
 
-		public function onSlugUrl(&$event, $data){
+		public function onSlugUrl($event, $data){
 			if(!isset($data['data'])){
 				$data['data'] = $data;
 			}
@@ -110,11 +110,11 @@
 			} // switch
 		}
 
-		public function onRequireHelpersToLoad(&$event){
+		public function onRequireHelpersToLoad($event){
 			
 		}
 
-		public function onRequireCssToLoad(&$event){
+		public function onRequireCssToLoad($event){
 			if($event->Handler->params['plugin'] == 'blog'){
 				return '/blog/css/blog';
 			}
