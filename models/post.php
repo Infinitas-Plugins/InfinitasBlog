@@ -231,7 +231,7 @@
 		 * @param int $active if the posts should be active or not
 		 * @return array $dates an array or years and months
 		 */
-		public function getLatest($limit = 10, $active = 1) {
+		public function getLatest($limit = 5, $active = 1) {
 			$cacheName = cacheName('posts_latest', array($limit, $active));
 			$posts = Cache::read($cacheName, 'blog');
 			if($posts !== false){
@@ -239,23 +239,17 @@
 			}
 
 			$posts = $this->find(
-				'list',
+				'all',
 				array(
+					'fields' => array(
+						$this->alias . '.id'
+					),
 					'conditions' => array(
 						'Post.active' => $active
 					),
 					'limit' => $limit,
 					'order' => array(
 						'Post.created' => 'DESC'
-					)
-				)
-			);
-
-			$posts['countAll'] = $this->find(
-				'count',
-				array(
-					'conditions' => array(
-						'Post.active' => $active
 					)
 				)
 			);
