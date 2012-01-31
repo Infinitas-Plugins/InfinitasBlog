@@ -74,7 +74,8 @@
 
 		public $virtualFields = array(
 			'created_year' => 'EXTRACT(YEAR FROM `Post`.`created`)',
-			'created_month' => 'EXTRACT(MONTH FROM `Post`.`created`)'
+			'created_month' => 'EXTRACT(MONTH FROM `Post`.`created`)',
+			'year_month' => 'CONCAT_WS("_", EXTRACT(YEAR FROM `Post`.`created`), EXTRACT(MONTH FROM `Post`.`created`))',
 		);
 
 		/**
@@ -194,11 +195,14 @@
 				array(
 					'fields' => array(
 						'created_year',
-						'created_month'
+						'created_month',
+						'year_month'
 					),
 					'group' => array(
-						'created_year',
-						'created_month'
+						'year_month'
+					),
+					'order' => array(
+						'created' => 'desc'
 					)
 				)
 			);
@@ -207,14 +211,12 @@
 				return array();
 			}
 
-			$years = array_flip(array_flip(Set::extract('/Post/created_year', $dates)));
-			rsort($years);
+			$dates = Set::extract('/Post/year_month', $dates);
 
 			$return = array();
-			foreach($years as $year){
-				$months = Set::extract('/Post[created_year=2010]/created_month', $dates);
-				rsort($months);
-				$return[$year] = array_flip(array_flip($months));
+			foreach($dates as $date) {
+				$date = explode('_', $date);
+				$return[$date[0]][] = $date[1];
 			}
 			
 			Cache::write('posts_dates', $return, 'blog');
