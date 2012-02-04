@@ -126,18 +126,15 @@
 					'ChildPost' => array(
 						'Category'
 					)
-				)
+				),
+				'limit' => 6
 			);
-
-
 
 			$this->paginate = $this->Post->setPaginateDateOptions(
 				$paginate,
 				array(
 					'year' => $year,
 					'month' => $month
-					//'model' => 'custom_model',
-					//'created' => 'custom_created_field'
 				)
 			);
 
@@ -175,6 +172,9 @@
 				$this->Session->setFlash('No post was found', true);
 				$this->redirect($this->referer());
 			}
+
+			Configure::write('Website.keywords', $post['Post']['meta_keywords']);
+			Configure::write('Website.description', $post['Post']['meta_description']);
 
 			$this->set(compact('post'));
 			$this->set('title_for_layout', $post['Post']['slug']);
