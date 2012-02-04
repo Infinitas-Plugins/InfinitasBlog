@@ -198,6 +198,9 @@
 						'created_month',
 						'year_month'
 					),
+					'conditions' => array(
+						$this->alias . '.active' => 1
+					),
 					'group' => array(
 						'year_month'
 					),
