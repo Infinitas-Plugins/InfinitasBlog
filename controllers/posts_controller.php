@@ -56,7 +56,7 @@
 		 * @return
 		 */
 		public function index() {
-			$titleForLayout = $year = $month = $slug = null;
+			$titleForLayout = $year = $month = $slug = $tagData = null;
 
 			if(isset($this->params['year'])){
 				$year = $this->params['year'];
@@ -72,8 +72,12 @@
 				if(empty($titleForLayout)){
 					$titleForLayout = __('Posts', true);
 				}
+				
 				$titleForLayout = sprintf(__('%s related to %s', true), $titleForLayout, $tag);
+				$tagData = $this->Post->Tag->getViewData($tag);
 			}
+
+			$this->set('tagData', $tagData);
 
 			$this->set('title_for_layout', $titleForLayout);
 			
@@ -121,8 +125,20 @@
 					'Post.category_id' => $this->Post->Category->getActiveIds()
 				),
 				'contain' => array(
-					'Category',
-					'Tag',
+					'Category' => array(
+						'fields' => array(
+							//'Category.id',
+							//'Category.title'
+						)
+					),
+					'Tag' => array(
+						'fields' => array(
+							'Tag.id',
+							'Tag.name',
+							'Tag.keyname',
+							'Tag.weight'
+						)
+					),
 					'ChildPost' => array(
 						'Category'
 					)
