@@ -21,6 +21,8 @@
 	if(!empty($this->params['named']['page']) && $this->params['named']['page'] == 1) {
 		$firstPage = true;
 	}
+
+	echo $this->element('modules/tag_data', array('plugin' => 'tags', 'tagData' => $tagData));
 	
     foreach($posts as $k => $post) {  ?>
 		<div class="beforeEvent">
