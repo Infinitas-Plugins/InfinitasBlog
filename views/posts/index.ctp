@@ -45,7 +45,19 @@
 							$post['Post']['title'],
 							$urlArray
 						);
-					?><small><?php echo $this->Time->niceShort($post['Post']['created']); ?></small>
+					?>
+					<small>
+						<?php
+							$time = strtotime($post['Post']['created']);
+							echo sprintf(
+								'%s %s | %s',
+								date('M', $time),
+								date('Y', $time),
+								date('H:i', $time)
+							);
+							//echo $this->Time->niceShort($post['Post']['created']);
+						?>
+					</small>
 				</h2>
 				<div class="content <?php echo $this->layout; ?>">
 					<?php
