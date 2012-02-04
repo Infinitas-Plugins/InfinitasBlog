@@ -18,7 +18,8 @@
      */
 
 	$firstPage = false;
-	if(!empty($this->params['named']['page']) && $this->params['named']['page'] == 1) {
+	$mainPageCheck = empty($this->params['tag']) && empty($this->params['named']['page']) || (!empty($this->params['named']['page']) && $this->params['named']['page'] == 1);
+	if($mainPageCheck) {
 		$firstPage = true;
 	}
 
