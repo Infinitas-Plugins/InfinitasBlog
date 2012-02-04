@@ -58,6 +58,8 @@
 		public function index() {
 			$titleForLayout = $year = $month = $slug = $tagData = null;
 
+			$limit = 6;
+
 			if(isset($this->params['year'])){
 				$year = $this->params['year'];
 				$titleForLayout = sprintf(__('Posts for the year %s', true), $year);
@@ -75,10 +77,10 @@
 				
 				$titleForLayout = sprintf(__('%s related to %s', true), $titleForLayout, $tag);
 				$tagData = $this->Post->Tag->getViewData($tag);
+				$limit = 50;
 			}
 
 			$this->set('tagData', $tagData);
-
 			$this->set('title_for_layout', $titleForLayout);
 			
 			$post_ids = array();
@@ -143,7 +145,7 @@
 						'Category'
 					)
 				),
-				'limit' => 6
+				'limit' => $limit
 			);
 
 			$this->paginate = $this->Post->setPaginateDateOptions(
