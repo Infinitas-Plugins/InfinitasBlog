@@ -16,7 +16,13 @@
      * @subpackage    blog.views.index
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
-    foreach($posts as $post){
+
+	$firstPage = false;
+	if(!empty($this->params['named']['page']) && $this->params['named']['page'] == 1) {
+		$firstPage = true;
+	}
+	
+    foreach($posts as $k => $post){
 		$eventData = $this->Event->trigger('blogBeforeContentRender', array('_this' => $this, 'post' => $post));		
 		?><div class="beforeEvent"><?php
 			foreach((array)$eventData['blogBeforeContentRender'] as $_plugin => $_data){
@@ -36,7 +42,16 @@
 						?><small><?php echo $this->Time->niceShort($post['Post']['created']); ?></small>
 					</h2>
 					<div class="content <?php echo $this->layout; ?>">
-						<p><?php echo $this->Text->truncate($post['Post']['body'], Configure::read('Blog.preview'), array('html' => true)); ?></p>
+						<?php
+							if($firstPage && !$k) {
+								echo $post['Post']['body'];
+							}
+							else {
+								?><p><?php echo $this->Text->truncate($post['Post']['body'], Configure::read('Blog.preview'), array('html' => true)); ?></p><?php
+							}
+
+							echo sprintf('<p>Let me know what you %s</p>', $this->Html->link('think', $urlArray . '#comment'));
+						?>
 					</div>
 				</div>
 				<?php
