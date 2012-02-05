@@ -125,13 +125,13 @@
 					'Post.active' => 1,
 					'Post.id' . ((!empty($post_ids)) ? ' IN (' . implode(',', $post_ids) . ')' : ' > 0'),
 					'Post.parent_id IS NULL',
-					'Post.category_id' => $this->Post->Category->getActiveIds()
+					'Post.category_id' => $this->Post->GlobalCategory->getActiveIds()
 				),
 				'contain' => array(
-					'Category' => array(
+					'GlobalCategory' => array(
 						'fields' => array(
-							//'Category.id',
-							//'Category.title'
+							//'GlobalCategory.id',
+							//'GlobalCategory.title'
 						)
 					),
 					'GlobalTag' => array(
@@ -143,7 +143,7 @@
 						)
 					),
 					'ChildPost' => array(
-						'Category'
+						'GlobalCategory'
 					)
 				),
 				'limit' => $limit

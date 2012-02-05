@@ -66,17 +66,17 @@
 
 			$paginate = array(
 				'conditions' => array(
-					'Category.id' => array(1,2,3,4)
+					'GlobalCategory.id' => array(1,2,3,4)
 				)
 			);
 			$expected = array(
 				'conditions' => array(
-					'Category.id' => array(1,2,3,4),
-					'Category.xxxxx BETWEEN ? AND ?' => array('2010-01-01 00:00:00', '2010-12-31 23:59:59')	
+					'GlobalCategory.id' => array(1,2,3,4),
+					'GlobalCategory.xxxxx BETWEEN ? AND ?' => array('2010-01-01 00:00:00', '2010-12-31 23:59:59')
 				)
 			);
 			$result = $this->Post->setPaginateDateOptions($paginate, array(
-				'model' => 'Category',
+				'model' => 'GlobalCategory',
 				'created' => 'xxxxx',
 				'year' => 2010
 			));

@@ -35,7 +35,7 @@
 
 		public $actsAs = array(
 			'Feed.Feedable',
-			'Contents.GlobalTaggable'
+			'Contents.Taggable'
 		);
 
 		public $hasMany = array(
