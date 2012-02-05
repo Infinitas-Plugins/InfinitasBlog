@@ -14,7 +14,7 @@
 			unset($_tags);
 		}
 
-		echo $this->GlobalTagCloud->display(
+		echo $this->TagCloud->display(
 			$tags,
 			array(
 				'before' => '<li size="%size%" class="tag">',
