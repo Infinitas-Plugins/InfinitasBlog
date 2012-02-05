@@ -8,8 +8,8 @@
 				'author' => 'Infinitas',
 				'dashboard' => array(
 					'plugin' => 'blog',
-					'controller' => 'posts',
-					'action' => 'index'
+					'controller' => 'blog',
+					'action' => 'dashboard'
 				)
 			);
 		}
@@ -36,7 +36,7 @@
 
 		public function onAdminMenu($event){
 			$menu['main'] = array(
-				'Dashboard' => array('controller' => 'posts', 'action' => 'dashboard'),
+				'Dashboard' => array('plugin' => 'blog', 'controller' => 'blog', 'action' => 'dashboard'),
 				'Posts' => array('controller' => 'posts', 'action' => 'index'),
 				'Active' => array('controller' => 'posts', 'action' => 'index', 'Post.active' => 1),
 				'Pending' => array('controller' => 'posts', 'action' => 'index', 'Post.active' => 0)
@@ -118,5 +118,18 @@
 			if($event->Handler->params['plugin'] == 'blog'){
 				return '/blog/css/blog';
 			}
+		}
+
+		public function onSetupRoutes($event, $data = null) {
+			Router::connect(
+				'/admin/blog',
+				array(
+					'admin' => true,
+					'prefix' => 'admin',
+					'plugin' => 'blog',
+					'controller' => 'blog',
+					'action' => 'dashboard'
+				)
+			);
 		}
 	}
