@@ -106,7 +106,7 @@
 		*
 		* Generates a list of links for the tags of the post
 		*
-		* @param array $tags normaly from $post['Tag']
+		* @param array $tags normaly from $post['GlobalTag']
 		* @param string $seperator what to seperate the links with
 		* @return string the html code for the linked tags
 		*/

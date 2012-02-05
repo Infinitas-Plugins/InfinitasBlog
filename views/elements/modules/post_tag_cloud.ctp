@@ -5,16 +5,16 @@
 		}
 		
 		// format is different of views / the find above
-		if(!isset($tags[0]['Tag'])){
+		if(!isset($tags[0]['GlobalTag'])){
 			$_tags = array();
 			foreach($tags as $tag){
-				$_tags[]['Tag'] = $tag;
+				$_tags[]['GlobalTag'] = $tag;
 			}
 			$tags = $_tags;
 			unset($_tags);
 		}
 
-		echo $this->TagCloud->display(
+		echo $this->GlobalTagCloud->display(
 			$tags,
 			array(
 				'before' => '<li size="%size%" class="tag">',

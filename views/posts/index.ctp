@@ -77,7 +77,7 @@
 					'modules/post_tag_cloud',
 					array(
 						'plugin' => 'blog',
-						'tags' => $post['Tag'],
+						'tags' => $post['GlobalTag'],
 						'title' => 'Tags'
 					)
 				);

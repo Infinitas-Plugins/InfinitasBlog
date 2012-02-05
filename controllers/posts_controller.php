@@ -77,7 +77,7 @@
 				}
 				
 				$titleForLayout = sprintf(__('%s related to %s', true), $titleForLayout, $tag);
-				$tagData = $this->Post->Tag->getViewData($tag);
+				$tagData = $this->Post->GlobalTag->getViewData($tag);
 				$limit = 50;
 			}
 
@@ -86,26 +86,26 @@
 			
 			$post_ids = array();
 			if (isset($tag)) {
-				$tag_id = ClassRegistry::init('Tags.Tag')->find(
+				$tag_id = ClassRegistry::init('Contents.GlobalTag')->find(
 					'list',
 					array(
 						'fields' => array(
-							'Tag.id', 'Tag.id'
+							'GlobalTag.id', 'GlobalTag.id'
 						),
 						'conditions' => array(
-							'Tag.name' => $tag
+							'GlobalTag.name' => $tag
 						)
 					)
 				);
 
-				$post_ids = $this->Post->Tagged->find(
+				$post_ids = $this->Post->GlobalTagged->find(
 					'list',
 					array(
 						'fields' => array(
-							'Tagged.foreign_key', 'Tagged.foreign_key'
+							'GlobalTagged.foreign_key', 'GlobalTagged.foreign_key'
 						),
 						'conditions' => array(
-							'Tagged.tag_id' => $tag_id
+							'GlobalTagged.tag_id' => $tag_id
 						)
 					)
 				);
@@ -134,12 +134,12 @@
 							//'Category.title'
 						)
 					),
-					'Tag' => array(
+					'GlobalTag' => array(
 						'fields' => array(
-							'Tag.id',
-							'Tag.name',
-							'Tag.keyname',
-							'Tag.weight'
+							'GlobalTag.id',
+							'GlobalTag.name',
+							'GlobalTag.keyname',
+							'GlobalTag.weight'
 						)
 					),
 					'ChildPost' => array(
@@ -261,7 +261,7 @@
 		 */
 		public function admin_index() {
 			$this->paginate['Post'] = array(
-				'contain' => array('Tag', 'Category')
+				'contain' => array('GlobalTag', 'Category')
 			);
 			$posts = $this->paginate(null, $this->Filter->filter);
 

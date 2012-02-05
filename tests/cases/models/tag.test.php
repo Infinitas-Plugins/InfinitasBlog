@@ -1,6 +1,6 @@
 <?php
 	/* Tag Test cases generated on: 2010-03-13 15:03:17 : 1268487017*/
-	App::import('Model', 'blog.Tag');
+	App::import('Model', 'blog.GlobalTag');
 
 	class TagTestCase extends CakeTestCase {
 		var $fixtures = array(
@@ -17,11 +17,11 @@
 		);
 
 		function startTest() {
-			$this->Tag =& ClassRegistry::init('Tag');
+			$this->GlobalTag =& ClassRegistry::init('Contents.GlobalTag');
 		}
 
 		function endTest() {
-			unset($this->Tag);
+			unset($this->GlobalTag);
 			ClassRegistry::flush();
 		}
 

@@ -80,7 +80,7 @@
 			}
 
 			foreach($posts as $post) {
-				$tags = Set::extract('/Tag/name', $post);
+				$tags = Set::extract('/GlobalTag/name', $post);
 				$keywords = implode(',', $tags);
 
 				$description = array();

@@ -81,7 +81,7 @@
 								}
                         	?>
 						</td>
-                        <td><?php echo implode(', ', Set::extract('/Tag/name', $post)); ?>&nbsp;</td>
+                        <td><?php echo implode(', ', Set::extract('/GlobalTag/name', $post)); ?>&nbsp;</td>
                         <td><?php echo $post['Post']['comment_count']; ?>&nbsp;</td>
                         <td><?php echo $post['Post']['views']; ?>&nbsp;</td>
                         <td>

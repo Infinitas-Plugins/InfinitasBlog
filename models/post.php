@@ -35,7 +35,7 @@
 
 		public $actsAs = array(
 			'Feed.Feedable',
-			'Tags.Taggable'
+			'Contents.GlobalTaggable'
 		);
 
 		public $hasMany = array(
@@ -150,7 +150,7 @@
 						'Category',
 						'ChildPost',
 						'ParentPost',
-						'Tag'
+						'GlobalTag'
 					)
 				)
 			);
@@ -363,17 +363,17 @@
 				return $tags;
 			}
 
-			$tags = $this->Tag->find(
+			$tags = $this->GlobalTag->find(
 				'all',
 				array(
 					'conditions' => array(
 						'or' => array(
-							'Tag.id' => $tag,
-							'Tag.name' => $tag
+							'GlobalTag.id' => $tag,
+							'GlobalTag.name' => $tag
 						)
 					),
 					'fields' => array(
-						'Tag.id'
+						'GlobalTag.id'
 					),
 					'contain' => array(
 						'Post' => array(
@@ -464,7 +464,7 @@
 				return $tags;
 			}
 
-			$tags = $this->Tagged->find('cloud', array('limit' => $limit));
+			$tags = $this->GlobalTagged->find('cloud', array('limit' => $limit));
 
 			Cache::write($cacheName, $tags, 'blog');
 			return $tags;
