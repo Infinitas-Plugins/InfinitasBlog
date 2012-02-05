@@ -1,4 +1,3 @@
-<h3><?php $title = isset($title) && !empty($title) ? $title : 'Tag cloud'; echo __($title, true); ?></h3>
 <p class="tags">
 	<?php
 		if(!isset($tags)){

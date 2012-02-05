@@ -56,7 +56,10 @@
 		 * @return
 		 */
 		public function index() {
-			$titleForLayout = $year = $month = $slug = null;
+			$this->Session->delete('Pagination.Post');
+			$titleForLayout = $year = $month = $slug = $tagData = null;
+
+			$limit = 6;
 
 			if(isset($this->params['year'])){
 				$year = $this->params['year'];
@@ -72,9 +75,13 @@
 				if(empty($titleForLayout)){
 					$titleForLayout = __('Posts', true);
 				}
+				
 				$titleForLayout = sprintf(__('%s related to %s', true), $titleForLayout, $tag);
+				$tagData = $this->Post->Tag->getViewData($tag);
+				$limit = 50;
 			}
 
+			$this->set('tagData', $tagData);
 			$this->set('title_for_layout', $titleForLayout);
 			
 			$post_ids = array();
@@ -121,23 +128,32 @@
 					'Post.category_id' => $this->Post->Category->getActiveIds()
 				),
 				'contain' => array(
-					'Category',
-					'Tag',
+					'Category' => array(
+						'fields' => array(
+							//'Category.id',
+							//'Category.title'
+						)
+					),
+					'Tag' => array(
+						'fields' => array(
+							'Tag.id',
+							'Tag.name',
+							'Tag.keyname',
+							'Tag.weight'
+						)
+					),
 					'ChildPost' => array(
 						'Category'
 					)
-				)
+				),
+				'limit' => $limit
 			);
-
-
 
 			$this->paginate = $this->Post->setPaginateDateOptions(
 				$paginate,
 				array(
 					'year' => $year,
 					'month' => $month
-					//'model' => 'custom_model',
-					//'created' => 'custom_created_field'
 				)
 			);
 
@@ -175,6 +191,9 @@
 				$this->Session->setFlash('No post was found', true);
 				$this->redirect($this->referer());
 			}
+
+			Configure::write('Website.keywords', $post['Post']['meta_keywords']);
+			Configure::write('Website.description', $post['Post']['meta_description']);
 
 			$this->set(compact('post'));
 			$this->set('title_for_layout', $post['Post']['slug']);
