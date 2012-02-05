@@ -56,6 +56,7 @@
 		 * @return
 		 */
 		public function index() {
+			$this->Session->delete('Pagination.Post');
 			$titleForLayout = $year = $month = $slug = $tagData = null;
 
 			$limit = 6;
