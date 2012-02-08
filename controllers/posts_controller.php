@@ -260,16 +260,13 @@
 		 * @return na
 		 */
 		public function admin_index() {
-			$this->paginate['Post'] = array(
-				'contain' => array('GlobalTag', 'Category')
-			);
 			$posts = $this->paginate(null, $this->Filter->filter);
 
 			$filterOptions = $this->Filter->filterOptions;
 			$filterOptions['fields'] = array(
 				'title',
 				'body',
-				'category_id' => array(null => __('All', true)) + $this->Post->generateCategoryList(),
+				'category_id' => $this->Post->GlobalContent->find('categoryList'),
 				'active' => Configure::read('CORE.active_options')
 			);
 

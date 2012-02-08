@@ -19,14 +19,23 @@
 
     echo $this->Form->create('Post');
         echo $this->Infinitas->adminEditHead();
-		echo $this->element('content_form', array('plugin' => 'contents')); ?>
-		<fieldset>
-			<h1><?php echo __('Other Info', true); ?></h1><?php
-			echo $this->Form->input('id');
-			echo $this->element('category_list', array('plugin' => 'Categories'));
-			echo $this->Form->input('parent_id', array('options' => $parents, 'empty' => __('No Parent', true)));
-			echo $this->Form->input('active');
-			echo $this->Form->input('tags'); ?>
-		</fieldset><?php
+
+		$tabs = array(
+			__d('contents', 'Content', true),
+			__d('contents', 'Author', true),
+			__d('blog', 'Other Data', true)
+		);
+
+		$content = array(
+			$this->element('content_form', array('plugin' => 'Contents', 'intro' => false)),
+			$this->element('author_form', array('plugin' => 'Contents')),
+			implode('', array(
+				$this->Form->input('id'),
+				$this->Form->input('active'),
+				$this->Form->hidden('ContentConfig.id'),
+				$this->element('meta_form', array('plugin' => 'Contents'),
+				$this->Form->input('parent_id', array('options' => $parents, 'empty' => __('No Parent', true))))))
+		);
+
+		echo $this->Design->tabs($tabs, $content);
     echo $this->Form->end();
-?>
