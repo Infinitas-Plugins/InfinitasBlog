@@ -67,6 +67,16 @@
 			}
 
 			$data['data']['Post'] = isset($data['data']['Post']) ? $data['data']['Post'] : $data['data'];
+
+			$categorySlug = 'news-feed';
+			
+			if(!empty($data['data']['GlobalCategory']['slug'])) {
+				$categorySlug = $data['data']['GlobalCategory']['slug'];
+			}
+
+			else if(!empty($data['data']['Post']['GlobalCategory']['slug'])) {
+				$categorySlug = $data['data']['Post']['GlobalCategory']['slug'];
+			}
 			
 			switch($data['type']){
 				case 'posts':
@@ -75,7 +85,7 @@
 						'controller' => 'posts',
 						'action' => 'view',
 						'id' => $data['data']['Post']['id'],
-						'category' => isset($data['data']['Category']['slug']) ? $data['data']['Category']['slug'] : 'news-feed',
+						'category' => $categorySlug,
 						'slug' => $data['data']['Post']['slug']
 					);
 					break;
