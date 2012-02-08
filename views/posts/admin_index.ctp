@@ -68,20 +68,20 @@
                         </td>
                         <td>
 							<?php
-								if(isset($post['Category']['title'])) {
+								if(isset($post['GlobalCategory']['title'])) {
 									echo $this->Html->link(
-										$post['Category']['title'],
+										$post['GlobalCategory']['title'],
 										array(
-											'plugin' => 'management',
-											'controller' => 'categories',
+											'plugin' => 'contents',
+											'controller' => 'global_categories',
 											'action' => 'edit',
-											$post['Category']['id']
+											$post['GlobalCategory']['id']
 										)
 									);
 								}
                         	?>
 						</td>
-                        <td><?php echo implode(', ', Set::extract('/GlobalTag/name', $post)); ?>&nbsp;</td>
+                        <td><?php echo $this->TagCloud->tagList($post); ?>&nbsp;</td>
                         <td><?php echo $post['Post']['comment_count']; ?>&nbsp;</td>
                         <td><?php echo $post['Post']['views']; ?>&nbsp;</td>
                         <td>
