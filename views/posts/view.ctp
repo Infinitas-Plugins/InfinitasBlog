@@ -27,15 +27,23 @@
 	$post['Post']['created'] = $this->Time->niceShort($post['Post']['created']);
 	$post['Post']['modified'] = $this->Time->niceShort($post['Post']['modified']);
 
+	$post['Post']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
 	$post['Post']['module_tags'] = $this->element(
 		'modules/post_tag_cloud',
 		array(
 			'plugin' => 'blog',
-			'tags' => $post['GlobalTag'],
+			'tags' => $post['GlobalTagged'],
 			'title' => 'Tags'
 		)
 	);
-	
+
+	$post['Post']['author_link'] = $this->GlobalContents->author($post);
+
+	$post['Post']['module_comment_count'] = $this->Html->link(
+		sprintf(__d('comments', '%d Comments', true), count($post['PostComment'])),
+		'#comments-top'
+	);
+
 	$post['Post']['module_comments'] = $this->element(
 		'modules/comment',
 		array(
