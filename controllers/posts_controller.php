@@ -56,19 +56,26 @@
 		 * @return
 		 */
 		public function index() {
-			$this->set('seoContentIndex', false);
 			$this->Session->delete('Pagination.Post');
+			$this->set('seoContentIndex', false);
 			$titleForLayout = $year = $month = $slug = $tagData = null;
 
 			$limit = 6;
 
+
+			$url = array_merge(array('action' => 'index'), $this->params['named']);
+
 			if(isset($this->params['year'])){
 				$year = $this->params['year'];
 				$titleForLayout = sprintf(__d('blog', 'Posts for the year %s', true), $year);
+				$url['year'] = $year;
+				
 				if(isset($this->params['pass'][0])){
 					$month = substr((int)$this->params['pass'][0], 0, 2);
 					$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s', true), __(date('F', mktime(0, 0, 0, $month)), true), $year);
+					$url[] = $month;
 				}
+				
 			}
 			
 			else if(isset($this->params['tag'])){
@@ -80,7 +87,11 @@
 				$titleForLayout = sprintf(__d('blog', '%s related to %s', true), $titleForLayout, $tag);
 				$tagData = $this->Post->GlobalTag->getViewData($tag);
 				$limit = 50;
+
+				$url['tag'] = $tag;
 			}
+
+			$this->set('seoCanonicalUrl', Router::url($url));
 
 			$this->set('tagData', $tagData);
 			$this->set('title_for_layout', $titleForLayout);
