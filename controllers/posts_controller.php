@@ -64,20 +64,20 @@
 
 			if(isset($this->params['year'])){
 				$year = $this->params['year'];
-				$titleForLayout = sprintf(__('Posts for the year %s', true), $year);
+				$titleForLayout = sprintf(__d('blog', 'Posts for the year %s', true), $year);
 				if(isset($this->params['pass'][0])){
 					$month = substr((int)$this->params['pass'][0], 0, 2);
-					$titleForLayout = sprintf(__('Posts in %s, %s', true), __(date('F', mktime(0, 0, 0, $month)), true), $year);
+					$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s', true), __(date('F', mktime(0, 0, 0, $month)), true), $year);
 				}
 			}
 			
 			else if(isset($this->params['tag'])){
 				$tag = $this->params['tag'];
 				if(empty($titleForLayout)){
-					$titleForLayout = __('Posts', true);
+					$titleForLayout = __d('blog', 'Posts', true);
 				}
 				
-				$titleForLayout = sprintf(__('%s related to %s', true), $titleForLayout, $tag);
+				$titleForLayout = sprintf(__d('blog', '%s related to %s', true), $titleForLayout, $tag);
 				$tagData = $this->Post->GlobalTag->getViewData($tag);
 				$limit = 50;
 			}
@@ -181,7 +181,7 @@
 		 */
 		public function view() {
 			if (!isset($this->params['slug'])) {
-				$this->Session->setFlash( __('Post could not be found', true) );
+				$this->Session->setFlash(__d('blog', 'Post could not be found', true) );
 				$this->redirect($this->referer());
 			}
 
