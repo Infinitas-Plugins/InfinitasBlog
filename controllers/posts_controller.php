@@ -91,7 +91,7 @@
 				$url['tag'] = $tag;
 			}
 
-			$this->set('seoCanonicalUrl', Router::url($url));
+			$this->set('seoCanonicalUrl', $url);
 
 			$this->set('tagData', $tagData);
 			$this->set('title_for_layout', $titleForLayout);
@@ -218,6 +218,8 @@
 				$this->redirect($this->referer());
 			}
 
+			$canonicalUrl = $this->Event->trigger('blog.slugUrl', $post);
+			$this->set('seoCanonicalUrl', $canonicalUrl['slugUrl']['blog']);
 			$this->set(compact('post'));
 			$this->set('title_for_layout', $post['Post']['slug']);
 		}
