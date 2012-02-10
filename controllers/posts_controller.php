@@ -56,6 +56,7 @@
 		 * @return
 		 */
 		public function index() {
+			$this->set('seoContentIndex', false);
 			$this->Session->delete('Pagination.Post');
 			$titleForLayout = $year = $month = $slug = $tagData = null;
 
