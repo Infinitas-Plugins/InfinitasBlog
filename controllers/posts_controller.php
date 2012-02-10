@@ -125,25 +125,32 @@
 					'Post.active' => 1,
 					'Post.id' . ((!empty($post_ids)) ? ' IN (' . implode(',', $post_ids) . ')' : ' > 0'),
 					'Post.parent_id IS NULL',
-					'Post.category_id' => $this->Post->GlobalCategory->getActiveIds()
+					'GlobalCategory.active' => 1
 				),
-				'contain' => array(
-					'GlobalCategory' => array(
-						'fields' => array(
-							//'GlobalCategory.id',
-							//'GlobalCategory.title'
+				'joins' => array(
+					array(
+						'table' => 'blog_posts',
+						'alias' => 'ChildPost',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'ChildPost.parent_id = Post.id'
 						)
 					),
-					'GlobalTag' => array(
-						'fields' => array(
-							'GlobalTag.id',
-							'GlobalTag.name',
-							'GlobalTag.keyname',
-							'GlobalTag.weight'
+					array(
+						'table' => 'blog_posts',
+						'alias' => 'ChildPostGlobalContent',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'ChildPostGlobalContent.floreign_key = ChildPost.id'
 						)
 					),
-					'ChildPost' => array(
-						'GlobalCategory'
+					array(
+						'table' => 'global_categories',
+						'alias' => 'ChildPostGlobalCategory',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'ChildPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
+						)
 					)
 				),
 				'limit' => $limit
@@ -177,10 +184,13 @@
 				$this->redirect($this->referer());
 			}
 
-			$post = $this->Post->getViewData(
+			$post = $this->Post->find(
+				'viewData',
 				array(
-					'Post.id' => $this->Post->getContentId($this->params['slug']),
-					'Post.active' => 1
+					'conditions' => array(
+						'GlobalContent.slug' => $this->params['slug'],
+						'Post.active' => 1
+					)
 				)
 			);
 
@@ -191,9 +201,6 @@
 				$this->Session->setFlash('No post was found', true);
 				$this->redirect($this->referer());
 			}
-
-			Configure::write('Website.keywords', $post['Post']['meta_keywords']);
-			Configure::write('Website.description', $post['Post']['meta_description']);
 
 			$this->set(compact('post'));
 			$this->set('title_for_layout', $post['Post']['slug']);

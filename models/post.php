@@ -118,6 +118,100 @@
 					)
 				)
 			);
+
+			$this->_findMethods['viewData'] = true;
+		}
+
+		public function _findViewData($state, $query, $results = array()) {
+			if ($state === 'before') {
+				$query['fields'] = array_merge(
+					(array)$query['fields'],
+					array(
+						'Post.id',
+						'Post.active',
+						'Post.views',
+						'Post.comment_count',
+						'Post.rating',
+						'Post.rating_count',
+						'Post.created',
+						'Post.modified'
+					)
+				);
+				
+				$query['joins'][] = array(
+					'table' => 'blog_posts',
+					'alias' => 'ChildPost',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPost.parent_id = Post.id'
+					)
+				);
+				
+				$query['joins'][] = array(
+					'table' => 'global_contents',
+					'alias' => 'ChildPostGlobalContent',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPostGlobalContent.foreign_key = ChildPost.id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'global_categories',
+					'alias' => 'ChildPostGlobalCategory',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'blog_posts',
+					'alias' => 'ParentPost',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ParentPost.id = Post.parent_id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'global_contents',
+					'alias' => 'ParentPostGlobalContent',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ParentPostGlobalContent.foreign_key = ChildPost.id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'global_categories',
+					'alias' => 'ParentPostGlobalCategory',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ParentPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
+					)
+				);
+				return $query;
+			}
+
+			if (!empty($query['operation'])) {
+				return $this->_findPaginatecount($state, $query, $results);
+			}
+
+			return $results;
+		}
+
+		public function afterFind($results, $primary = false) {
+			switch($this->findQueryType) {
+				case 'viewData':
+					$results = $this->attachComments($results);
+					if(!empty($results[0])) {
+						$results = $results[0];
+					}
+					break;
+			}
+			
+			return $results;
 		}
 
 		/**
@@ -131,29 +225,6 @@
 			if(!$conditions){
 				return false;
 			}
-
-			$post = $this->find(
-				'first',
-				array(
-					'fields' => array(
-						'Post.id',
-						'Post.active',
-						'Post.views',
-						'Post.comment_count',
-						'Post.rating',
-						'Post.rating_count',
-						'Post.created',
-						'Post.modified'
-					),
-					'conditions' => $conditions,
-					'contain' => array(
-						'Category',
-						'ChildPost',
-						'ParentPost',
-						'GlobalTag'
-					)
-				)
-			);
 
 			if (!empty($post['ParentPost']['id'])) {
 				$post['ParentPost']['ChildPost'] = $this->find(
@@ -406,9 +477,9 @@
 		 */
 		public function setPaginateDateOptions($paginate, $options = array()) {
 			$default = array(
-				'year' => null,
+				'year' => date('Y'),
 				'month' => null,
-				'model' => null,
+				'model' => $this->alias,
 				'created' => 'created'
 			);
 			// Extract Options
@@ -425,24 +496,13 @@
 			$ymTmplBegin = "%s-%02d-01 00:00:00";
 			$ymTmplEnd = "%s-%02d-%02d 23:59:59";
 
-			if ($model === null) {
-				$model = $this->alias;
-			}
-
-			if ($year === null) {
-				$year = date('Y');
-			}
-
+			$begin = sprintf($yTmplBegin, $year);
+			$end = sprintf($yTmplEnd, $year);
 			if ($month !== null) {
 				// Get days for selected month
 				$days = cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 				$begin = sprintf($ymTmplBegin, $year, $month);
 				$end = sprintf($ymTmplEnd, $year, $month, $days);
-			}
-
-			else {
-				$begin = sprintf($yTmplBegin, $year);
-				$end = sprintf($yTmplEnd, $year);
 			}
 
 			$paginate['conditions'] += array(
