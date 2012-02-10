@@ -276,7 +276,7 @@
 						'year_month'
 					),
 					'order' => array(
-						'created' => 'desc'
+						$this->alias . '.created' => 'desc'
 					)
 				)
 			);
