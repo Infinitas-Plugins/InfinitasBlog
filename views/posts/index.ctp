@@ -77,10 +77,7 @@
 		);
 
 		$post['Post']['author_link'] = $this->GlobalContents->author($post);
-		$post['Post']['module_comment_count'] = $this->Html->link(
-			sprintf(__d('comments', '%d Comments', true), $post['Post']['comment_count']),
-			'#comments-top'
-		);
+		$post['Post']['module_comment_count'] = sprintf(__d('comments', '%d Comments', true), $post['Post']['comment_count']);
     }
 	
 	if(count($posts) > 0) {
@@ -91,8 +88,5 @@
 	if(empty($globalLayoutTemplate)) {
 		throw new Exception('Template was not loaded, make sure one exists');
 	}
-
-	if($globalLayoutTemplate['GlobalLayout']['css']) {
-		echo sprintf('<style>%s</style>', $globalLayoutTemplate['GlobalLayout']['css']);
-	}
-	echo $globalLayoutTemplate['GlobalLayout']['html'];
+	
+	echo $this->GlobalContents->renderTemplate($globalLayoutTemplate);

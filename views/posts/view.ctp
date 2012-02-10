@@ -17,12 +17,27 @@
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
 
+	/**
+	 * events for before the output
+	 */
+	$eventData = $this->Event->trigger('blogBeforeContentRender', array('_this' => $this, 'post' => $post));
+	$post['Post']['events_before'] = '';
+	foreach((array)$eventData['blogBeforeContentRender'] as $_plugin => $_data){
+		$post['Post']['events_before'] .= '<div class="'.$_plugin.'">'.$_data.'</div>';
+	}
+
+	/**
+	 * events for after the output
+	 */
+	$eventData = $this->Event->trigger('blogAfterContentRender', array('_this' => $this, 'post' => $post));
+	$post['Post']['events_after'] = '';
+	foreach((array)$eventData['blogAfterContentRender'] as $_plugin => $_data){
+		$post['Post']['events_after'] .= '<div class="'.$_plugin.'">'.$_data.'</div>';
+	}
+
 	$eventData = $this->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $post));
-	$urlArray = current($eventData['slugUrl']);
-	$post['Post']['title_link'] = $this->Html->link(
-		$post['Post']['title'],
-		$urlArray
-	);
+	$post['Post']['url'] = Router::url(current($eventData['slugUrl']), true);
+	$post['Post']['title_link'] = $this->Html->link($post['Post']['title'], $post['Post']['url']);
 	
 	$post['Post']['created'] = $this->Time->niceShort($post['Post']['created']);
 	$post['Post']['modified'] = $this->Time->niceShort($post['Post']['modified']);
@@ -53,34 +68,7 @@
 			'foreign_id' => $post['Post']['id']
 		)
 	);
-
-	/**
-	 * events for before the output
-	 */
-	$eventData = $this->Event->trigger('blogBeforeContentRender', array('_this' => $this, 'post' => $post));
-	$post['Post']['events_before'] = array();
-	foreach((array)$eventData['blogBeforeContentRender'] as $_plugin => $_data){
-		$post['Post']['events_before'][] = '<div class="'.$_plugin.'">'.$_data.'</div>';
-	}
-	$post['Post']['events_before'] = implode('', $post['Post']['events_before']);
-
-	/**
-	 * events for after the output
-	 */
-	$eventData = $this->Event->trigger('blogAfterContentRender', array('_this' => $this, 'post' => $post));
-	$post['Post']['events_after'] = array();
-	foreach((array)$eventData['blogAfterContentRender'] as $_plugin => $_data){
-		$post['Post']['events_after'][] = '<div class="'.$_plugin.'">'.$_data.'</div>';
-	}
-	$post['Post']['events_after'] = implode('', $post['Post']['events_after']);
 	
 	// need to overwrite the stuff in the viewVars for mustache
 	$this->set('post', $post);
-
-	if(!empty($post['Layout']['css'])){
-		?><style type="text/css"><?php echo $post['Layout']['css']; ?></style><?php
-	}
-
-	// render the content template
-	echo $post['Layout']['html'];
-?>
+	echo $this->GlobalContents->renderTemplate($post);
