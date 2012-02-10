@@ -112,6 +112,16 @@
 				);
 			}
 
+			$conditions = array(
+				'Post.active' => 1,
+				'Post.parent_id IS NULL',
+				'GlobalCategory.active' => 1
+			);
+
+			if(!empty($post_ids)) {
+				$conditions['Post.id'] = $post_ids;
+			}
+
 			$paginate = array(
 				'fields' => array(
 					'Post.id',
@@ -120,14 +130,8 @@
 					'Post.created',
 					'Post.parent_id',
 					'Post.ordering',
-					'Post.category_id',
 				),
-				'conditions' => array(
-					'Post.active' => 1,
-					'Post.id' . ((!empty($post_ids)) ? ' IN (' . implode(',', $post_ids) . ')' : ' > 0'),
-					'Post.parent_id IS NULL',
-					'GlobalCategory.active' => 1
-				),
+				'conditions' => $conditions,
 				'joins' => array(
 					array(
 						'table' => 'blog_posts',
