@@ -97,7 +97,7 @@
 			$this->set('title_for_layout', $titleForLayout);
 			
 			$post_ids = array();
-			if (isset($tag)) {
+			if (!empty($tag)) {
 				$tag_id = ClassRegistry::init('Contents.GlobalTag')->find(
 					'list',
 					array(
@@ -130,7 +130,7 @@
 			);
 
 			if(!empty($post_ids)) {
-				$conditions['Post.id'] = $post_ids;
+				$conditions['GlobalContent.id'] = $post_ids;
 			}
 
 			$paginate = array(
