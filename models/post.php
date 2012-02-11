@@ -120,6 +120,7 @@
 			);
 
 			$this->_findMethods['viewData'] = true;
+			$this->_findMethods['dates'] = true;
 		}
 
 		public function _findViewData($state, $query, $results = array()) {
@@ -244,58 +245,6 @@
 			}
 
 			return $post;
-		}
-
-		/**
-		 * Get years and months of all posts.
-		 *
-		 * The years are cached cos they wont change much so it saves a
-		 * little bit of database calls. only gets active posts so if a month
-		 * has no active posts it will not get them.
-		 *
-		 * @return array $dates an array or years and months
-		 */
-		public function getDates() {
-			$dates = Cache::read('posts_dates');
-			if ($dates !== false) {
-				//return $dates;
-			}
-
-			$dates = $this->find(
-				'all',
-				array(
-					'fields' => array(
-						'created_year',
-						'created_month',
-						'year_month'
-					),
-					'conditions' => array(
-						$this->alias . '.active' => 1
-					),
-					'group' => array(
-						'year_month'
-					),
-					'order' => array(
-						$this->alias . '.created' => 'desc'
-					)
-				)
-			);
-
-			if(empty($dates)){
-				return array();
-			}
-
-			$dates = Set::extract('/Post/year_month', $dates);
-
-			$return = array();
-			foreach($dates as $date) {
-				$date = explode('_', $date);
-				$return[$date[0]][] = $date[1];
-			}
-			
-			Cache::write('posts_dates', $return, 'blog');
-
-			return $return;
 		}
 
 		/**
@@ -512,21 +461,53 @@
 			return $paginate;
 		}
 
+
 		/**
-		 * Get count of tags.
+		 * @brief Get years and months of all posts.
 		 *
-		 * Used for things like generating the tag cloud.
+		 * This is used to get all the dates that posts are available in. It can then 
+		 * be used to generate links to archived posts etc.
+		 *
+		 * @param string $state before or after
+		 * @param array $query the details of the find being done
+		 * @param array $results the results from the find
+		 *
+		 * @return array an array or years and months
 		 */
-		public function getTags($limit = 50) {
-			$cacheName = cacheName('post_tags', $limit);
-			$tags = Cache::read($cacheName, 'shop');
-			if($tags !== false){
-				return $tags;
+		public function _findDates($state, $query, $results = array()) {
+			if ($state === 'before') {
+				$conditions = array(
+					'fields' => array(
+						'created_year',
+						'created_month',
+						'year_month'
+					),
+					'conditions' => array(
+						$this->alias . '.active' => 1
+					),
+					'group' => array(
+						'year_month'
+					),
+					'order' => array(
+						$this->alias . '.created' => 'desc'
+					)
+				);
+
+				return array_merge($conditions, $query);
 			}
 
-			$tags = $this->GlobalTagged->find('cloud', array('limit' => $limit));
+			if (!empty($query['operation'])) {
+				return $this->_findPaginatecount($state, $query, $results);
+			}
 
-			Cache::write($cacheName, $tags, 'blog');
-			return $tags;
+			$return = array();
+			foreach(Set::extract('/' . $this->alias . '/year_month', $results) as $date) {
+				$date = explode('_', $date);
+				if(empty($return[$date[0]]) || !in_array($date[1], $return[$date[0]])) {
+					$return[$date[0]][] = $date[1];
+				}
+			}
+
+			return $return;
 		}
 	}
