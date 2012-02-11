@@ -119,6 +119,7 @@
 				)
 			);
 
+			$this->_findMethods['paginated'] = true;
 			$this->_findMethods['viewData'] = true;
 			$this->_findMethods['dates'] = true;
 		}
@@ -347,7 +348,7 @@
 		 */
 		public function setPaginateDateOptions($paginate, $options = array()) {
 			$default = array(
-				'year' => date('Y'),
+				'year' => null,
 				'month' => null,
 				'model' => $this->alias,
 				'created' => 'created'
@@ -379,9 +380,52 @@
 				$model . '.' . $created.' BETWEEN ? AND ?' => array($begin,$end)
 			);
 
+			unset($paginate['year'], $paginate['month'], $paginate['created'], $paginate['model']);
+
 			return $paginate;
 		}
 
+		protected function _findPaginated($state, $query, $results = array()) {
+			if ($state === 'before') {
+				$query = $this->setPaginateDateOptions($query);
+
+				if(empty($query['fields'])) {
+					$query['fields'] = array($this->alias . '.*');
+				}
+
+				/*array(
+					'table' => 'blog_posts',
+					'alias' => 'ChildPost',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPost.parent_id = Post.id'
+					)
+				),
+				array(
+					'table' => 'blog_posts',
+					'alias' => 'ChildPostGlobalContent',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPostGlobalContent.floreign_key = ChildPost.id'
+					)
+				),
+				array(
+					'table' => 'global_categories',
+					'alias' => 'ChildPostGlobalCategory',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
+					)
+				)*/
+				return $query;
+			}
+
+			if (!empty($query['operation'])) {
+				return $this->_findPaginatecount($state, $query, $results);
+			}
+
+			return $results;
+		}
 
 		/**
 		 * @brief Get years and months of all posts.

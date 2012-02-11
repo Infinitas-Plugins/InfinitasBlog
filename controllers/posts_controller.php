@@ -133,7 +133,8 @@
 				$conditions['GlobalContent.id'] = $post_ids;
 			}
 
-			$paginate = array(
+			$this->paginate = array(
+				'paginated',
 				'fields' => array(
 					'Post.id',
 					'Post.comment_count',
@@ -143,42 +144,12 @@
 					'Post.ordering',
 				),
 				'conditions' => $conditions,
-				'joins' => array(
-					array(
-						'table' => 'blog_posts',
-						'alias' => 'ChildPost',
-						'type' => 'LEFT',
-						'conditions' => array(
-							'ChildPost.parent_id = Post.id'
-						)
-					),
-					array(
-						'table' => 'blog_posts',
-						'alias' => 'ChildPostGlobalContent',
-						'type' => 'LEFT',
-						'conditions' => array(
-							'ChildPostGlobalContent.floreign_key = ChildPost.id'
-						)
-					),
-					array(
-						'table' => 'global_categories',
-						'alias' => 'ChildPostGlobalCategory',
-						'type' => 'LEFT',
-						'conditions' => array(
-							'ChildPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
-						)
-					)
-				),
-				'limit' => $limit
+				'limit' => $limit,
+				'year' => $year,
+				'month' => $month
 			);
 
-			$this->paginate = $this->Post->setPaginateDateOptions(
-				$paginate,
-				array(
-					'year' => $year,
-					'month' => $month
-				)
-			);
+			
 
 			$posts = $this->paginate('Post');
 			$this->set(compact('posts'));
