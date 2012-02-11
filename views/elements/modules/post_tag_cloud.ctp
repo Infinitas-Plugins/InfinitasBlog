@@ -1,7 +1,12 @@
 <p class="tags">
 	<?php
 		if(!isset($tags)){
-			$tags = ClassRegistry::init('Blog.Post')->getTags();
+			$tags = ClassRegistry::init('Blog.Post')->GlobalTagged->find(
+				'cloud',
+				array(
+					'limit' => 50
+				)
+			);
 		}
 		
 		// format is different of views / the find above
