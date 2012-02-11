@@ -33,5 +33,15 @@
 		 'info' => array(
 			 'posts' => __d('blog', 'You can view the posts on your site now using the list icons. You can see everything or filter out active or disabled posts also. You can add new posts using the add icon.', true),
 			 'config' => __d('blog', 'Configure and manage how your posts are displayed. Create different SEO urls, manage images, restore trash and more', true)
+		 ),
+		 'robots' => array(
+			 'index' => array(
+				 'index' => false,
+				 'follow' => true
+			 ),
+			 'view' => array(
+				 'index' => true,
+				 'follow' => true
+			 ),
 		 )
 	 );
