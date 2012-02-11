@@ -57,7 +57,6 @@
 		 */
 		public function index() {
 			$this->Session->delete('Pagination.Post');
-			$this->set('seoContentIndex', false);
 			$titleForLayout = $year = $month = $slug = $tagData = null;
 
 			$limit = 6;
@@ -75,7 +74,6 @@
 					$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s', true), __(date('F', mktime(0, 0, 0, $month)), true), $year);
 					$url[] = $month;
 				}
-				
 			}
 			
 			else if(isset($this->params['tag'])){
@@ -90,11 +88,6 @@
 
 				$url['tag'] = $tag;
 			}
-
-			$this->set('seoCanonicalUrl', $url);
-
-			$this->set('tagData', $tagData);
-			$this->set('title_for_layout', $titleForLayout);
 			
 			$post_ids = array();
 			if (!empty($tag)) {
@@ -149,14 +142,12 @@
 				'month' => $month
 			);
 
-			
-
-			$posts = $this->paginate('Post');
-			$this->set(compact('posts'));
-
-			if( $this->RequestHandler->isRss() ){
-				//$this->render('index');
-			}
+			$this->set('posts', $this->paginate('Post'));
+			$this->set('seoContentIndex', Configure::read('Blog.robots.index.index'));
+			$this->set('seoContentFollow', Configure::read('Blog.robots.index.follow'));
+			$this->set('seoCanonicalUrl', $url);
+			$this->set('tagData', $tagData);
+			$this->set('title_for_layout', $titleForLayout);
 		}
 
 		/**
@@ -188,11 +179,15 @@
 				$this->Session->setFlash('No post was found', true);
 				$this->redirect($this->referer());
 			}
+			
+			$this->set('post', $post);
 
 			$canonicalUrl = $this->Event->trigger('blog.slugUrl', $post);
 			$this->set('seoCanonicalUrl', $canonicalUrl['slugUrl']['blog']);
-			$this->set(compact('post'));
-			$this->set('title_for_layout', $post['Post']['slug']);
+			
+			$this->set('seoContentIndex', Configure::read('Blog.robots.view.index'));
+			$this->set('seoContentFollow', Configure::read('Blog.robots.view.follow'));
+			$this->set('title_for_layout', $post['Post']['title']);
 		}
 
 		/**
