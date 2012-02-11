@@ -389,13 +389,15 @@
 		 * This is used to get all the dates that posts are available in. It can then 
 		 * be used to generate links to archived posts etc.
 		 *
+		 * @access protected
+		 *
 		 * @param string $state before or after
 		 * @param array $query the details of the find being done
 		 * @param array $results the results from the find
 		 *
 		 * @return array an array or years and months
 		 */
-		public function _findDates($state, $query, $results = array()) {
+		protected function _findDates($state, $query, $results = array()) {
 			if ($state === 'before') {
 				$conditions = array(
 					'fields' => array(
@@ -438,13 +440,15 @@
 		 * This gets all the required data to view a post. Including things like
 		 * comments and other relations.
 		 *
+		 * @access protected
+		 *
 		 * @param string $state before or after
 		 * @param array $query the details of the find being done
 		 * @param array $results the results from the find
 		 *
 		 * @return array of data from the db
 		 */
-		public function _findViewData($state, $query, $results = array()) {
+		protected function _findViewData($state, $query, $results = array()) {
 			if ($state === 'before') {
 				$query['fields'] = array_merge(
 					(array)$query['fields'],
