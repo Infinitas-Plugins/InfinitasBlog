@@ -158,8 +158,7 @@
 		 */
 		public function view() {
 			if (!isset($this->params['slug'])) {
-				$this->Session->setFlash(__d('blog', 'Post could not be found', true) );
-				$this->redirect($this->referer());
+				$this->Infinitas->noticeInvalidRecord();
 			}
 
 			$post = $this->Post->find(
@@ -176,8 +175,7 @@
 			 * make sure there is something found
 			 */
 			if (empty($post)) {
-				$this->Session->setFlash('No post was found', true);
-				$this->redirect($this->referer());
+				$this->Infinitas->noticeInvalidRecord();
 			}
 			
 			$this->set('post', $post);
