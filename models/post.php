@@ -123,85 +123,6 @@
 			$this->_findMethods['dates'] = true;
 		}
 
-		public function _findViewData($state, $query, $results = array()) {
-			if ($state === 'before') {
-				$query['fields'] = array_merge(
-					(array)$query['fields'],
-					array(
-						'Post.id',
-						'Post.active',
-						'Post.views',
-						'Post.comment_count',
-						'Post.rating',
-						'Post.rating_count',
-						'Post.created',
-						'Post.modified'
-					)
-				);
-				
-				$query['joins'][] = array(
-					'table' => 'blog_posts',
-					'alias' => 'ChildPost',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'ChildPost.parent_id = Post.id'
-					)
-				);
-				
-				$query['joins'][] = array(
-					'table' => 'global_contents',
-					'alias' => 'ChildPostGlobalContent',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'ChildPostGlobalContent.foreign_key = ChildPost.id'
-					)
-				);
-
-				$query['joins'][] = array(
-					'table' => 'global_categories',
-					'alias' => 'ChildPostGlobalCategory',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'ChildPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
-					)
-				);
-
-				$query['joins'][] = array(
-					'table' => 'blog_posts',
-					'alias' => 'ParentPost',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'ParentPost.id = Post.parent_id'
-					)
-				);
-
-				$query['joins'][] = array(
-					'table' => 'global_contents',
-					'alias' => 'ParentPostGlobalContent',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'ParentPostGlobalContent.foreign_key = ChildPost.id'
-					)
-				);
-
-				$query['joins'][] = array(
-					'table' => 'global_categories',
-					'alias' => 'ParentPostGlobalCategory',
-					'type' => 'LEFT',
-					'conditions' => array(
-						'ParentPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
-					)
-				);
-				return $query;
-			}
-
-			if (!empty($query['operation'])) {
-				return $this->_findPaginatecount($state, $query, $results);
-			}
-
-			return $results;
-		}
-
 		public function afterFind($results, $primary = false) {
 			switch($this->findQueryType) {
 				case 'viewData':
@@ -509,5 +430,96 @@
 			}
 
 			return $return;
+		}
+
+		/**
+		 * @brief Get the data that is used in when viewing a post
+		 *
+		 * This gets all the required data to view a post. Including things like
+		 * comments and other relations.
+		 *
+		 * @param string $state before or after
+		 * @param array $query the details of the find being done
+		 * @param array $results the results from the find
+		 *
+		 * @return array of data from the db
+		 */
+		public function _findViewData($state, $query, $results = array()) {
+			if ($state === 'before') {
+				$query['fields'] = array_merge(
+					(array)$query['fields'],
+					array(
+						'Post.id',
+						'Post.active',
+						'Post.views',
+						'Post.comment_count',
+						'Post.rating',
+						'Post.rating_count',
+						'Post.created',
+						'Post.modified'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'blog_posts',
+					'alias' => 'ChildPost',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPost.parent_id = Post.id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'global_contents',
+					'alias' => 'ChildPostGlobalContent',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPostGlobalContent.foreign_key = ChildPost.id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'global_categories',
+					'alias' => 'ChildPostGlobalCategory',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ChildPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'blog_posts',
+					'alias' => 'ParentPost',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ParentPost.id = Post.parent_id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'global_contents',
+					'alias' => 'ParentPostGlobalContent',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ParentPostGlobalContent.foreign_key = ChildPost.id'
+					)
+				);
+
+				$query['joins'][] = array(
+					'table' => 'global_categories',
+					'alias' => 'ParentPostGlobalCategory',
+					'type' => 'LEFT',
+					'conditions' => array(
+						'ParentPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
+					)
+				);
+				return $query;
+			}
+
+			if (!empty($query['operation'])) {
+				return $this->_findPaginatecount($state, $query, $results);
+			}
+
+			return $results;
 		}
 	}
