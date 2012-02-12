@@ -286,8 +286,7 @@
 
 		public function admin_view($slug = null) {
 			if (!$slug) {
-				$this->Session->setFlash('That post could not be found', true);
-				$this->redirect($this->referer());
+				$this->Infinitas->noticeInvalidRecord();
 			}
 
 			$post = ((int)$slug > 0)
