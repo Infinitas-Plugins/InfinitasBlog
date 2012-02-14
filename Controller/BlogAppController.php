@@ -24,20 +24,6 @@
 			'Blog.Blog', 'Blog.PostLayout', 'Blog.CommentLayout',
 			'Google.Chart'
 		);
-		
-		/**
-		 * beforeFilter callback
-		 *
-		 * this method is run before any of the controllers in the blog plugin.
-		 * It is used to set up a cache config and some other variables that are
-		 * needed throughout the plugin.
-		 *
-		 * @param nothing $
-		 * @return nothing
-		 */
-		public function beforeFilter() {
-			parent::beforeFilter();
-		}
 
 		/**
 		 * afterFilter callback.

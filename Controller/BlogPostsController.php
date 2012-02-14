@@ -31,15 +31,6 @@
 		);
 
 		/**
-		 * PostsController::beforeFilter()
-		 *
-		 * empty
-		 */
-		public function beforeFilter() {
-			parent::beforeFilter();
-		}
-
-		/**
 		 * Index for users
 		 *
 		 * @param string $tag used to find posts with a tag
