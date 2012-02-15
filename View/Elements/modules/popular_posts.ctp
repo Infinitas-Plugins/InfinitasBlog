@@ -28,10 +28,10 @@
 	foreach($popularPosts as $post){
 		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $post));
 		$links[] = $this->Html->link(
-			$this->Text->truncate(strip_tags($post['Post']['title']), 40),
+			$this->Text->truncate(strip_tags($post['BlogPost']['title']), 40),
 			current($url['slugUrl']),
 			array(
-				'title' => $post['Post']['title']
+				'title' => $post['BlogPost']['title']
 			)
 		);
 	}

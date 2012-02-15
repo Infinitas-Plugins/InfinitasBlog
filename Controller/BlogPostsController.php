@@ -115,7 +115,7 @@
 				'month' => $month
 			);
 
-			$this->set('posts', $this->paginate('Post'));
+			$this->set('posts', $this->paginate('BlogPost'));
 			$this->set('seoContentIndex', Configure::read('Blog.robots.index.index'));
 			$this->set('seoContentFollow', Configure::read('Blog.robots.index.follow'));
 			$this->set('seoCanonicalUrl', $url);
@@ -158,7 +158,7 @@
 			
 			$this->set('seoContentIndex', Configure::read('Blog.robots.view.index'));
 			$this->set('seoContentFollow', Configure::read('Blog.robots.view.follow'));
-			$this->set('title_for_layout', $post['Post']['title']);
+			$this->set('title_for_layout', $post['BlogPost']['title']);
 		}
 
 		/**

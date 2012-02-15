@@ -16,7 +16,7 @@
      * @subpackage    blog.views.posts.admin_index
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
-    echo $this->Form->create('Post', array('url' => array('controller' => 'posts', 'action' => 'mass', 'admin' => 'true')));
+    echo $this->Form->create('BlogPost', array('url' => array('controller' => 'posts', 'action' => 'mass', 'admin' => 'true')));
         $massActions = $this->Blog->massActionButtons(
             array(
                 'add',
@@ -59,11 +59,11 @@
             foreach($posts as $post){
                 ?>
                     <tr class="<?php echo $this->Blog->rowClass(); ?>">
-                        <td><?php echo $this->Form->checkbox( $post['Post']['id'] ); ?>&nbsp;</td>
-                        <td title="<?php echo $post['Post']['slug']; ?>">
+                        <td><?php echo $this->Form->checkbox( $post['BlogPost']['id'] ); ?>&nbsp;</td>
+                        <td title="<?php echo $post['BlogPost']['slug']; ?>">
                             <?php
-								echo $this->Html->link($post['Post']['title'], array('action' => 'edit', $post['Post']['id']));
-								echo $this->Html->adminPreview($post['Post']);
+								echo $this->Html->link($post['BlogPost']['title'], array('action' => 'edit', $post['BlogPost']['id']));
+								echo $this->Html->adminPreview($post['BlogPost']);
 							?>
                         </td>
                         <td>
@@ -82,11 +82,11 @@
                         	?>
 						</td>
                         <td><?php echo $this->TagCloud->tagList($post); ?>&nbsp;</td>
-                        <td><?php echo $post['Post']['comment_count']; ?>&nbsp;</td>
-                        <td><?php echo $post['Post']['views']; ?>&nbsp;</td>
+                        <td><?php echo $post['BlogPost']['comment_count']; ?>&nbsp;</td>
+                        <td><?php echo $post['BlogPost']['views']; ?>&nbsp;</td>
                         <td>
                             <?php
-                                echo $this->Infinitas->status($post['Post']['active'], $post['Post']['id']),
+                                echo $this->Infinitas->status($post['BlogPost']['active'], $post['BlogPost']['id']),
                                     $this->Locked->display($post);
                             ?>
                         </td>

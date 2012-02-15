@@ -66,7 +66,7 @@
 				$data['type'] = 'posts';
 			}
 
-			$data['data']['Post'] = isset($data['data']['Post']) ? $data['data']['Post'] : $data['data'];
+			$data['data']['BlogPost'] = isset($data['data']['BlogPost']) ? $data['data']['BlogPost'] : $data['data'];
 
 			$categorySlug = 'news-feed';
 			
@@ -74,8 +74,8 @@
 				$categorySlug = $data['data']['GlobalCategory']['slug'];
 			}
 
-			else if(!empty($data['data']['Post']['GlobalCategory']['slug'])) {
-				$categorySlug = $data['data']['Post']['GlobalCategory']['slug'];
+			else if(!empty($data['data']['BlogPost']['GlobalCategory']['slug'])) {
+				$categorySlug = $data['data']['BlogPost']['GlobalCategory']['slug'];
 			}
 			
 			switch($data['type']){
@@ -84,9 +84,9 @@
 						'plugin' => 'blog',
 						'controller' => 'posts',
 						'action' => 'view',
-						'id' => $data['data']['Post']['id'],
+						'id' => $data['data']['BlogPost']['id'],
 						'category' => $categorySlug,
-						'slug' => $data['data']['Post']['slug']
+						'slug' => $data['data']['BlogPost']['slug']
 					);
 					break;
 

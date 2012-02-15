@@ -35,10 +35,10 @@
 	foreach($latestPosts as $latestPost){
 		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $latestPost));
 		$latestPostlinks[] = $this->Html->link(
-			$this->Text->truncate(strip_tags($latestPost['Post']['title']), $config['title_length']),
+			$this->Text->truncate(strip_tags($latestPost['BlogPost']['title']), $config['title_length']),
 			current($url['slugUrl']),
 			array(
-				'title' => $latestPost['Post']['title']
+				'title' => $latestPost['BlogPost']['title']
 			)
 		);
 	}

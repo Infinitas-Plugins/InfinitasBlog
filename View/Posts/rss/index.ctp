@@ -12,24 +12,24 @@
 		<webMaster>webmaster@example.com</webMaster>
 		<?php
 			foreach ($posts as $post) {
-				$postTime = strtotime($post['Post']['created']);
+				$postTime = strtotime($post['BlogPost']['created']);
 
 				$postLink = array(
 				    'plugin' => 'posts',
 				    'controller' => 'entries',
 				    'action' => 'view',
-				    $post['Post']['id'],
+				    $post['BlogPost']['id'],
 				    'year' => date('Y', $postTime),
 				    'month' => date('m', $postTime),
 				    'day' => date('d', $postTime),
-				    $post['Post']['slug']
+				    $post['BlogPost']['slug']
 				);
 
 				// You should import Sanitize
 				App::import('Sanitize');
 				// This is the part where we clean the body text for output as the description
 				// of the rss item, this needs to have only text to make sure the feed validates
-				$bodyText = preg_replace('=\(.*?\)=is', '', $post['Post']['body']);
+				$bodyText = preg_replace('=\(.*?\)=is', '', $post['BlogPost']['body']);
 				$bodyText = $this->Text->stripLinks($bodyText);
 				$bodyText = Sanitize::stripAll($bodyText);
 				$bodyText = $this->Text->truncate($bodyText, 400);
@@ -38,12 +38,12 @@
 
 				?>
 					<item>
-						<title><?php echo $post['Post']['title']; ?></title>
-						<link>http://www.example.com/articles/view/<?php echo $post['Post']['id']; ?></link>
+						<title><?php echo $post['BlogPost']['title']; ?></title>
+						<link>http://www.example.com/articles/view/<?php echo $post['BlogPost']['id']; ?></link>
 						<description><?php echo $bodyText; ?></description>
-						<?php echo $time->nice($post['Post']['created']) . ' GMT'; ?>
-						<pubDate><?php echo $time->nice($time->gmt($post['Post']['created'])) . ' GMT'; ?></pubDate>
-						<guid><?php echo $this->Html->link($post['Post']['title'], $postLink); ?></guid>
+						<?php echo $time->nice($post['BlogPost']['created']) . ' GMT'; ?>
+						<pubDate><?php echo $time->nice($time->gmt($post['BlogPost']['created'])) . ' GMT'; ?></pubDate>
+						<guid><?php echo $this->Html->link($post['BlogPost']['title'], $postLink); ?></guid>
 					</item>
 				<?php
 			}

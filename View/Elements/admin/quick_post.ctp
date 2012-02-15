@@ -1,6 +1,6 @@
 <?php
 	if (!empty($categories)) {
-		echo $this->Form->create('Post', array('url' => array('plugin' => 'blog', 'controller' => 'posts', 'action' => 'add')));
+		echo $this->Form->create('BlogPost', array('url' => array('plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'add')));
 			echo $this->Form->input('category_id', array('empty' => Configure::read('Website.empty_select')));
 			echo $this->Form->input('title', array('class' => 'title'));
 			echo $this->Form->input('new_tags', array('label' => __('Tags'), 'class'=>'title'));

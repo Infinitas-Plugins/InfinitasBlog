@@ -21,29 +21,29 @@
 	 * events for before the output
 	 */
 	$eventData = $this->Event->trigger('blogBeforeContentRender', array('_this' => $this, 'post' => $post));
-	$post['Post']['events_before'] = '';
+	$post['BlogPost']['events_before'] = '';
 	foreach((array)$eventData['blogBeforeContentRender'] as $_plugin => $_data){
-		$post['Post']['events_before'] .= '<div class="'.$_plugin.'">'.$_data.'</div>';
+		$post['BlogPost']['events_before'] .= '<div class="'.$_plugin.'">'.$_data.'</div>';
 	}
 
 	/**
 	 * events for after the output
 	 */
 	$eventData = $this->Event->trigger('blogAfterContentRender', array('_this' => $this, 'post' => $post));
-	$post['Post']['events_after'] = '';
+	$post['BlogPost']['events_after'] = '';
 	foreach((array)$eventData['blogAfterContentRender'] as $_plugin => $_data){
-		$post['Post']['events_after'] .= '<div class="'.$_plugin.'">'.$_data.'</div>';
+		$post['BlogPost']['events_after'] .= '<div class="'.$_plugin.'">'.$_data.'</div>';
 	}
 
 	$eventData = $this->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $post));
-	$post['Post']['url'] = Router::url(current($eventData['slugUrl']), true);
-	$post['Post']['title_link'] = $this->Html->link($post['Post']['title'], $post['Post']['url']);
+	$post['BlogPost']['url'] = Router::url(current($eventData['slugUrl']), true);
+	$post['BlogPost']['title_link'] = $this->Html->link($post['BlogPost']['title'], $post['BlogPost']['url']);
 	
-	$post['Post']['created'] = $this->Time->niceShort($post['Post']['created']);
-	$post['Post']['modified'] = $this->Time->niceShort($post['Post']['modified']);
+	$post['BlogPost']['created'] = $this->Time->niceShort($post['BlogPost']['created']);
+	$post['BlogPost']['modified'] = $this->Time->niceShort($post['BlogPost']['modified']);
 
-	$post['Post']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
-	$post['Post']['module_tags'] = $this->ModuleLoader->loadDirect(
+	$post['BlogPost']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
+	$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect(
 		'Blog.post_tag_cloud',
 		array(
 			'tags' => $post['GlobalTagged'],
@@ -51,19 +51,19 @@
 		)
 	);
 
-	$post['Post']['author_link'] = $this->GlobalContents->author($post);
+	$post['BlogPost']['author_link'] = $this->GlobalContents->author($post);
 
-	$post['Post']['module_comment_count'] = $this->Html->link(
+	$post['BlogPost']['module_comment_count'] = $this->Html->link(
 		sprintf(__d('comments', '%d Comments'), count($post['PostComment'])),
 		'#comments-top'
 	);
 
-	$post['Post']['module_comments'] = $this->element(
+	$post['BlogPost']['module_comments'] = $this->element(
 		'Comments.modules/comment',
 		array(
 			'content' => $post,
-			'modelName' => 'Post',
-			'foreign_id' => $post['Post']['id']
+			'modelName' => 'BlogPost',
+			'foreign_id' => $post['BlogPost']['id']
 		)
 	);
 	

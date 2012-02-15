@@ -319,7 +319,7 @@
 						'GlobalTag.id'
 					),
 					'contain' => array(
-						'Post' => array(
+						'BlogPost' => array(
 							'fields' => array(
 								'BlogPost.id'
 							)
@@ -386,7 +386,7 @@
 			return $paginate;
 		}
 
-		protected function findPaginated($state, $query, $results = array()) {
+		protected function _findPaginated($state, $query, $results = array()) {
 			if ($state === 'before') {
 				$query = $this->setPaginateDateOptions($query);
 
@@ -442,7 +442,7 @@
 		 *
 		 * @return array an array or years and months
 		 */
-		protected function findDates($state, $query, $results = array()) {
+		protected function _findDates($state, $query, $results = array()) {
 			if ($state === 'before') {
 				$conditions = array(
 					'fields' => array(
@@ -493,7 +493,7 @@
 		 *
 		 * @return array of data from the db
 		 */
-		protected function findViewData($state, $query, $results = array()) {
+		protected function _findViewData($state, $query, $results = array()) {
 			if ($state === 'before') {
 				$query['fields'] = array_merge(
 					(array)$query['fields'],

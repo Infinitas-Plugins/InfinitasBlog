@@ -23,7 +23,7 @@
 $data[1]['plugin'] = 'management';
 $data[1]['controller'] = 'infinitas_comments';
 $data[1]['action'] = 'index';
-$data[1]['Comment.class'] = 'Post';
+$data[1]['Comment.class'] = 'BlogPost';
 $data[2] = null;
 
 $total_comments = 0;
