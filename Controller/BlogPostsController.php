@@ -131,7 +131,7 @@
 		 */
 		public function view() {
 			if (!isset($this->params['slug'])) {
-				$this->Infinitas->noticeInvalidRecord();
+				$this->notice('invalid');
 			}
 
 			$post = $this->BlogPost->find(
@@ -148,7 +148,7 @@
 			 * make sure there is something found
 			 */
 			if (empty($post)) {
-				$this->Infinitas->noticeInvalidRecord();
+				$this->notice('invalid');
 			}
 			
 			$this->set('post', $post);
@@ -259,7 +259,7 @@
 
 		public function admin_view($slug = null) {
 			if (!$slug) {
-				$this->Infinitas->noticeInvalidRecord();
+				$this->notice('invalid');
 			}
 
 			$post = ((int)$slug > 0)
