@@ -21,7 +21,7 @@
      */
 
 	if(!isset($postDates)){
-		$postDates = ClassRegistry::init('Blog.Post')->find('dates');
+		$postDates = ClassRegistry::init('Blog.BlogPost')->find('dates');
 	}
 
 	if(empty($postDates)){

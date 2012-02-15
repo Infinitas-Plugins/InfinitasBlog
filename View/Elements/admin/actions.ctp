@@ -22,8 +22,8 @@
 <h3><?php echo __( 'Posts' ); ?></h3>
 <ul class="nav">
     <li><?php echo $this->Html->link( __( 'Index', true ), array( 'plugin' => 'blog', 'controller' => 'posts', 'action' => 'index' ) ); ?></li>
-    <li><?php echo $this->Html->link( __( 'Active', true ), array( 'plugin' => 'blog', 'controller' => 'posts', 'action' => 'index', 'Post.active' => 1 ) ); ?></li>
-    <li><?php echo $this->Html->link( __( 'Pending', true ), array( 'plugin' => 'blog', 'controller' => 'posts', 'action' => 'index', 'Post.active' => 0 ) ); ?></li>
+    <li><?php echo $this->Html->link( __( 'Active', true ), array( 'plugin' => 'blog', 'controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 1 ) ); ?></li>
+    <li><?php echo $this->Html->link( __( 'Pending', true ), array( 'plugin' => 'blog', 'controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 0 ) ); ?></li>
     <li><?php echo $this->Html->link( __( 'New', true ), array( 'plugin' => 'blog', 'controller' => 'posts', 'action' => 'add' ) ); ?></li>
 </ul>
 <h3><?php echo __( 'Comments' ); ?></h3>

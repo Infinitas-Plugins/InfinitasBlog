@@ -100,8 +100,8 @@
 			}
 
 			$conditions = array(
-				'Post.active' => 1,
-				'Post.parent_id IS NULL',
+				'BlogPost.active' => 1,
+				'BlogPost.parent_id IS NULL',
 				'GlobalCategory.active' => 1
 			);
 
@@ -112,12 +112,12 @@
 			$this->paginate = array(
 				'paginated',
 				'fields' => array(
-					'Post.id',
-					'Post.comment_count',
-					'Post.views',
-					'Post.created',
-					'Post.parent_id',
-					'Post.ordering',
+					'BlogPost.id',
+					'BlogPost.comment_count',
+					'BlogPost.views',
+					'BlogPost.created',
+					'BlogPost.parent_id',
+					'BlogPost.ordering',
 				),
 				'conditions' => $conditions,
 				'limit' => $limit,
@@ -149,7 +149,7 @@
 				array(
 					'conditions' => array(
 						'GlobalContent.slug' => $this->params['slug'],
-						'Post.active' => 1
+						'BlogPost.active' => 1
 					)
 				)
 			);
@@ -191,10 +191,10 @@
 						'action' => 'view',
 					),
 					'fields' => array(
-						'Post.id',
-						'Post.title',
-						'Post.intro',
-						'Post.created'
+						'BlogPost.id',
+						'BlogPost.title',
+						'BlogPost.intro',
+						'BlogPost.created'
 					),
 					'feed' => array(
 						'Core.Comment' => array(
@@ -221,7 +221,7 @@
 
 			$this->set('dashboardPostCount', $this->BlogPost->getCounts());
 			$this->set('dashboardPostLatest', $this->BlogPost->getLatest());
-			$this->set('dashboardCommentsCount', $this->BlogPost->Comment->getCounts('Blog.Post'));
+			$this->set('dashboardCommentsCount', $this->BlogPost->Comment->getCounts('Blog.BlogPost'));
 		}
 
 		/**
@@ -278,7 +278,7 @@
 				'first',
 				array(
 					'conditions' => array(
-						'Post.slug' => $slug
+						'BlogPost.slug' => $slug
 					)
 				)
 			);

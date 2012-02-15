@@ -38,8 +38,8 @@
 			$menu['main'] = array(
 				'Dashboard' => array('plugin' => 'blog', 'controller' => 'blog', 'action' => 'dashboard'),
 				'Posts' => array('controller' => 'posts', 'action' => 'index'),
-				'Active' => array('controller' => 'posts', 'action' => 'index', 'Post.active' => 1),
-				'Pending' => array('controller' => 'posts', 'action' => 'index', 'Post.active' => 0)
+				'Active' => array('controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 1),
+				'Pending' => array('controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 0)
 			);
 
 			return $menu;

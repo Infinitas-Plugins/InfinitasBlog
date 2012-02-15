@@ -27,7 +27,7 @@
 	);
 	$config = array_merge($defaultConfig, $config);
 
-	$latestPosts = ClassRegistry::init('Blog.Post')->getLatest($config['limit']);
+	$latestPosts = ClassRegistry::init('Blog.BlogPost')->getLatest($config['limit']);
 ?>
 <h3><?php echo __($config['title']); ?></h3>
 <?php

@@ -1,7 +1,7 @@
 <p class="tags">
 	<?php
 		if(!isset($tags)){
-			$tags = ClassRegistry::init('Blog.Post')->GlobalTagged->find(
+			$tags = ClassRegistry::init('Blog.BlogPost')->GlobalTagged->find(
 				'cloud',
 				array(
 					'limit' => 50

@@ -28,7 +28,7 @@
 		 * always sort posts so newest is at the top
 		 */
 		public $order = array(
-			'Post.created' => 'desc',
+			'BlogPost.created' => 'desc',
 		);
 
 		public $actsAs = array(
@@ -38,7 +38,7 @@
 
 		public $hasMany = array(
 			'ChildPost' => array(
-				'className' => 'Blog.Post',
+				'className' => 'Blog.BlogPost',
 				'foreignKey' => 'parent_id',
 				'dependent' => true,
 				'conditions' => '',
@@ -58,7 +58,7 @@
 
 		public $belongsTo = array(
 			'ParentPost' => array(
-				'className' => 'Blog.Post',
+				'className' => 'Blog.BlogPost',
 				'foreignKey' => 'parent_id',
 				'conditions' => '',
 				'fields' => array(
@@ -87,7 +87,7 @@
 				'list',
 				array(
 					'conditions' => array(
-						'Post.parent_id IS NULL'
+						'BlogPost.parent_id IS NULL'
 					)
 				)
 			);
@@ -152,12 +152,12 @@
 					'all',
 					array(
 						'conditions' => array(
-							'Post.parent_id' => $post['ParentPost']['id']
+							'BlogPost.parent_id' => $post['ParentPost']['id']
 						),
 						'fields' => array(
-							'Post.id',
-							'Post.title',
-							'Post.slug',
+							'BlogPost.id',
+							'BlogPost.title',
+							'BlogPost.slug',
 						),
 						'contain' => false
 					)
@@ -190,11 +190,11 @@
 						$this->alias . '.id'
 					),
 					'conditions' => array(
-						'Post.active' => $active
+						'BlogPost.active' => $active
 					),
 					'limit' => $limit,
 					'order' => array(
-						'Post.created' => 'DESC'
+						'BlogPost.created' => 'DESC'
 					)
 				)
 			);
@@ -222,7 +222,7 @@
 				'count',
 				array(
 					'conditions' => array(
-						'Post.active' => 1
+						'BlogPost.active' => 1
 					),
 					'contain' => false
 				)
@@ -232,7 +232,7 @@
 				'count',
 				array(
 					'conditions' => array(
-						'Post.active' => 0
+						'BlogPost.active' => 0
 					),
 					'contain' => false
 				)
@@ -263,10 +263,10 @@
 				'list',
 				array(
 					'conditions' => array(
-						'Post.active' => 0
+						'BlogPost.active' => 0
 					),
 					'order' => array(
-						'Post.modified' => 'ASC'
+						'BlogPost.modified' => 'ASC'
 					),
 					'limit' => $limit
 				)
@@ -276,7 +276,7 @@
 				'count',
 				array(
 					'conditions' => array(
-						'Post.active' => 0
+						'BlogPost.active' => 0
 					)
 				)
 			);
@@ -318,7 +318,7 @@
 					'contain' => array(
 						'Post' => array(
 							'fields' => array(
-								'Post.id'
+								'BlogPost.id'
 							)
 						)
 					)
@@ -396,7 +396,7 @@
 					'alias' => 'ChildPost',
 					'type' => 'LEFT',
 					'conditions' => array(
-						'ChildPost.parent_id = Post.id'
+						'ChildPost.parent_id = BlogPost.id'
 					)
 				),
 				array(
@@ -495,14 +495,14 @@
 				$query['fields'] = array_merge(
 					(array)$query['fields'],
 					array(
-						'Post.id',
-						'Post.active',
-						'Post.views',
-						'Post.comment_count',
-						'Post.rating',
-						'Post.rating_count',
-						'Post.created',
-						'Post.modified'
+						'BlogPost.id',
+						'BlogPost.active',
+						'BlogPost.views',
+						'BlogPost.comment_count',
+						'BlogPost.rating',
+						'BlogPost.rating_count',
+						'BlogPost.created',
+						'BlogPost.modified'
 					)
 				);
 
