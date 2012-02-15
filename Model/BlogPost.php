@@ -70,12 +70,6 @@
 			)
 		);
 
-		public $virtualFields = array(
-			'created_year' => 'EXTRACT(YEAR FROM `Post`.`created`)',
-			'created_month' => 'EXTRACT(MONTH FROM `Post`.`created`)',
-			'year_month' => 'CONCAT_WS("_", EXTRACT(YEAR FROM `Post`.`created`), EXTRACT(MONTH FROM `Post`.`created`))',
-		);
-
 		/**
 		 * Get a list of possible parents for the post create page. Setting a
 		 * parent will make multi page posts
@@ -114,6 +108,15 @@
 						'rule' => array('comparison', '>', 0),
 						'message' => __('Please select a category')
 					)
+				)
+			);
+
+			$this->virtualFields = array_merge(
+				(array)$this->virtualFields,
+				array(
+					'created_year' => 'EXTRACT(YEAR FROM `' . $this->alias . '`.`created`)',
+					'created_month' => 'EXTRACT(MONTH FROM `' . $this->alias . '`.`created`)',
+					'year_month' => 'CONCAT_WS("_", EXTRACT(YEAR FROM `' . $this->alias . '`.`created`), EXTRACT(MONTH FROM `' . $this->alias . '`.`created`))'
 				)
 			);
 
