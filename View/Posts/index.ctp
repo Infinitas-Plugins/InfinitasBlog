@@ -23,7 +23,7 @@
 		$firstPage = true;
 	}
 
-	//echo $this->element('modules/tag_data', array('plugin' => 'tags', 'tagData' => $tagData));
+	//echo $this->ModuleLoader->loadDirect('Tags.tag_data', array('tagData' => $tagData));
 	
     foreach($posts as $k => &$post) {
 		$eventData = $this->Event->trigger('blogBeforeContentRender', array('_this' => $this, 'post' => $post));
@@ -55,10 +55,9 @@
 			$post['Post']['body'] = $this->Text->truncate($post['Post']['body'], Configure::read('Blog.preview'), array('html' => true));
 		}
 
-		$post['Post']['module_comments'] = $this->element(
-			'modules/comment',
+		$post['Post']['module_comments'] = $this->ModuleLoader->loadDirect(
+			'Comments.comment',
 			array(
-				'plugin' => 'comments',
 				'content' => $post,
 				'modelName' => 'Post',
 				'foreign_id' => $post['Post']['id']
@@ -67,10 +66,9 @@
 
 
 		$post['Post']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
-		$post['Post']['module_tags'] = $this->element(
-			'modules/post_tag_cloud',
+		$post['Post']['module_tags'] = $this->ModuleLoader->loadDirect(
+			'Blog.post_tag_cloud',
 			array(
-				'plugin' => 'blog',
 				'tags' => $post['GlobalTagged'],
 				'title' => 'Tags'
 			)

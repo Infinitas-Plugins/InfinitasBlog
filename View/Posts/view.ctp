@@ -43,10 +43,9 @@
 	$post['Post']['modified'] = $this->Time->niceShort($post['Post']['modified']);
 
 	$post['Post']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
-	$post['Post']['module_tags'] = $this->element(
-		'modules/post_tag_cloud',
+	$post['Post']['module_tags'] = $this->ModuleLoader->loadDirect(
+		'Blog.post_tag_cloud',
 		array(
-			'plugin' => 'blog',
 			'tags' => $post['GlobalTagged'],
 			'title' => 'Tags'
 		)

@@ -55,17 +55,10 @@
 	<p class="info"><?php echo Configure::read('Blog.info.posts'); ?></p>
 </div>
 <?php
-	echo $this->element(
-		'modules/admin/dashboard_links',
-		array(
-			'plugin' => 'contents'
-		)
-	);
+	echo $this->ModuleLoader->loadDirect('Contents.dashboard_links');
 
-	echo $this->element(
-		'modules/admin/popular_items',
+	echo $this->ModuleLoader->loadDirect('ViewCounter.popular_items',
 		array(
-			'plugin' => 'view_counter',
 			'model' => 'Blog.post'
 		)
 	);
