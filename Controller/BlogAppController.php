@@ -20,20 +20,5 @@
 	 */
 
 	class BlogAppController extends AppController {
-		public $helpers = array(
-			'Blog.Blog', 'Blog.PostLayout', 'Blog.CommentLayout',
-			'Google.Chart'
-		);
-
-		/**
-		 * afterFilter callback.
-		 *
-		 * used to do stuff before the code is rendered but after all the
-		 * controllers have finnished.
-		 *
-		 * @return nothing
-		 */
-		public function afterFilter() {
-			parent::afterFilter();
-		}
+		
 	}

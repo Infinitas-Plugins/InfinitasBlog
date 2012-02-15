@@ -1,11 +1,12 @@
 <?php
 	class BlogController extends BlogAppController {
-		public $uses = array();
+		public $uses = array(
+			'Blog.BlogPost'
+		);
 		
 		public function admin_dashboard() {
-			$Post = ClassRegistry::init('Blog.BlogPost');
 
-			$this->set('requreSetup', count($Post->GlobalContent->GlobalLayout->find('list')) >= 1);
-			$this->set('hasContent', $Post->find('count') >= 1);
+			$this->set('requreSetup', count($this->BlogPost->GlobalContent->GlobalLayout->find('list')) >= 1);
+			$this->set('hasContent', $this->BlogPost->find('count') >= 1);
 		}
 	}
