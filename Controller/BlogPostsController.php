@@ -21,16 +21,6 @@
 
 	class BlogPostsController extends BlogAppController {
 		/**
-		 * Helpers.
-		 *
-		 * @access public
-		 * @var array
-		 */
-		public $helpers = array(
-			'Filter.Filter'
-		);
-
-		/**
 		 * Index for users
 		 *
 		 * @param string $tag used to find posts with a tag
