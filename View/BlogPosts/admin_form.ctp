@@ -27,14 +27,14 @@
 		);
 
 		$content = array(
-			$this->element('content_form', array('plugin' => 'Contents', 'intro' => false)),
-			$this->element('author_form', array('plugin' => 'Contents')),
+			$this->element('Contents.content_form', array('intro' => false)),
+			$this->element('Contents.author_form'),
 			implode('', array(
 				$this->Form->input('id'),
 				$this->Form->input('active'),
 				$this->Form->hidden('ContentConfig.id'),
-				$this->element('meta_form', array('plugin' => 'Contents'),
-				$this->Form->input('parent_id', array('options' => $parents, 'empty' => __('No Parent'))))))
+				$this->element('Contents.meta_form'),
+				$this->Form->input('parent_id', array('options' => $parents, 'empty' => __('No Parent')))))
 		);
 
 		echo $this->Design->tabs($tabs, $content);

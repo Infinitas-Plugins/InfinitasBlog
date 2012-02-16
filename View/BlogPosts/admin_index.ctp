@@ -40,11 +40,11 @@
                         'style' => 'width:25px;'
                     ),
                     $this->Paginator->sort('title'),
-                    $this->Paginator->sort(__('Category'), 'Category.name') => array(
+                    $this->Paginator->sort('Category.name', __d('blog', 'Category')) => array(
                         'style' => 'width:130px;'
                     ),
                     __('Tags'),
-                    $this->Paginator->sort('Comments','comment_count') => array(
+                    $this->Paginator->sort('comment_count', __d('blog', 'Comments')) => array(
                         'style' => 'width:50px;'
                     ),
                     $this->Paginator->sort('views') => array(
