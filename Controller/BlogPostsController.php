@@ -177,7 +177,7 @@
 				array(
 					'setup' => array(
 						'plugin' => 'Blog',
-						'controller' => 'posts',
+						'controller' => 'blog_posts',
 						'action' => 'view',
 					),
 					'fields' => array(

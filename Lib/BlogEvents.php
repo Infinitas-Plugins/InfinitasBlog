@@ -37,9 +37,9 @@
 		public function onAdminMenu($event){
 			$menu['main'] = array(
 				'Dashboard' => array('plugin' => 'blog', 'controller' => 'blog', 'action' => 'dashboard'),
-				'Posts' => array('controller' => 'posts', 'action' => 'index'),
-				'Active' => array('controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 1),
-				'Pending' => array('controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 0)
+				'Posts' => array('plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index'),
+				'Active' => array('plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index', 'BlogPost.active' => 1),
+				'Pending' => array('plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index', 'BlogPost.active' => 0)
 			);
 
 			return $menu;
@@ -81,7 +81,7 @@
 				case 'posts':
 					return array(
 						'plugin' => 'blog',
-						'controller' => 'posts',
+						'controller' => 'blog_posts',
 						'action' => 'view',
 						'id' => $data['data']['BlogPost']['id'],
 						'category' => $categorySlug,
@@ -92,7 +92,7 @@
 				case 'year':
 					return array(
 						'plugin' => 'blog',
-						'controller' => 'posts',
+						'controller' => 'blog_posts',
 						'action' => 'index',
 						'year' => $data['data']['year']
 					);
@@ -101,7 +101,7 @@
 				case 'year_month':
 					return array(
 						'plugin' => 'blog',
-						'controller' => 'posts',
+						'controller' => 'blog_posts',
 						'action' => 'index',
 						'year' => $data['data']['year'],
 						$data['data']['month']
@@ -111,7 +111,7 @@
 				case 'tag':
 					return array(
 						'plugin' => 'blog',
-						'controller' => 'posts',
+						'controller' => 'blog_posts',
 						'action' => 'index',
 						'tag' => $data['data']['tag']
 					);
