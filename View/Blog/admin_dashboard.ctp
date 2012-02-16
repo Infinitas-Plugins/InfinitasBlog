@@ -27,25 +27,25 @@
 			'name' => __d('blog', 'List'),
 			'description' => __d('blog', 'View all your posts'),
 			'icon' => '/blog/img/icon.png',
-			'dashboard' => array('controller' => 'posts', 'action' => 'index')
+			'dashboard' => array('controller' => 'blog_posts', 'action' => 'index')
 		),
 		array(
 			'name' => __d('blog', 'Add'),
 			'description' => __d('blog', 'Create a new post'),
 			'icon' => '/blog/img/icon.png',
-			'dashboard' => array('controller' => 'posts', 'action' => 'add')
+			'dashboard' => array('controller' => 'blog_posts', 'action' => 'add')
 		),
 		array(
 			'name' => __d('blog', 'Active'),
 			'description' => __d('blog', 'See what items are currently active'),
 			'icon' => '/blog/img/icon.png',
-			'dashboard' => array('controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 1)
+			'dashboard' => array('controller' => 'blog_posts', 'action' => 'index', 'BlogPost.active' => 1)
 		),
 		array(
 			'name' => __d('blog', 'Pending'),
 			'description' => __d('blog', 'See what items are currently pending'),
 			'icon' => '/blog/img/icon.png',
-			'dashboard' => array('controller' => 'posts', 'action' => 'index', 'BlogPost.active' => 0)
+			'dashboard' => array('controller' => 'blog_posts', 'action' => 'index', 'BlogPost.active' => 0)
 		)
 	);
 ?>
