@@ -139,7 +139,7 @@
 				array(
 					'conditions' => array(
 						'GlobalContent.slug' => $this->params['slug'],
-						'BlogPost.active' => 1
+						$this->modelClass . '.active' => 1
 					)
 				)
 			);
@@ -153,12 +153,12 @@
 			
 			$this->set('post', $post);
 
-			$canonicalUrl = $this->Event->trigger('blog.slugUrl', $post);
-			$this->set('seoCanonicalUrl', $canonicalUrl['slugUrl']['blog']);
+			$canonicalUrl = $this->Event->trigger('Blog.slugUrl', $post);
+			$this->set('seoCanonicalUrl', $canonicalUrl['slugUrl']['Blog']);
 			
 			$this->set('seoContentIndex', Configure::read('Blog.robots.view.index'));
 			$this->set('seoContentFollow', Configure::read('Blog.robots.view.follow'));
-			$this->set('title_for_layout', $post['BlogPost']['title']);
+			$this->set('title_for_layout', $post[$this->modelClass]['title']);
 		}
 
 		/**

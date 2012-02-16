@@ -67,7 +67,6 @@
 			}
 
 			$data['data']['BlogPost'] = isset($data['data']['BlogPost']) ? $data['data']['BlogPost'] : $data['data'];
-
 			$categorySlug = 'news-feed';
 			
 			if(!empty($data['data']['GlobalCategory']['slug'])) {

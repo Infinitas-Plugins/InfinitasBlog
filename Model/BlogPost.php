@@ -498,14 +498,14 @@
 				$query['fields'] = array_merge(
 					(array)$query['fields'],
 					array(
-						'BlogPost.id',
-						'BlogPost.active',
-						'BlogPost.views',
-						'BlogPost.comment_count',
-						'BlogPost.rating',
-						'BlogPost.rating_count',
-						'BlogPost.created',
-						'BlogPost.modified'
+						$this->alias . '.id',
+						$this->alias . '.active',
+						$this->alias . '.views',
+						$this->alias . '.comment_count',
+						$this->alias . '.rating',
+						$this->alias . '.rating_count',
+						$this->alias . '.created',
+						$this->alias . '.modified'
 					)
 				);
 
@@ -514,7 +514,7 @@
 					'alias' => 'ChildPost',
 					'type' => 'LEFT',
 					'conditions' => array(
-						'ChildPost.parent_id = Post.id'
+						'ChildPost.parent_id = '. $this->alias . '.id'
 					)
 				);
 
@@ -541,7 +541,7 @@
 					'alias' => 'ParentPost',
 					'type' => 'LEFT',
 					'conditions' => array(
-						'ParentPost.id = Post.parent_id'
+						'ParentPost.id = ' . $this->alias . '.parent_id'
 					)
 				);
 
