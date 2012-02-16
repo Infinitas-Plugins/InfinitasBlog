@@ -33,13 +33,13 @@
 
 	$lis = array();
 	foreach($postDates as $year => $months){
-		$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year', 'data' => array('year' => $year)));
+		$url = $this->Event->trigger('Blog.slugUrl', array('type' => 'year', 'data' => array('year' => $year)));
 		echo sprintf('<h4>%s</h4>%s', $this->Html->link($year, current($url['slugUrl'])), is_string($months) ? $months : '');
 		
 		if (!empty($months)){
 			$_monthsLi = array();
 			foreach($months as $month){
-				$url = $this->Event->trigger('blog.slugUrl', array('type' => 'year_month', 'data' => array('year' => $year, 'month' => $month)));
+				$url = $this->Event->trigger('Blog.slugUrl', array('type' => 'year_month', 'data' => array('year' => $year, 'month' => $month)));
 				$_monthsLi[] = $this->Html->link(
 					date('F', mktime(0,0,0,$month)),
 					current($url['slugUrl'])

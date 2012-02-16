@@ -35,7 +35,7 @@
 		$post['BlogPost']['events_after'] .= '<div class="'.$_plugin.'">'.$_data.'</div>';
 	}
 
-	$eventData = $this->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $post));
+	$eventData = $this->Event->trigger('Blog.slugUrl', array('type' => 'posts', 'data' => $post));
 	$post['BlogPost']['url'] = Router::url(current($eventData['slugUrl']), true);
 	$post['BlogPost']['title_link'] = $this->Html->link($post['BlogPost']['title'], $post['BlogPost']['url']);
 	
