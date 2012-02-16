@@ -18,7 +18,7 @@
 	 * @license http://www.opensource.org/licenses/mit-license.php The MIT License
 	 * @since 0.5a
 	 */
-
+	App::uses('BlogAppController', 'Blog.Controller');
 	class BlogPostsController extends BlogAppController {
 		/**
 		 * Index for users
@@ -41,27 +41,27 @@
 				$year = $this->request->params['year'];
 				$titleForLayout = sprintf(__d('blog', 'Posts for the year %s'), $year);
 				$url['year'] = $year;
-				
+
 				if(isset($this->request->params['pass'][0])){
 					$month = substr((int)$this->request->params['pass'][0], 0, 2);
 					$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s'), __(date('F', mktime(0, 0, 0, $month))), $year);
 					$url[] = $month;
 				}
 			}
-			
+
 			else if(isset($this->request->params['tag'])){
 				$tag = $this->request->params['tag'];
 				if(empty($titleForLayout)){
 					$titleForLayout = __d('blog', 'Posts');
 				}
-				
+
 				$titleForLayout = sprintf(__d('blog', '%s related to %s'), $titleForLayout, $tag);
 				$tagData = $this->BlogPost->GlobalTag->getViewData($tag);
 				$limit = 50;
 
 				$url['tag'] = $tag;
 			}
-			
+
 			$post_ids = array();
 			if (!empty($tag)) {
 				$tag_id = ClassRegistry::init('Contents.GlobalTag')->find(
@@ -150,12 +150,12 @@
 			if (empty($post)) {
 				$this->notice('invalid');
 			}
-			
+
 			$this->set('post', $post);
 
 			$canonicalUrl = $this->Event->trigger('Blog.slugUrl', $post);
 			$this->set('seoCanonicalUrl', $canonicalUrl['slugUrl']['Blog']);
-			
+
 			$this->set('seoContentIndex', Configure::read('Blog.robots.view.index'));
 			$this->set('seoContentFollow', Configure::read('Blog.robots.view.follow'));
 			$this->set('title_for_layout', $post[$this->modelClass]['title']);
