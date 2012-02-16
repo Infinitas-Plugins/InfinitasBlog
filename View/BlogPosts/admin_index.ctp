@@ -16,7 +16,7 @@
      * @subpackage    blog.views.posts.admin_index
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
-    echo $this->Form->create('BlogPost', array('url' => array('controller' => 'posts', 'action' => 'mass', 'admin' => 'true')));
+    echo $this->Form->create('BlogPost', array('action' => 'mass'));
         $massActions = $this->Infinitas->massActionButtons(
             array(
                 'add',
