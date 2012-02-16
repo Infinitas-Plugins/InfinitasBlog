@@ -50,7 +50,7 @@
                     $this->Paginator->sort('views') => array(
                         'style' => 'width:30px;'
                     ),
-                    __('Status') => array(
+                    __d('blog', 'Status') => array(
                         'class' => 'actions'
                     )
                 )
