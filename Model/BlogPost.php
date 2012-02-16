@@ -422,7 +422,7 @@
 			}
 
 			if (!empty($query['operation'])) {
-				return $this->findPaginatecount($state, $query, $results);
+				return $this->_findPaginatecount($state, $query, $results);
 			}
 
 			return $results;
@@ -465,7 +465,7 @@
 			}
 
 			if (!empty($query['operation'])) {
-				return $this->findPaginatecount($state, $query, $results);
+				return $this->_findPaginatecount($state, $query, $results);
 			}
 
 			$return = array();
@@ -566,7 +566,7 @@
 			}
 
 			if (!empty($query['operation'])) {
-				return $this->findPaginatecount($state, $query, $results);
+				return $this->_findPaginatecount($state, $query, $results);
 			}
 
 			return $results;
