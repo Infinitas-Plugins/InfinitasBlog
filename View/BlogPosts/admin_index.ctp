@@ -17,7 +17,7 @@
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
     echo $this->Form->create('BlogPost', array('url' => array('controller' => 'posts', 'action' => 'mass', 'admin' => 'true')));
-        $massActions = $this->Blog->massActionButtons(
+        $massActions = $this->Infinitas->massActionButtons(
             array(
                 'add',
                 'edit',
@@ -33,7 +33,7 @@
 <div class="table">
     <table class="listing" cellpadding="0" cellspacing="0">
         <?php
-            echo $this->Blog->adminTableHeader(
+            echo $this->Infinitas->adminTableHeader(
                 array(
                     $this->Form->checkbox('all') => array(
                         'class' => 'first',
@@ -58,7 +58,7 @@
 
             foreach($posts as $post){
                 ?>
-                    <tr class="<?php echo $this->Blog->rowClass(); ?>">
+                    <tr class="<?php echo $this->Infinitas->rowClass(); ?>">
                         <td><?php echo $this->Form->checkbox( $post['BlogPost']['id'] ); ?>&nbsp;</td>
                         <td title="<?php echo $post['BlogPost']['slug']; ?>">
                             <?php
