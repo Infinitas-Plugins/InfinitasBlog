@@ -35,22 +35,22 @@
 			$limit = 6;
 
 
-			$url = array_merge(array('action' => 'index'), $this->params['named']);
+			$url = array_merge(array('action' => 'index'), $this->request->params['named']);
 
-			if(isset($this->params['year'])){
-				$year = $this->params['year'];
+			if(isset($this->request->params['year'])){
+				$year = $this->request->params['year'];
 				$titleForLayout = sprintf(__d('blog', 'Posts for the year %s'), $year);
 				$url['year'] = $year;
 				
-				if(isset($this->params['pass'][0])){
-					$month = substr((int)$this->params['pass'][0], 0, 2);
+				if(isset($this->request->params['pass'][0])){
+					$month = substr((int)$this->request->params['pass'][0], 0, 2);
 					$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s'), __(date('F', mktime(0, 0, 0, $month))), $year);
 					$url[] = $month;
 				}
 			}
 			
-			else if(isset($this->params['tag'])){
-				$tag = $this->params['tag'];
+			else if(isset($this->request->params['tag'])){
+				$tag = $this->request->params['tag'];
 				if(empty($titleForLayout)){
 					$titleForLayout = __d('blog', 'Posts');
 				}
@@ -130,7 +130,7 @@
 		 * @return na
 		 */
 		public function view() {
-			if (!isset($this->params['slug'])) {
+			if (!isset($this->request->params['slug'])) {
 				$this->notice('invalid');
 			}
 
@@ -138,7 +138,7 @@
 				'viewData',
 				array(
 					'conditions' => array(
-						'GlobalContent.slug' => $this->params['slug'],
+						'GlobalContent.slug' => $this->request->params['slug'],
 						$this->modelClass . '.active' => 1
 					)
 				)
