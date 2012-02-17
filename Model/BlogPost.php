@@ -138,6 +138,22 @@
 			return $results;
 		}
 
+		public function beforeFind($queryData) {
+			if($this->findQueryType == 'count') {
+				return $queryData;
+			}
+
+			$queryData['fields'] = array_merge(
+				(array)$queryData['fields'],
+				array(
+					'created_year',
+					'created_month',
+				)
+			);
+
+			return $queryData;
+		}
+
 		/**
 		 * General method for the view pages. Gets the required data and relations
 		 * and can be used for the admin preview also.
