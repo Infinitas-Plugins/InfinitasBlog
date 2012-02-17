@@ -66,57 +66,11 @@
 				$data['type'] = 'posts';
 			}
 
-			$data['data']['BlogPost'] = isset($data['data']['BlogPost']) ? $data['data']['BlogPost'] : $data['data'];
-			$categorySlug = 'news-feed';
-			
-			if(!empty($data['data']['GlobalCategory']['slug'])) {
-				$categorySlug = $data['data']['GlobalCategory']['slug'];
-			}
-
-			else if(!empty($data['data']['BlogPost']['GlobalCategory']['slug'])) {
-				$categorySlug = $data['data']['BlogPost']['GlobalCategory']['slug'];
+			if(empty($data['data']['GlobalCategory']['slug'])) {
+				$data['data']['GlobalCategory']['slug'] = __d('blog', 'news-feed');
 			}
 			
-			switch($data['type']){
-				case 'posts':
-					return array(
-						'plugin' => 'blog',
-						'controller' => 'blog_posts',
-						'action' => 'view',
-						'id' => $data['data']['BlogPost']['id'],
-						'category' => $categorySlug,
-						'slug' => $data['data']['BlogPost']['slug']
-					);
-					break;
-
-				case 'year':
-					return array(
-						'plugin' => 'blog',
-						'controller' => 'blog_posts',
-						'action' => 'index',
-						'year' => $data['data']['year']
-					);
-					break;
-
-				case 'year_month':
-					return array(
-						'plugin' => 'blog',
-						'controller' => 'blog_posts',
-						'action' => 'index',
-						'year' => $data['data']['year'],
-						$data['data']['month']
-					);
-					break;
-
-				case 'tag':
-					return array(
-						'plugin' => 'blog',
-						'controller' => 'blog_posts',
-						'action' => 'index',
-						'tag' => $data['data']['tag']
-					);
-					break;
-			} // switch
+			return parent::onSlugUrl($event, $data['data'], $data['type']);
 		}
 
 		public function onRequireHelpersToLoad($event){
