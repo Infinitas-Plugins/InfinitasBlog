@@ -43,5 +43,43 @@
 				 'index' => true,
 				 'follow' => true
 			 ),
+		 ),
+		 'slugUrl' => array(
+			 'posts' => array(
+				 'BlogPost.id' => 'id',
+				 'BlogPost.slug' => 'slug',
+				 'GlobalCategory.id' => 'category_id',
+				 'GlobalCategory.slug' => 'category',
+				 'url' => array(
+					 'plugin' => 'plugin',
+					 'controller' => 'blog_posts',
+					 'action' => 'view'
+				 )
+			 ),
+			 'year' => array(
+				 'BlogPost.created_year' => 'year',
+				 'url' => array(
+					 'plugin' => 'plugin',
+					 'controller' => 'blog_posts',
+					 'action' => 'index'
+				 )
+			 ),
+			 'year_month' => array(
+				 'BlogPost.created_year' => 'year',
+				 'BlogPost.created_month' => 'month',
+				 'url' => array(
+					 'plugin' => 'plugin',
+					 'controller' => 'blog_posts',
+					 'action' => 'index'
+				 )
+			 ),
+			 'tag' => array(
+				 'tag' => 'tag',
+				 'url' => array(
+					 'plugin' => 'plugin',
+					 'controller' => 'blog_posts',
+					 'action' => 'index'
+				 )
+			 )
 		 )
 	 );
