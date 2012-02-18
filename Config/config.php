@@ -50,6 +50,8 @@
 				 'BlogPost.slug' => 'slug',
 				 'GlobalCategory.id' => 'category_id',
 				 'GlobalCategory.slug' => 'category',
+				 'BlogPost.GlobalCategory.id' => 'category_id',
+				 'BlogPost.GlobalCategory.slug' => 'category',
 				 'url' => array(
 					 'plugin' => 'plugin',
 					 'controller' => 'blog_posts',
