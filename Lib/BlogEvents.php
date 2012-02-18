@@ -79,7 +79,9 @@
 
 		public function onRequireCssToLoad($event){
 			if($event->Handler->params['plugin'] == 'blog'){
-				return '/blog/css/blog';
+				return array(
+					'Blog.blog'
+				);
 			}
 		}
 
