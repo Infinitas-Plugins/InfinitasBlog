@@ -363,7 +363,7 @@
 		 * 			- created (string) the name of the field to use in the Between statement (defaults 'created')
 		 * @todo take just reference parameter?
 		 */
-		public function setPaginateDateOptions($paginate, $options = array()) {
+		public function setPaginateDateOptions($options = array()) {
 			$default = array(
 				'year' => null,
 				'month' => null,
@@ -375,7 +375,7 @@
 
 			// If nothing is given, add nothing
 			if ($year === null && $month === null) {
-				return $paginate;
+				return $options;
 			}
 
 			// SQL time templates for sprintf
@@ -386,20 +386,20 @@
 
 			$begin = sprintf($yTmplBegin, $year);
 			$end = sprintf($yTmplEnd, $year);
-			if ($month !== null) {
+			if ($month !== null && $month <= 12) {
 				// Get days for selected month
 				$days = cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 				$begin = sprintf($ymTmplBegin, $year, $month);
 				$end = sprintf($ymTmplEnd, $year, $month, $days);
 			}
 
-			$paginate['conditions'] += array(
-				$model . '.' . $created.' BETWEEN ? AND ?' => array($begin,$end)
+			$options['conditions'] += array(
+				$model . '.' . $created.' BETWEEN ? AND ?' => array($begin, $end)
 			);
 
-			unset($paginate['year'], $paginate['month'], $paginate['created'], $paginate['model']);
-
-			return $paginate;
+			unset($options['conditions']['year'], $options['conditions']['month'], $options['created'], $options['model']);
+			
+			return $options;
 		}
 
 		protected function _findPaginated($state, $query, $results = array()) {
