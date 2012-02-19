@@ -31,21 +31,27 @@
 		public function index() {
 			$this->Session->delete('Pagination.Post');
 			$titleForLayout = $year = $month = $slug = $tagData = null;
-
 			$limit = 6;
-
-
 			$url = array_merge(array('action' => 'index'), $this->request->params['named']);
-
-			if(isset($this->request->params['year'])){
+			
+			$conditions = array(
+				'BlogPost.active' => 1,
+				'BlogPost.parent_id IS NULL',
+				'or' => array(
+					'GlobalCategory.active' => 1,
+					'GlobalCategory.id IS NULL'
+				)
+			);
+			
+			if(isset($this->request->params['year'])) {
 				$year = $this->request->params['year'];
 				$titleForLayout = sprintf(__d('blog', 'Posts for the year %s'), $year);
-				$url['year'] = $year;
-
-				if(isset($this->request->params['pass'][0])){
-					$month = substr((int)$this->request->params['pass'][0], 0, 2);
+				$conditions['year'] = $url['year'] = $year;
+				
+				if(isset($this->request->params['month'])) {
+					$month = substr((int)$this->request->params['month'], 0, 2);
 					$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s'), __(date('F', mktime(0, 0, 0, $month))), $year);
-					$url[] = $month;
+					$conditions['month'] = $url[] = $month;
 				}
 			}
 
@@ -89,12 +95,6 @@
 				);
 			}
 
-			$conditions = array(
-				'BlogPost.active' => 1,
-				'BlogPost.parent_id IS NULL',
-				'GlobalCategory.active' => 1
-			);
-
 			if(!empty($post_ids)) {
 				$conditions['GlobalContent.id'] = $post_ids;
 			}
@@ -114,7 +114,7 @@
 				'year' => $year,
 				'month' => $month
 			);
-
+			
 			$this->set('posts', $this->paginate('BlogPost'));
 			$this->set('seoContentIndex', Configure::read('Blog.robots.index.index'));
 			$this->set('seoContentFollow', Configure::read('Blog.robots.index.follow'));
