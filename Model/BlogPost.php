@@ -476,10 +476,6 @@
 				return array_merge($conditions, $query);
 			}
 
-			if (!empty($query['operation'])) {
-				return $this->_findPaginatecount($state, $query, $results);
-			}
-
 			$return = array();
 			foreach(Set::extract('/' . $this->alias . '/year_month', $results) as $date) {
 				$date = explode('_', $date);
@@ -575,10 +571,6 @@
 					)
 				);
 				return $query;
-			}
-
-			if (!empty($query['operation'])) {
-				return $this->_findPaginatecount($state, $query, $results);
 			}
 
 			return $results;
