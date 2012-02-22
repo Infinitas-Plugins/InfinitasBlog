@@ -99,7 +99,7 @@
 				$conditions['GlobalContent.id'] = $post_ids;
 			}
 
-			$this->paginate = array(
+			$this->Paginator->settings = array(
 				'paginated',
 				'fields' => array(
 					'BlogPost.id',
@@ -115,7 +115,7 @@
 				'month' => $month
 			);
 			
-			$this->set('posts', $this->paginate('BlogPost'));
+			$this->set('posts', $this->Paginator->paginate($this->modelClass));
 			$this->set('seoContentIndex', Configure::read('Blog.robots.index.index'));
 			$this->set('seoContentFollow', Configure::read('Blog.robots.index.follow'));
 			$this->set('seoCanonicalUrl', $url);
