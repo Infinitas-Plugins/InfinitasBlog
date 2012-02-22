@@ -222,7 +222,7 @@
 		 * @return na
 		 */
 		public function admin_index() {
-			$posts = $this->paginate(null, $this->Filter->filter);
+			$posts = $this->Paginator->paginate(null, $this->Filter->filter);
 
 			$filterOptions = $this->Filter->filterOptions;
 			$filterOptions['fields'] = array(
