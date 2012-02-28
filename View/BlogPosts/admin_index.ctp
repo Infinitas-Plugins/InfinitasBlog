@@ -56,10 +56,10 @@
                 )
             );
 
-            foreach($posts as $post){
+            foreach($posts as $post) {
                 ?>
                     <tr class="<?php echo $this->Infinitas->rowClass(); ?>">
-                        <td><?php echo $this->Form->checkbox( $post['BlogPost']['id'] ); ?>&nbsp;</td>
+                        <td><?php echo $this->Form->checkbox($post['BlogPost']['id']); ?>&nbsp;</td>
                         <td title="<?php echo $post['BlogPost']['slug']; ?>">
                             <?php
 								echo $this->Html->link($post['BlogPost']['title'], array('action' => 'edit', $post['BlogPost']['id']));
