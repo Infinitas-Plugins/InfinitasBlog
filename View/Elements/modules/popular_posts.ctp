@@ -20,7 +20,10 @@
 	 * Redistributions of files must retain the above copyright notice.
 	 */
 
-	$popularPosts = ClassRegistry::init('Blog.BlogPost')->getMostViewed($config['limit']);
+	$popularPosts = ClassRegistry::init('Blog.BlogPost')->getMostViewed(!empty($config['limit']) ? $config['limit'] : 5);
+	if(empty($popularPosts)) {
+		return false;
+	}
 ?>
 <h4><?php echo __('Popular Posts'); ?></h4>
 <?php
