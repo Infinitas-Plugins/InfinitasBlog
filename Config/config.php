@@ -25,6 +25,7 @@
 		 'allow_ratings' => true,
 		 'depreciate' => '6 months', // the time before the post is marked as old
 		 'preview' => 400, // the length of the text to show on index pages
+		 'time_format' => 'jS M Y',
 		 'before' => array(
 		 ),
 		 'after' => array(

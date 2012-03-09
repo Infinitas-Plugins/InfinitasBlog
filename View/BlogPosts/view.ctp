@@ -39,8 +39,8 @@
 	$post['BlogPost']['url'] = Router::url(current($eventData['slugUrl']), true);
 	$post['BlogPost']['title_link'] = $this->Html->link($post['BlogPost']['title'], $post['BlogPost']['url']);
 	
-	$post['BlogPost']['created'] = $this->Time->niceShort($post['BlogPost']['created']);
-	$post['BlogPost']['modified'] = $this->Time->niceShort($post['BlogPost']['modified']);
+	$post['BlogPost']['created'] = CakeTime::format(Configure::read('Blog.time_format'), $post['BlogPost']['created']);
+	$post['BlogPost']['modified'] = CakeTime::format(Configure::read('Blog.time_format'), $post['BlogPost']['modified']);
 
 	$post['BlogPost']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
 	$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect(

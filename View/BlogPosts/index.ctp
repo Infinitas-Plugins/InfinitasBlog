@@ -43,13 +43,8 @@
 		$post['BlogPost']['title_link'] = $this->Html->link($post['BlogPost']['title'], $url);
 		$post['BlogPost']['url'] = $url;
 
-		$time = strtotime($post['BlogPost']['created']);
-		$post['BlogPost']['created'] = sprintf(
-			'%s %s | %s',
-			date('M', $time),
-			date('Y', $time),
-			date('H:i', $time)
-		);
+		$post['BlogPost']['created'] = CakeTime::format(Configure::read('Blog.time_format'), $post['BlogPost']['created']);
+		$post['BlogPost']['modified'] = CakeTime::format(Configure::read('Blog.time_format'), $post['BlogPost']['modified']);
 
 		if(!($firstPage && $k === 0)) {
 			$post['BlogPost']['body'] = $this->Text->truncate($post['BlogPost']['body'], Configure::read('Blog.preview'), array('html' => true));
