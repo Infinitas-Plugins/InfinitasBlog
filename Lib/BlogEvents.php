@@ -1,5 +1,5 @@
 <?php
-	final class BlogEvents extends AppEvents{
+	final class BlogEvents extends AppEvents {
 		public function onPluginRollCall(){
 			return array(
 				'name' => 'Blog',
@@ -43,10 +43,6 @@
 			);
 
 			return $menu;
-		}
-
-		public function onSetupConfig(){
-			return Configure::load('Blog.config');
 		}
 		
 		public function onSetupCache(){
