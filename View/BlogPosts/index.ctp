@@ -39,7 +39,7 @@
 		}
 
 		$eventData = $this->Event->trigger('Blog.slugUrl', array('type' => 'posts', 'data' => $post));
-		$url = Router::url(current($eventData['slugUrl']), true);
+		$url = InfinitasRouter::url(current($eventData['slugUrl']), true);
 		$post['BlogPost']['title_link'] = $this->Html->link($post['BlogPost']['title'], $url);
 		$post['BlogPost']['url'] = $url;
 
