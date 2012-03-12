@@ -17,7 +17,7 @@
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
 
-    echo $this->Form->create('BlogPost');
+    echo $this->Form->create('BlogPost', array('type' => 'file'));
         echo $this->Infinitas->adminEditHead();
 
 		$tabs = array(
