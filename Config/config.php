@@ -45,6 +45,11 @@
 				 'follow' => true
 			 ),
 		 ),
+		 'meta' => array(
+			 'keywords' => 'infinitas blog plugin,cakephp powered blog,php blog software',
+			 'description' => 'The Infinitas blog plugin is designed for building powerful flexible blogs running on the Infinitas platform. For more information see http://infinitas-cms.org',
+			 'title' => ''
+		 ),
 		 'slugUrl' => array(
 			 'posts' => array(
 				 'BlogPost.id' => 'id',
