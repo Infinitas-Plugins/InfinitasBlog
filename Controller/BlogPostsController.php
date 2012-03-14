@@ -116,8 +116,6 @@
 			);
 			
 			$this->set('posts', $this->Paginator->paginate($this->modelClass));
-			$this->set('seoContentIndex', Configure::read('Blog.robots.index.index'));
-			$this->set('seoContentFollow', Configure::read('Blog.robots.index.follow'));
 			$this->set('seoCanonicalUrl', $url);
 			$this->set('tagData', $tagData);
 			$this->set('title_for_layout', $titleForLayout);
@@ -155,10 +153,13 @@
 
 			$canonicalUrl = $this->Event->trigger('Blog.slugUrl', $post);
 			$this->set('seoCanonicalUrl', $canonicalUrl['slugUrl']['Blog']);
-
-			$this->set('seoContentIndex', Configure::read('Blog.robots.view.index'));
-			$this->set('seoContentFollow', Configure::read('Blog.robots.view.follow'));
+			
+			$this->set('seoMetaDescription', $post['BlogPost']['meta_description']);
+			$this->set('seoMetaKeywords', $post['BlogPost']['meta_keywords']);
+			
 			$this->set('title_for_layout', $post[$this->modelClass]['title']);
+			
+			Configure::write('Website.keywords', $post['BlogPost']['meta_keywords']);
 		}
 
 		/**
