@@ -66,6 +66,14 @@
 				$limit = 50;
 
 				$url['tag'] = $tag;
+				
+				if(!empty($tagData['GlobalTag']['meta_keywords'])) {
+					$this->set('seoMetaKeywords', $tagData['GlobalTag']['meta_keywords']);
+				}
+				
+				if(!empty($tagData['GlobalTag']['meta_description'])) {
+					$this->set('seoMetaDescription', $tagData['GlobalTag']['meta_description']);
+				}
 			}
 
 			$post_ids = array();
@@ -115,7 +123,9 @@
 				'month' => $month
 			);
 			
-			$this->set('posts', $this->Paginator->paginate($this->modelClass));
+			$posts = $this->Paginator->paginate($this->modelClass);
+			
+			$this->set('posts', $posts);
 			$this->set('seoCanonicalUrl', $url);
 			$this->set('tagData', $tagData);
 			$this->set('title_for_layout', $titleForLayout);
