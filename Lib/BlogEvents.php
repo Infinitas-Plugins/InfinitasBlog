@@ -93,4 +93,24 @@
 				)
 			);
 		}
+		
+		public function onRouteParse($event, $data) {
+			$count = 0;
+			if(!empty($data['slug']) && ($data['controller'] == 'blog_posts' && $data['action'] == 'view')) {
+				$count = ClassRegistry::init('Blog.BlogPost')->find(
+					'count',
+					array(
+						'conditions' => array(
+							'GlobalContent.slug' => $data['slug']
+						)
+					)
+				);
+			
+				if($count < 1) {
+					return false;
+				}
+
+				return $data;
+			}
+		}
 	}
