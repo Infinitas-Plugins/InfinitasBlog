@@ -82,7 +82,7 @@
 		}
 
 		public function onSetupRoutes($event, $data = null) {
-			Router::connect(
+			InfinitasRouter::connect(
 				'/admin/blog',
 				array(
 					'admin' => true,
