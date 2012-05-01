@@ -62,10 +62,12 @@
 
 		$post['BlogPost']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
 		$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect(
-			'Blog.post_tag_cloud',
+			'Contents.tag_cloud',
 			array(
 				'tags' => $post['GlobalTagged'],
-				'title' => 'Tags'
+				'title' => 'Tags',
+				'model' => 'Blog.BlogPost',
+				'id' => $post['BlogPost']['id']
 			)
 		);
 
