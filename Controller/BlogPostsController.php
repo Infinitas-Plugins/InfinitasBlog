@@ -35,15 +35,15 @@
 			$url = array_merge(array('action' => 'index'), $this->request->params['named']);
 			
 			$conditions = array(
-				'BlogPost.active' => 1,
-				'BlogPost.parent_id IS NULL',
+				$this->modelClass . '.active' => 1,
+				$this->modelClass . '.parent_id IS NULL',
 				'or' => array(
 					'GlobalCategory.active' => 1,
 					'GlobalCategory.id IS NULL'
 				)
 			);
 			
-			if(isset($this->request->params['year'])) {
+			if(!empty($this->request->params['year'])) {
 				$year = $this->request->params['year'];
 				$titleForLayout = sprintf(__d('blog', 'Posts for the year %s'), $year);
 				$url['year'] = $year;
@@ -55,14 +55,14 @@
 				}
 			}
 
-			else if(isset($this->request->params['tag'])){
+			else if(!empty($this->request->params['tag'])){
 				$tag = $this->request->params['tag'];
 				if(empty($titleForLayout)){
 					$titleForLayout = __d('blog', 'Posts');
 				}
 
 				$titleForLayout = sprintf(__d('blog', '%s related to %s'), $titleForLayout, $tag);
-				$tagData = $this->BlogPost->GlobalTag->getViewData($tag);
+				$tagData = $this->{$this->modelClass}->GlobalTag->getViewData($tag);
 				$limit = 50;
 
 				$url['tag'] = $tag;
@@ -76,7 +76,6 @@
 				}
 			}
 
-			$post_ids = array();
 			if (!empty($tag)) {
 				$tag_id = ClassRegistry::init('Contents.GlobalTag')->find(
 					'list',
@@ -90,7 +89,7 @@
 					)
 				);
 
-				$post_ids = $this->BlogPost->GlobalTagged->find(
+				$conditions['GlobalContent.id'] = $this->{$this->modelClass}->GlobalTagged->find(
 					'list',
 					array(
 						'fields' => array(
@@ -103,19 +102,15 @@
 				);
 			}
 
-			if(!empty($post_ids)) {
-				$conditions['GlobalContent.id'] = $post_ids;
-			}
-
 			$this->Paginator->settings = array(
 				'paginated',
 				'fields' => array(
-					'BlogPost.id',
-					'BlogPost.comment_count',
-					'BlogPost.views',
-					'BlogPost.created',
-					'BlogPost.parent_id',
-					'BlogPost.ordering',
+					$this->modelClass . '.id',
+					$this->modelClass . '.comment_count',
+					$this->modelClass . '.views',
+					$this->modelClass . '.created',
+					$this->modelClass . '.parent_id',
+					$this->modelClass . '.ordering',
 				),
 				'conditions' => $conditions,
 				'limit' => $limit,
@@ -123,9 +118,7 @@
 				'month' => $month
 			);
 			
-			$posts = $this->Paginator->paginate($this->modelClass);
-			
-			$this->set('posts', $posts);
+			$this->set('posts', $this->Paginator->paginate());
 			$this->set('seoCanonicalUrl', $url);
 			$this->set('tagData', $tagData);
 			$this->set('title_for_layout', $titleForLayout);
@@ -142,7 +135,7 @@
 				$this->notice('invalid');
 			}
 
-			$post = $this->BlogPost->find(
+			$post = $this->{$this->modelClass}->find(
 				'viewData',
 				array(
 					'conditions' => array(
@@ -164,12 +157,12 @@
 			$canonicalUrl = $this->Event->trigger('Blog.slugUrl', $post);
 			$this->set('seoCanonicalUrl', $canonicalUrl['slugUrl']['Blog']);
 			
-			$this->set('seoMetaDescription', $post['BlogPost']['meta_description']);
-			$this->set('seoMetaKeywords', $post['BlogPost']['meta_keywords']);
+			$this->set('seoMetaDescription', $post[$this->modelClass]['meta_description']);
+			$this->set('seoMetaKeywords', $post[$this->modelClass]['meta_keywords']);
 			
 			$this->set('title_for_layout', $post[$this->modelClass]['title']);
 			
-			Configure::write('Website.keywords', $post['BlogPost']['meta_keywords']);
+			Configure::write('Website.keywords', $post[$this->modelClass]['meta_keywords']);
 		}
 
 		/**
@@ -183,7 +176,7 @@
 		 * @return na
 		 */
 		public function admin_dashboard() {
-			$feed = $this->BlogPost->find(
+			$feed = $this->{$this->modelClass}->find(
 				'feed',
 				array(
 					'setup' => array(
@@ -192,10 +185,10 @@
 						'action' => 'view',
 					),
 					'fields' => array(
-						'BlogPost.id',
-						'BlogPost.title',
-						'BlogPost.intro',
-						'BlogPost.created'
+						$this->modelClass . '.id',
+						$this->modelClass . '.title',
+						$this->modelClass . '.intro',
+						$this->modelClass . '.created'
 					),
 					'feed' => array(
 						'Core.Comment' => array(
@@ -220,9 +213,9 @@
 
 			$this->set('blogFeeds', $feed);
 
-			$this->set('dashboardPostCount', $this->BlogPost->getCounts());
-			$this->set('dashboardPostLatest', $this->BlogPost->getLatest());
-			$this->set('dashboardCommentsCount', $this->BlogPost->Comment->getCounts('Blog.BlogPost'));
+			$this->set('dashboardPostCount', $this->{$this->modelClass}->getCounts());
+			$this->set('dashboardPostLatest', $this->{$this->modelClass}->getLatest());
+			$this->set('dashboardCommentsCount', $this->{$this->modelClass}->Comment->getCounts('Blog.' . $this->modelClass));
 		}
 
 		/**
@@ -239,7 +232,7 @@
 			$filterOptions['fields'] = array(
 				'title',
 				'body',
-				'category_id' => $this->BlogPost->GlobalContent->find('categoryList'),
+				'category_id' => $this->{$this->modelClass}->GlobalContent->find('categoryList'),
 				'active' => Configure::read('CORE.active_options')
 			);
 
@@ -257,14 +250,14 @@
 		public function admin_add() {
 			parent::admin_add();
 
-			$parents = $this->BlogPost->getParentPosts();
+			$parents = $this->{$this->modelClass}->getParentPosts();
 			$this->set(compact('tags', 'parents'));
 		}
 
 		public function admin_edit($id = null) {
 			parent::admin_edit($id);
 
-			$parents = $this->BlogPost->getParentPosts();
+			$parents = $this->{$this->modelClass}->getParentPosts();
 			$this->set(compact('parents'));
 		}
 
@@ -274,12 +267,12 @@
 			}
 
 			$post = ((int)$slug > 0)
-			? $this->BlogPost->read(null, $slug)
-			: $this->BlogPost->find(
+			? $this->{$this->modelClass}->read(null, $slug)
+			: $this->{$this->modelClass}->find(
 				'first',
 				array(
 					'conditions' => array(
-						'BlogPost.slug' => $slug
+						$this->modelClass . '.slug' => $slug
 					)
 				)
 			);
