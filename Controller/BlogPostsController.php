@@ -89,7 +89,7 @@
 					)
 				);
 
-				$conditions['GlobalContent.id'] = $this->{$this->modelClass}->GlobalTagged->find(
+				$conditions['GlobalContent.foreign_key'] = $this->{$this->modelClass}->GlobalTagged->find(
 					'list',
 					array(
 						'fields' => array(
