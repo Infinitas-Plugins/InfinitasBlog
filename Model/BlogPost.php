@@ -473,7 +473,15 @@
 					)
 				);
 
-				return array_merge($conditions, $query);
+				$query = array_merge_recursive($conditions, $query);
+				foreach($query as $k => &$v) {
+					if(!is_array($v)) {
+						continue;
+					}
+					
+					$v = array_filter($v);
+				}
+				return $query;
 			}
 
 			$return = array();

@@ -48,8 +48,11 @@
 				$titleForLayout = sprintf(__d('blog', 'Posts for the year %s'), $year);
 				$url['year'] = $year;
 				
-				if(isset($this->request->params['month'])) {
-					$month = substr((int)$this->request->params['month'], 0, 2);
+				$month = !empty($this->request->params['pass'][1]) ? $this->request->params['pass'][1] : null;
+				if(!empty($this->request->params['month'])) {
+					$month = $this->request->params['month'];
+				}
+				if((int)$month > 0 && (int)$month < 13) {
 					$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s'), __(date('F', mktime(0, 0, 0, $month))), $year);
 					$url[] = $month;
 				}
