@@ -20,11 +20,11 @@
      * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
      */
 
-	if(!isset($postDates)){
+	if(!isset($postDates)) {
 		$postDates = ClassRegistry::init('Blog.BlogPost')->find('dates');
 	}
 
-	if(empty($postDates)){
+	if(empty($postDates)) {
 		echo __('No posts found');
 		return;
 	}
@@ -32,13 +32,13 @@
 	?><h3><?php echo __('Browse By Date'); ?></h3><?php
 
 	$lis = array();
-	foreach($postDates as $year => $months){
+	foreach($postDates as $year => $months) {
 		$url = $this->Event->trigger('Blog.slugUrl', array('type' => 'year', 'data' => array('BlogPost' => array('created_year' => $year))));
 		echo sprintf('<h4>%s</h4>%s', $this->Html->link($year, current($url['slugUrl'])), is_string($months) ? $months : '');
 		
-		if (!empty($months)){
+		if (!empty($months)) {
 			$_monthsLi = array();
-			foreach($months as $month){
+			foreach($months as $month) {
 				$url = $this->Event->trigger('Blog.slugUrl', array('type' => 'year_month', 'data' => array('BlogPost' => array('created_year' => $year, 'created_month' => $month))));
 				$_monthsLi[] = $this->Html->link(
 					date('F', mktime(0,0,0,$month)),

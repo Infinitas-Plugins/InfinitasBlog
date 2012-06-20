@@ -58,9 +58,9 @@
 				}
 			}
 
-			else if(!empty($this->request->params['tag'])){
+			else if(!empty($this->request->params['tag'])) {
 				$tag = $this->request->params['tag'];
-				if(empty($titleForLayout)){
+				if(empty($titleForLayout)) {
 					$titleForLayout = __d('blog', 'Posts');
 				}
 

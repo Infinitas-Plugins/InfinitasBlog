@@ -1,6 +1,6 @@
 <?php
 	final class BlogEvents extends AppEvents {
-		public function onPluginRollCall(){
+		public function onPluginRollCall() {
 			return array(
 				'name' => 'Blog',
 				'description' => 'Blogging platform',
@@ -14,7 +14,7 @@
 			);
 		}
 
-		public function onRequireTodoList($event){
+		public function onRequireTodoList($event) {
 			return array(
 				array(
 					'name' => 'warning no categories',
@@ -34,7 +34,7 @@
 			);
 		}
 
-		public function onAdminMenu($event){
+		public function onAdminMenu($event) {
 			$menu['main'] = array(
 				'Dashboard' => array('plugin' => 'blog', 'controller' => 'blog', 'action' => 'dashboard'),
 				'Posts' => array('plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index'),
@@ -45,7 +45,7 @@
 			return $menu;
 		}
 		
-		public function onSetupCache(){
+		public function onSetupCache() {
 			return array(
 				'name' => 'blog',
 				'config' => array(
@@ -54,11 +54,11 @@
 			);
 		}
 
-		public function onSlugUrl($event, $data){
-			if(!isset($data['data'])){
+		public function onSlugUrl($event, $data) {
+			if(!isset($data['data'])) {
 				$data['data'] = $data;
 			}
-			if(!isset($data['type'])){
+			if(!isset($data['type'])) {
 				$data['type'] = 'posts';
 			}
 
@@ -69,12 +69,12 @@
 			return parent::onSlugUrl($event, $data['data'], $data['type']);
 		}
 
-		public function onRequireHelpersToLoad($event){
+		public function onRequireHelpersToLoad($event) {
 			
 		}
 
-		public function onRequireCssToLoad($event){
-			if($event->Handler->params['plugin'] == 'blog'){
+		public function onRequireCssToLoad($event) {
+			if($event->Handler->params['plugin'] == 'blog') {
 				return array(
 					'Blog.blog'
 				);

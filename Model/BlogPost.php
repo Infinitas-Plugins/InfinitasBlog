@@ -76,7 +76,7 @@
 		 *
 		 * @return array
 		 */
-		public function getParentPosts(){
+		public function getParentPosts() {
 			return $this->find(
 				'list',
 				array(
@@ -161,8 +161,8 @@
 		 * @param array $conditions conditions for the find
 		 * @return array the data that was found
 		 */
-		public function getViewData($conditions = array()){
-			if(!$conditions){
+		public function getViewData($conditions = array()) {
+			if(!$conditions) {
 				return false;
 			}
 
@@ -198,7 +198,7 @@
 		public function getLatest($limit = 5, $active = 1) {
 			$cacheName = cacheName('posts_latest', array($limit, $active));
 			$posts = Cache::read($cacheName, 'blog');
-			if($posts !== false){
+			if($posts !== false) {
 				return $posts;
 			}
 
@@ -233,7 +233,7 @@
 		public function getCounts($model = null) {
 			$cacheName = cacheName('posts_count', $model);
 			$counts = Cache::read($cacheName, 'blog');
-			if($counts !== false){
+			if($counts !== false) {
 				return $counts;
 			}
 
@@ -274,7 +274,7 @@
 		public function getPending($limit = 10) {
 			$cacheName = cacheName('posts_pending', $limit);
 			$pending = Cache::read($cacheName, 'blog');
-			if($pending !== false){
+			if($pending !== false) {
 				return $pending;
 			}
 
@@ -318,7 +318,7 @@
 		public function findPostsByTag($tag) {
 			$cacheName = cacheName('posts_by_tag', $tag);
 			$tags = Cache::read($cacheName, 'blog');
-			if($tags !== false){
+			if($tags !== false) {
 				return $tags;
 			}
 
