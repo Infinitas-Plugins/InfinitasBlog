@@ -3,7 +3,7 @@
 	App::uses('BlogPost', 'Blog.Model');
 
 	class BlogPostTest extends CakeTestCase {
-		var $fixtures = array(
+		public $fixtures = array(
 			'plugin.contents.global_category',
 			'plugin.blog.post',
 			//'plugin.contents.posts_tag',
@@ -16,20 +16,21 @@
 			'core.aros_aco',
 		);
 
-		function startTest() {
+		public function startTest() {
 			$this->Post =& ClassRegistry::init('Blog.BlogPost');
 		}
 
-		function endTest() {
+		public function endTest() {
 			unset($this->Post);
 			ClassRegistry::flush();
 		}
 
-		function testYearAndMonthPaginateOptions() {
+		public function testYearAndMonthPaginateOptions() {
 			$paginate = array(
 				'conditions' => array(
 					'BlogPost.id' => array(1,2,3,4)
-				)
+				),
+				'year' => 2009
 			);
 			$expected = array(
 				'conditions' => array(
@@ -37,7 +38,7 @@
 					'BlogPost.created BETWEEN ? AND ?' => array('2009-01-01 00:00:00', '2009-12-31 23:59:59')
 				)
 			);
-			$result = $this->Post->setPaginateDateOptions($paginate, array('year' => 2009));
+			$result = $this->Post->setPaginateDateOptions($paginate);
 			$this->assertEqual($result, $expected);
 
 			$expected = array(
@@ -46,7 +47,8 @@
 					'BlogPost.created BETWEEN ? AND ?' => array('2009-11-01 00:00:00', '2009-11-30 23:59:59')
 				)
 			);
-			$result = $this->Post->setPaginateDateOptions($paginate, array('year' => 2009, 'month' => 11));
+			$paginate['month'] = 11;
+			$result = $this->Post->setPaginateDateOptions($paginate);
 			$this->assertEqual($result, $expected);
 
 			$expected = array(
@@ -55,13 +57,17 @@
 					'BlogPost.created BETWEEN ? AND ?' => array('2010-05-01 00:00:00', '2010-05-31 23:59:59')
 				)
 			);
-			$result = $this->Post->setPaginateDateOptions($paginate, array('month' => 5));
+
+			$paginate['year'] = 2010;
+			$paginate['month'] = 5;
+			$result = $this->Post->setPaginateDateOptions($paginate);
 			$this->assertEqual($result, $expected);
 
 			$expected = array(
 				'conditions' => array(
 					'BlogPost.id' => array(1,2,3,4)				)
 			);
+			unset($paginate['month'], $paginate['year']);
 			$result = $this->Post->setPaginateDateOptions($paginate);
 			$this->assertEqual($result, $expected);
 
@@ -76,26 +82,27 @@
 					'GlobalCategory.xxxxx BETWEEN ? AND ?' => array('2010-01-01 00:00:00', '2010-12-31 23:59:59')
 				)
 			);
-			$result = $this->Post->setPaginateDateOptions($paginate, array(
-				'model' => 'GlobalCategory',
-				'created' => 'xxxxx',
-				'year' => 2010
-			));
+
+			$paginate['model'] = 'GlobalCategory';
+			$paginate['created'] = 'xxxxx';
+			$paginate['year'] = 2010;
+			$result = $this->Post->setPaginateDateOptions($paginate);
 			$this->assertEqual($result, $expected);
 
 			// Test leap year
 			$paginate = array(
 				'conditions' => array(
 					'BlogPost.id' => array(1,2,3,4)
-				)
+				),
+				'year' => 2008,
+				'month' => 2
 			);
 			$expected = array(
 				'conditions' => array(
 					'BlogPost.id' => array(1,2,3,4),
 					'BlogPost.created BETWEEN ? AND ?' => array('2008-02-01 00:00:00', '2008-02-29 23:59:59')				)
 			);
-			$result = $this->Post->setPaginateDateOptions($paginate, array('year' => 2008, 'month' => 2));
+			$result = $this->Post->setPaginateDateOptions($paginate);
 			$this->assertEqual($result, $expected);
 		}
 	}
-?>
