@@ -396,6 +396,7 @@ class BlogPost extends BlogAppModel {
 			$model . '.' . $created.' BETWEEN ? AND ?' => array($begin, $end)
 		);
 
+
 		unset($options['conditions']['year'], $options['conditions']['month'], $options['year'], $options['month'], $options['created'], $options['model']);
 
 		return $options;
