@@ -36,6 +36,19 @@ class PostFixture extends CakeTestFixture {
 			'created' => '2010-01-01 00:00:00',
 			'modified' => '2010-01-01 00:00:00',
 		),
+		array(
+			'id' => 2,
+			'comment_count' => 0,
+			'active' => 1,
+			'views' => 10,
+			'rating' => 3,
+			'rating_count' => 1,
+			'category_id' => 1,
+			'parent_id' => 1,
+			'ordering' => 3,
+			'created' => '2010-01-02 00:00:00',
+			'modified' => '2010-01-02 00:00:00',
+		),
 	);
 }
 ?>
