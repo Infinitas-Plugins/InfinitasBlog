@@ -86,7 +86,7 @@
 				)
 			);
 		}
-		
+
 		public function __construct($id = false, $table = null, $ds = null) {
 			parent::__construct($id, $table, $ds);
 
@@ -134,7 +134,7 @@
 					}
 					break;
 			}
-			
+
 			return $results;
 		}
 
@@ -246,7 +246,7 @@
 					'contain' => false
 				)
 			);
-			
+
 			$counts['pending'] = $this->find(
 				'count',
 				array(
@@ -349,7 +349,7 @@
 
 			return $tags;
 		}
-		
+
 		/**
 		 * Adds BETWEEN conditions for $year and $month to any array.
 		 * You can pass a custom Model and a custom created field, too.
@@ -388,7 +388,7 @@
 			$end = sprintf($yTmplEnd, $year);
 			if ($month !== null && $month <= 12) {
 				// Get days for selected month
-				$days = cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
+				$days = date('t', mktime(0, 0, 0, $month, 1, $year));
 				$begin = sprintf($ymTmplBegin, $year, $month);
 				$end = sprintf($ymTmplEnd, $year, $month, $days);
 			}
@@ -398,7 +398,7 @@
 			);
 
 			unset($options['conditions']['year'], $options['conditions']['month'], $options['year'], $options['month'], $options['created'], $options['model']);
-			
+
 			return $options;
 		}
 
@@ -443,7 +443,7 @@
 		/**
 		 * @brief Get years and months of all posts.
 		 *
-		 * This is used to get all the dates that posts are available in. It can then 
+		 * This is used to get all the dates that posts are available in. It can then
 		 * be used to generate links to archived posts etc.
 		 *
 		 * @access protected
@@ -478,7 +478,7 @@
 					if(!is_array($v)) {
 						continue;
 					}
-					
+
 					$v = array_filter($v);
 				}
 				return $query;
