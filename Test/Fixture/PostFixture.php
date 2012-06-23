@@ -1,11 +1,11 @@
 <?php
 /* BlogPost Fixture generated on: 2010-03-13 15:03:30 : 1268487090 */
 class PostFixture extends CakeTestFixture {
-	var $name = 'Post';
+	public $name = 'Post';
 
-	var $table = 'blog_posts';
+	public $table = 'blog_posts';
 
-	var $fields = array(
+	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
 		'comment_count' => array('type' => 'integer', 'null' => false, 'default' => NULL),
 		'active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'key' => 'index'),
@@ -22,7 +22,7 @@ class PostFixture extends CakeTestFixture {
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 
-	var $records = array(
+	public $records = array(
 		array(
 			'id' => 1,
 			'comment_count' => 0,
