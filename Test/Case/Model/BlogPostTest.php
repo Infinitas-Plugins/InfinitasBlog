@@ -18,9 +18,9 @@ class BlogPostTest extends CakeTestCase {
 		'plugin.comments.infinitas_comment',
 		'plugin.users.user',
 		'plugin.users.group',
-		'core.aco',
-		'core.aro',
-		'core.aros_aco',
+		'plugin.management.aco',
+		'plugin.management.aro',
+		'plugin.management.aros_aco',
 		'plugin.installer.plugin',
 	);
 
