@@ -13,7 +13,7 @@ class BlogPostTest extends CakeTestCase {
 		'plugin.contents.global_tagged',
 		'plugin.contents.global_tag',
 
-		'plugin.blog.post',
+		'plugin.blog.blog_post',
 
 		'plugin.comments.infinitas_comment',
 		'plugin.users.user',
@@ -128,19 +128,21 @@ class BlogPostTest extends CakeTestCase {
  */
 	public function testGetParentPosts() {
 		$expected = array(
-			1 => 1
+			'blog-post-1' => 'blog-post-1',
+			'blog-post-2' => 'blog-post-2'
 		);
 		$result = $this->Post->getParentPosts();
-		$this->assertEqual($expected, $result);
+		$this->assertEquals($expected, $result);
 
-		$this->Post->id = 2;
+		$this->Post->id = 'blog-post-2-1';
 		$this->assertTrue((bool)$this->Post->saveField('parent_id', null));
 		$expected = array(
-			1 => 1,
-			2 => 2
+			'blog-post-1' => 'blog-post-1',
+			'blog-post-2' => 'blog-post-2',
+			'blog-post-2-1' => 'blog-post-2-1'
 		);
 		$result = $this->Post->getParentPosts();
-		$this->assertEqual($expected, $result);
+		$this->assertEquals($expected, $result);
 	}
 
 /**
@@ -164,7 +166,7 @@ class BlogPostTest extends CakeTestCase {
 		$expected = array(
 			array(
 				'BlogPost' => array(
-					'id' => '2',
+					'id' => 'blog-post-2',
 					'model' => null,
 					'foreign_key' => null,
 					'title' => null,
@@ -234,6 +236,8 @@ class BlogPostTest extends CakeTestCase {
 					'content_count' => null,
 					'created' => null,
 					'modified' => null,
+					'theme_id' => null,
+					'layout' => null
 				),
 				'GlobalCategory' => array(
 					'id' => null,
@@ -241,11 +245,7 @@ class BlogPostTest extends CakeTestCase {
 					'slug' => null,
 					'meta_keywords' => null,
 					'meta_description' => null,
-					'description' => null,
 					'active' => null,
-					'locked' => null,
-					'locked_since' => null,
-					'locked_by' => null,
 					'group_id' => null,
 					'item_count' => null,
 					'parent_id' => null,
@@ -254,6 +254,8 @@ class BlogPostTest extends CakeTestCase {
 					'views' => null,
 					'created' => null,
 					'modified' => null,
+					'hide' => null,
+					'path_depth' => null
 				),
 				'GlobalCategoryContent' => array(
 					'id' => null,
@@ -289,7 +291,7 @@ class BlogPostTest extends CakeTestCase {
 			),
 			array(
 				'BlogPost' => array(
-					'id' => '1',
+					'id' => 'blog-post-1',
 					'model' => null,
 					'foreign_key' => null,
 					'title' => null,
@@ -359,6 +361,8 @@ class BlogPostTest extends CakeTestCase {
 					'content_count' => null,
 					'created' => null,
 					'modified' => null,
+					'theme_id' => null,
+					'layout' => null
 				),
 				'GlobalCategory' => array(
 					'id' => null,
@@ -366,11 +370,7 @@ class BlogPostTest extends CakeTestCase {
 					'slug' => null,
 					'meta_keywords' => null,
 					'meta_description' => null,
-					'description' => null,
 					'active' => null,
-					'locked' => null,
-					'locked_since' => null,
-					'locked_by' => null,
 					'group_id' => null,
 					'item_count' => null,
 					'parent_id' => null,
@@ -379,6 +379,8 @@ class BlogPostTest extends CakeTestCase {
 					'views' => null,
 					'created' => null,
 					'modified' => null,
+					'hide' => null,
+					'path_depth' => null
 				),
 				'GlobalCategoryContent' => array(
 					'id' => null,
@@ -420,7 +422,7 @@ class BlogPostTest extends CakeTestCase {
 		$expected = array(
 			array(
 				'BlogPost' => array(
-					'id' => '2',
+					'id' => 'blog-post-2',
 					'model' => null,
 					'foreign_key' => null,
 					'title' => null,
@@ -490,6 +492,8 @@ class BlogPostTest extends CakeTestCase {
 					'content_count' => null,
 					'created' => null,
 					'modified' => null,
+					'theme_id' => null,
+					'layout' => null
 				),
 				'GlobalCategory' => array(
 					'id' => null,
@@ -497,11 +501,7 @@ class BlogPostTest extends CakeTestCase {
 					'slug' => null,
 					'meta_keywords' => null,
 					'meta_description' => null,
-					'description' => null,
 					'active' => null,
-					'locked' => null,
-					'locked_since' => null,
-					'locked_by' => null,
 					'group_id' => null,
 					'item_count' => null,
 					'parent_id' => null,
@@ -510,6 +510,8 @@ class BlogPostTest extends CakeTestCase {
 					'views' => null,
 					'created' => null,
 					'modified' => null,
+					'hide' => null,
+					'path_depth' => null
 				),
 				'GlobalCategoryContent' => array(
 					'id' => null,
@@ -547,7 +549,133 @@ class BlogPostTest extends CakeTestCase {
 		$result = $this->Post->getLatest(1);
 		$this->assertEquals($expected, $result);
 
-		$expected = array();
+		$expected = array(
+			array(
+				'BlogPost' => array(
+					'id' => 'blog-post-2-1',
+					'model' => null,
+					'foreign_key' => null,
+					'title' => null,
+					'slug' => null,
+					'introduction' => null,
+					'body' => null,
+					'image' => null,
+					'dir' => null,
+					'full_text_search' => null,
+					'keyword_density' => null,
+					'global_category_id' => null,
+					'meta_keywords' => null,
+					'meta_description' => null,
+					'group_id' => null,
+					'layout_id' => null,
+					'author_id' => null,
+					'author_alias' => null,
+					'editor_id' => null,
+					'editor_alias' => null,
+					'canonical_url' => null,
+					'canonical_redirect' => null,
+					'created' => null,
+					'modified' => null,
+					'content_image_path_full' => '/contents/img/no-image.png',
+					'content_image_path_jumbo' => '/contents/img/no-image.png',
+					'content_image_path_large' => '/contents/img/no-image.png',
+					'content_image_path_medium' => '/contents/img/no-image.png',
+					'content_image_path_small' => '/contents/img/no-image.png',
+					'content_image_path_thumb' => '/contents/img/no-image.png',
+					'created_year' => '2010',
+					'created_month' => '1',
+				),
+				'GlobalContent' => array(
+					'id' => null,
+					'model' => null,
+					'foreign_key' => null,
+					'title' => null,
+					'slug' => null,
+					'introduction' => null,
+					'body' => null,
+					'image' => null,
+					'dir' => null,
+					'full_text_search' => null,
+					'keyword_density' => null,
+					'global_category_id' => null,
+					'meta_keywords' => null,
+					'meta_description' => null,
+					'group_id' => null,
+					'layout_id' => null,
+					'author_id' => null,
+					'author_alias' => null,
+					'editor_id' => null,
+					'editor_alias' => null,
+					'canonical_url' => null,
+					'canonical_redirect' => null,
+					'created' => null,
+					'modified' => null,
+				),
+				'Layout' => array(
+					'id' => null,
+					'name' => null,
+					'model' => null,
+					'auto_load' => null,
+					'css' => null,
+					'html' => null,
+					'php' => null,
+					'content_count' => null,
+					'created' => null,
+					'modified' => null,
+					'theme_id' => null,
+					'layout' => null,
+				),
+				'GlobalCategory' => array(
+					'id' => null,
+					'title' => null,
+					'slug' => null,
+					'meta_keywords' => null,
+					'meta_description' => null,
+					'active' => null,
+					'group_id' => null,
+					'item_count' => null,
+					'parent_id' => null,
+					'lft' => null,
+					'rght' => null,
+					'views' => null,
+					'created' => null,
+					'modified' => null,
+					'hide' => null,
+					'path_depth' => null,
+				),
+				'GlobalCategoryContent' => array(
+					'id' => null,
+					'title' => null,
+					'slug' => null,
+					'meta_keywords' => null,
+					'meta_description' => null,
+				),
+				'ContentGroup' => array(
+					'id' => null,
+					'name' => null,
+				),
+				'ContentEditor' => array(
+					'id' => null,
+					'username' => null,
+				),
+				'ContentAuthor' => array(
+					'id' => null,
+					'username' => null,
+				),
+				'Lock' => array(
+					'id' => null,
+					'class' => null,
+					'foreign_key' => null,
+					'user_id' => null,
+					'created' => null,
+				),
+				'LockLocker' => array(
+					'id' => null,
+					'username' => null,
+				),
+				'GlobalTagged' => null,
+			),
+		);
 		$result = $this->Post->getLatest(1, 0);
 		$this->assertEquals($expected, $result);
 	}
@@ -558,17 +686,17 @@ class BlogPostTest extends CakeTestCase {
 	public function testGetCounts() {
 		$expected = array(
 			'active' => 2,
-			'pending' => 0
+			'pending' => 1
 		);
 		$result = $this->Post->getCounts();
 		$this->assertEquals($expected, $result);
 
-		$this->Post->id = 1;
+		$this->Post->id = 'blog-post-1';
 		$this->Post->saveField('active', 0);
 
 		$expected = array(
 			'active' => 1,
-			'pending' => 1
+			'pending' => 2
 		);
 		$result = $this->Post->getCounts();
 		$this->assertEquals($expected, $result);
@@ -578,26 +706,29 @@ class BlogPostTest extends CakeTestCase {
  * @brief get pending
  */
 	public function testGetPendingPosts() {
-		$expected = array();
+		$expected = array(
+			'blog-post-2-1' => 'blog-post-2-1'
+		);
 		$result = $this->Post->getPending();
 		$this->assertEquals($expected, $result);
 
-		$this->Post->id = 1;
+		$this->Post->id = 'blog-post-1';
 		$this->Post->saveField('active', 0);
 
-		$this->Post->id = 2;
+		$this->Post->id = 'blog-post-2';
 		$this->Post->saveField('active', 0);
 
 		$expected = array(
-			1 => 1,
-			2 => 2
+			'blog-post-2-1' => 'blog-post-2-1',
+			'blog-post-1' => 'blog-post-1',
+			'blog-post-2' => 'blog-post-2'
 		);
 		$result = $this->Post->getPending();
 		$this->assertEquals($expected, $result);
 
 		$expected = array(
-			1 => '1',
-			2 => 'And More...'
+			'blog-post-2-1' => 'blog-post-2-1',
+			0 => 'And More...'
 		);
 		$result = $this->Post->getPending(1);
 		$this->assertEquals($expected, $result);
