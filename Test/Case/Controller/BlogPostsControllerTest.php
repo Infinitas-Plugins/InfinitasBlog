@@ -14,10 +14,9 @@ class BlogPostsControllerTest extends ControllerTestCase {
  */
 	public $fixtures = array(
 		'plugin.blog.blog_post',
-		'plugin.blog.infinitas_comment',
-		'plugin.blog.infinitas_comment_attribute',
-		'plugin.blog.infinitas_comment_attributes',
-		'plugin.blog.view_counter_view'
+		'plugin.comments.infinitas_comment',
+		'plugin.comments.infinitas_comment_attribute',
+		'plugin.view_counter.view_counter_view'
 	);
 
 /**

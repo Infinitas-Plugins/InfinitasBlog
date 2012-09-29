@@ -14,18 +14,20 @@ class BlogControllerTest extends ControllerTestCase {
  */
 	public $fixtures = array(
 		'plugin.blog.blog_post',
-		'plugin.blog.global_content',
-		'plugin.blog.global_layout',
-		'plugin.blog.theme',
-		'plugin.blog.global_category',
-		'plugin.blog.group',
-		'plugin.blog.view_counter_view',
-		'plugin.blog.user',
-		'plugin.blog.global_tagged',
-		'plugin.blog.global_tag',
-		'plugin.blog.infinitas_comment',
-		'plugin.blog.infinitas_comment_attribute',
-		'plugin.blog.infinitas_comment_attributes'
+
+		'plugin.contents.global_content',
+		'plugin.contents.global_layout',
+		'plugin.contents.global_category',
+		'plugin.contents.global_tagged',
+		'plugin.contents.global_tag',
+
+		'plugin.themes.theme',
+		'plugin.view_counter.view_counter_view',
+		'plugin.users.user',
+		'plugin.users.group',
+
+		'plugin.comments.infinitas_comment',
+		'plugin.comments.infinitas_comment_attribute'
 	);
 
 /**
