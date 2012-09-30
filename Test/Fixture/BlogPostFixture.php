@@ -8,6 +8,8 @@
 class BlogPostFixture extends CakeTestFixture {
 	public $name = 'BlogPost';
 
+	public $table = 'blog_posts';
+
 	public $fields = array(
 		'id' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 36, 'key' => 'primary'),
 		'comment_count' => array('type' => 'integer', 'null' => false, 'default' => null),
