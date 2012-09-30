@@ -15,7 +15,7 @@ class BlogPostFixture extends CakeTestFixture {
 		'views' => array('type' => 'integer', 'null' => false, 'default' => '0', 'key' => 'index'),
 		'rating' => array('type' => 'float', 'null' => false, 'default' => '0'),
 		'rating_count' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-		'parent_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'key' => 'index'),
+		'parent_id' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 36, 'key' => 'index'),
 		'ordering' => array('type' => 'integer', 'null' => false, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
