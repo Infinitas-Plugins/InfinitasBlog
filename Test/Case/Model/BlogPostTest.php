@@ -6,7 +6,7 @@ class BlogPostTest extends CakeTestCase {
 	public $fixtures = array(
 		'plugin.view_counter.view_counter_view',
 		'plugin.management.ticket',
-		'plugin.locks.global_lock',
+		'plugin.locks.lock',
 		'plugin.contents.global_category',
 		'plugin.contents.global_content',
 		'plugin.contents.global_layout',
