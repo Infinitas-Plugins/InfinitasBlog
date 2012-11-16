@@ -27,16 +27,17 @@ class BlogPostTest extends CakeTestCase {
 /**
  * @brief set up at the start
  */
-	public function startTest() {
+	public function setUp() {
+		parent::setUp();
 		$this->Post = ClassRegistry::init('Blog.BlogPost');
 	}
 
 /**
  * @brief break down at the end
  */
-	public function endTest() {
+	public function tearDown() {
+		parent::tearDown();
 		unset($this->Post);
-		ClassRegistry::flush();
 	}
 
 /**
