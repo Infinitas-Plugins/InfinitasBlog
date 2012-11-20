@@ -27,9 +27,7 @@ class BlogPost extends BlogAppModel {
 	/**
 		* always sort posts so newest is at the top
 		*/
-	public $order = array(
-		'BlogPost.created' => 'desc',
-	);
+	public $order = array();
 
 	public $actsAs = array(
 		'Feed.Feedable',
@@ -73,23 +71,27 @@ class BlogPost extends BlogAppModel {
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 
+		$this->order = array(
+			$this->alias . '.created' => 'desc',
+		);
+
 		$this->validate = array(
 			'title' => array(
 				'notEmpty' => array(
 					'rule' => 'notEmpty',
-					'message' => __('Please enter the title of your post')
+					'message' => __d('blog', 'Please enter the title of your post')
 				)
 			),
 			'body' => array(
 				'notEmpty' => array(
 					'rule' => 'notEmpty',
-					'message' => __('Please enter your post')
+					'message' => __d('blog', 'Please enter your post')
 				)
 			),
 			'category_id' => array(
 				'comparison' => array(
 					'rule' => array('comparison', '>', 0),
-					'message' => __('Please select a category')
+					'message' => __d('blog', 'Please select a category')
 				)
 			)
 		);
@@ -128,14 +130,14 @@ class BlogPost extends BlogAppModel {
  * @return array
  */
 	public function getParentPosts() {
-		return $this->find(
+		return array_filter($this->find(
 			'list',
 			array(
 				'conditions' => array(
-					'BlogPost.parent_id IS NULL'
+					$this->alias . '.parent_id' => null
 				)
 			)
-		);
+		));
 	}
 
 	public function beforeFind($queryData) {
@@ -171,12 +173,12 @@ class BlogPost extends BlogAppModel {
 				'all',
 				array(
 					'conditions' => array(
-						'BlogPost.parent_id' => $post['ParentPost']['id']
+						$this->alias . '.parent_id' => $post['ParentPost']['id']
 					),
 					'fields' => array(
-						'BlogPost.id',
-						'BlogPost.title',
-						'BlogPost.slug',
+						$this->alias . '.id',
+						$this->alias . '.title',
+						$this->alias . '.slug',
 					),
 					'contain' => false
 				)

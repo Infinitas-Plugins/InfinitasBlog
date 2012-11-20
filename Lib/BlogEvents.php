@@ -1,6 +1,6 @@
 <?php
-	final class BlogEvents extends AppEvents {
-		public function onPluginRollCall() {
+	class BlogEvents extends AppEvents {
+		public function onPluginRollCall(Event $Event) {
 			return array(
 				'name' => 'Blog',
 				'description' => 'Blogging platform',
@@ -14,7 +14,7 @@
 			);
 		}
 
-		public function onRequireTodoList($event) {
+		public function onRequireTodoList(Event $Event) {
 			return array(
 				array(
 					'name' => 'warning no categories',
@@ -34,7 +34,7 @@
 			);
 		}
 
-		public function onAdminMenu($event) {
+		public function onAdminMenu(Event $Event) {
 			$menu['main'] = array(
 				'Dashboard' => array('plugin' => 'blog', 'controller' => 'blog', 'action' => 'dashboard'),
 				'Posts' => array('plugin' => 'blog', 'controller' => 'blog_posts', 'action' => 'index'),
@@ -44,8 +44,8 @@
 
 			return $menu;
 		}
-		
-		public function onSetupCache() {
+
+		public function onSetupCache(Event $Event) {
 			return array(
 				'name' => 'blog',
 				'config' => array(
@@ -54,7 +54,7 @@
 			);
 		}
 
-		public function onSlugUrl($event, $data) {
+		public function onSlugUrl(Event $Event, $data = null, $type = null) {
 			if(!isset($data['data'])) {
 				$data['data'] = $data;
 			}
@@ -65,23 +65,19 @@
 			if(empty($data['data']['GlobalCategory']['slug'])) {
 				$data['data']['GlobalCategory']['slug'] = __d('blog', 'news-feed');
 			}
-			
-			return parent::onSlugUrl($event, $data['data'], $data['type']);
+
+			return parent::onSlugUrl($Event, $data['data'], $data['type']);
 		}
 
-		public function onRequireHelpersToLoad($event) {
-			
-		}
-
-		public function onRequireCssToLoad($event) {
-			if($event->Handler->params['plugin'] == 'blog') {
+		public function onRequireCssToLoad(Event $Event) {
+			if($Event->Handler->params['plugin'] == 'blog') {
 				return array(
 					'Blog.blog'
 				);
 			}
 		}
 
-		public function onSetupRoutes($event, $data = null) {
+		public function onSetupRoutes(Event $Event, $data = null) {
 			InfinitasRouter::connect(
 				'/admin/blog',
 				array(
@@ -93,8 +89,8 @@
 				)
 			);
 		}
-		
-		public function onRouteParse($event, $data) {
+
+		public function onRouteParse(Event $Event, $data = null) {
 			$count = 0;
 			if(!empty($data['slug']) && ($data['controller'] == 'blog_posts' && $data['action'] == 'view')) {
 				$count = ClassRegistry::init('Blog.BlogPost')->find(
@@ -105,7 +101,7 @@
 						)
 					)
 				);
-			
+
 				if($count < 1) {
 					return false;
 				}
@@ -113,4 +109,5 @@
 				return $data;
 			}
 		}
+
 	}
