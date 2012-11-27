@@ -75,8 +75,8 @@
 					?>&nbsp;
 				</td>
 				<td><?php echo $this->TagCloud->tagList($post); ?>&nbsp;</td>
-				<td><?php echo $post['BlogPost']['comment_count']; ?>&nbsp;</td>
-				<td><?php echo $post['BlogPost']['views']; ?>&nbsp;</td>
+				<td><?php echo $this->Design->count($post['BlogPost']['comment_count']); ?>&nbsp;</td>
+				<td><?php echo $this->Design->count($post['BlogPost']['views']); ?>&nbsp;</td>
 				<td>
 					<?php
 						echo $this->Infinitas->status($post['BlogPost']['active'], $post['BlogPost']['id']),
