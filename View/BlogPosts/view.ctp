@@ -38,20 +38,23 @@
 	$eventData = $this->Event->trigger('Blog.slugUrl', array('type' => 'posts', 'data' => $post));
 	$post['BlogPost']['url'] = Router::url(current($eventData['slugUrl']), true);
 	$post['BlogPost']['title_link'] = $this->Html->link($post['BlogPost']['title'], $post['BlogPost']['url']);
-	
+
 	$post['BlogPost']['created'] = CakeTime::format(Configure::read('Blog.time_format'), $post['BlogPost']['created']);
 	$post['BlogPost']['modified'] = CakeTime::format(Configure::read('Blog.time_format'), $post['BlogPost']['modified']);
 
-	$post['BlogPost']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
-	$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect(
-		'Contents.tag_cloud',
-		array(
-			'tags' => $post['GlobalTagged'],
-			'title' => 'Tags',
-			'model' => 'Blog.BlogPost',
-			'id' => $post['BlogPost']['id']
-		)
-	);
+	$post['BlogPost']['module_tags_list'] = $this->ModuleLoader->loadDirect('Contents.tag_cloud', array(
+		'tags' => $post['GlobalTagged'],
+		'title' => 'Tags',
+		'model' => 'Blog.BlogPost',
+		'id' => $post['BlogPost']['id'],
+		'box' => false
+	));
+	$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect('Contents.tag_cloud', array(
+		'tags' => $post['GlobalTagged'],
+		'title' => 'Tags',
+		'model' => 'Blog.BlogPost',
+		'id' => $post['BlogPost']['id']
+	));
 
 	$post['BlogPost']['author_link'] = $this->GlobalContents->author($post);
 	$post['BlogPost']['module_comment_count'] = $this->Html->link(
@@ -67,7 +70,7 @@
 			'foreign_id' => $post['BlogPost']['id']
 		)
 	);
-	
+
 	// need to overwrite the stuff in the viewVars for mustache
 	$this->set('post', $post);
 	echo $this->GlobalContents->renderTemplate($post);

@@ -59,7 +59,6 @@
 			)
 		);
 
-
 		$post['BlogPost']['module_tags_list'] = $this->ModuleLoader->loadDirect('Contents.tag_cloud', array(
 			'tags' => $post['GlobalTagged'],
 			'title' => 'Tags',
