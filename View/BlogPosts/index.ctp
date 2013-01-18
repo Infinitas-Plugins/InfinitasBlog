@@ -24,7 +24,7 @@
 	}
 
 	//echo $this->ModuleLoader->loadDirect('Tags.tag_data', array('tagData' => $tagData));
-	
+
     foreach($posts as $k => &$post) {
 		$eventData = $this->Event->trigger('blogBeforeContentRender', array('_this' => $this, 'post' => $post));
 		$post['BlogPost']['events_before'] = '';
@@ -60,21 +60,24 @@
 		);
 
 
-		$post['BlogPost']['module_tags_list'] = $this->TagCloud->tagList($post, ',');
-		$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect(
-			'Contents.tag_cloud',
-			array(
-				'tags' => $post['GlobalTagged'],
-				'title' => 'Tags',
-				'model' => 'Blog.BlogPost',
-				'id' => $post['BlogPost']['id']
-			)
-		);
+		$post['BlogPost']['module_tags_list'] = $this->ModuleLoader->loadDirect('Contents.tag_cloud', array(
+			'tags' => $post['GlobalTagged'],
+			'title' => 'Tags',
+			'model' => 'Blog.BlogPost',
+			'id' => $post['BlogPost']['id'],
+			'box' => false
+		));
+		$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect('Contents.tag_cloud', array(
+			'tags' => $post['GlobalTagged'],
+			'title' => 'Tags',
+			'model' => 'Blog.BlogPost',
+			'id' => $post['BlogPost']['id']
+		));
 
 		$post['BlogPost']['author_link'] = $this->GlobalContents->author($post);
 		$post['BlogPost']['module_comment_count'] = sprintf(__d('comments', '%d Comments'), $post['BlogPost']['comment_count']);
     }
-	
+
 	if(count($posts) > 0) {
 		$this->set('posts', $posts);
 		$this->set('paginationNavigation', $this->element('pagination/navigation'));
@@ -83,5 +86,5 @@
 	if(empty($globalLayoutTemplate)) {
 		throw new Exception('Template was not loaded, make sure one exists');
 	}
-	
+
 	echo $this->GlobalContents->renderTemplate($globalLayoutTemplate);
