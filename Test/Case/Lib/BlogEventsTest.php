@@ -1,15 +1,6 @@
 <?php
-App::uses('BlogEvents', 'Blog.Lib');
-class BlogEventsTest extends CakeTestCase {
-	public function setUp() {
-		parent::setUp();
-	}
+App::uses('InfinitasEventTestCase', 'Events.Test/Lib');
 
-	public function tearDown() {
-		parent::tearDown();
-	}
+class BlogEventsTest extends InfinitasEventTestCase {
 
-	public function testSomething() {
-
-	}
 }

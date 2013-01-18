@@ -1,8 +1,8 @@
 <?php
-/* Post Test cases generated on: 2010-03-13 15:03:45 : 1268486985*/
 App::uses('BlogPost', 'Blog.Model');
 
 class BlogPostTest extends CakeTestCase {
+
 	public $fixtures = array(
 		'plugin.view_counter.view_counter_view',
 		'plugin.management.ticket',
@@ -25,7 +25,7 @@ class BlogPostTest extends CakeTestCase {
 	);
 
 /**
- * @brief set up at the start
+ * set up at the start
  */
 	public function setUp() {
 		parent::setUp();
@@ -33,7 +33,7 @@ class BlogPostTest extends CakeTestCase {
 	}
 
 /**
- * @brief break down at the end
+ * break down at the end
  */
 	public function tearDown() {
 		parent::tearDown();
@@ -41,7 +41,7 @@ class BlogPostTest extends CakeTestCase {
 	}
 
 /**
- * @brief test year / month pagination
+ * test year / month pagination
  */
 	public function testYearAndMonthPaginateOptions() {
 		$paginate = array(
@@ -125,7 +125,7 @@ class BlogPostTest extends CakeTestCase {
 	}
 
 /**
- * @brief test getting the parent posts
+ * test getting the parent posts
  */
 	public function testGetParentPosts() {
 		$expected = array(
@@ -147,21 +147,19 @@ class BlogPostTest extends CakeTestCase {
 	}
 
 /**
- * @brief test afterFind
+ * test afterFind
  */
 	public function testAfterFind() {
-
 	}
 
 /**
- * @brief test getting view data
+ * test getting view data
  */
 	public function testGetViewData() {
-
 	}
 
 /**
- * @brief latest posts
+ * latest posts
  */
 	public function testGetLatestPosts() {
 		$expected = array(
@@ -682,7 +680,7 @@ class BlogPostTest extends CakeTestCase {
 	}
 
 /**
- * @brief get counts
+ * get counts
  */
 	public function testGetCounts() {
 		$expected = array(
@@ -704,7 +702,7 @@ class BlogPostTest extends CakeTestCase {
 	}
 
 /**
- * @brief get pending
+ * get pending
  */
 	public function testGetPendingPosts() {
 		$expected = array(
@@ -736,30 +734,26 @@ class BlogPostTest extends CakeTestCase {
 	}
 
 /**
- * @brief find by tags
+ * find by tags
  */
 	public function testFindByTag() {
-
 	}
 
 /**
- * @brief test paginated custom find
+ * test paginated custom find
  */
 	public function testFindPaginated() {
-
 	}
 
 /**
- * @brief find post dates
+ * find post dates
  */
 	public function testPostDates() {
-
 	}
 
 /**
- * @brief get view data
+ * get view data
  */
 	public function testFindViewData() {
-
 	}
 }

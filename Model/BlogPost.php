@@ -1,33 +1,27 @@
 <?php
 /**
-	* Blog Post Model class file.
-	*
-	* This is the main model for Blog Posts. There are a number of
-	* methods for getting the counts of all posts, active posts, pending
-	* posts etc.  It extends {@see BlogAppModel} for some all round
-	* functionality. look at {@see BlogAppModel::afterSave} for an example
-	*
-	* Copyright (c) 2009 Carl Sutton ( dogmatic69 )
-	*
-	* Licensed under The MIT License
-	* Redistributions of files must retain the above copyright notice.
-	*
-	* @filesource
-	* @copyright Copyright (c) 2009 Carl Sutton ( dogmatic69 )
-	* @link http://infinitas-cms.org
-	* @package blog
-	* @subpackage blog.models.post
-	* @license http://www.opensource.org/licenses/mit-license.php The MIT License
-	*/
+ * Blog Post Model class file.
+ *
+ * This is the main model for Blog Posts. There are a number of
+ * methods for getting the counts of all posts, active posts, pending
+ * posts etc.  It extends {@see BlogAppModel} for some all round
+ * functionality. look at {@see BlogAppModel::afterSave} for an example
+ *
+ * @copyright Copyright (c) 2009 Carl Sutton ( dogmatic69 )
+ * 
+ * @link http://infinitas-cms.org
+ * @package Blog.Model
+ * @license http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @since 0.6a
+ *
+ * @author Carl Sutton <dogmatic69@infinitas-cms.org>
+ */
+
 class BlogPost extends BlogAppModel {
+
 	public $lockable = true;
 
 	public $contentable = true;
-
-	/**
-		* always sort posts so newest is at the top
-		*/
-	public $order = array();
 
 	public $actsAs = array(
 		'Feed.Feedable',
@@ -68,6 +62,15 @@ class BlogPost extends BlogAppModel {
 		)
 	);
 
+/**
+ * Constructor
+ *
+ * @param type $id
+ * @param type $table
+ * @param type $ds
+ *
+ * @return void
+ */
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 
@@ -110,11 +113,19 @@ class BlogPost extends BlogAppModel {
 		$this->findMethods['dates'] = true;
 	}
 
+/**
+ * AfterFind callback
+ *
+ * @param array $results
+ * @param boolean $primary
+ *
+ * @return array
+ */
 	public function afterFind($results, $primary = false) {
 		switch($this->findQueryType) {
 			case 'viewData':
 				$results = $this->attachComments($results);
-				if(!empty($results[0])) {
+				if (!empty($results[0])) {
 					$results = $results[0];
 				}
 				break;
@@ -124,24 +135,30 @@ class BlogPost extends BlogAppModel {
 	}
 
 /**
+ * Get parent posts
+ *
  * Get a list of possible parents for the post create page. Setting a
  * parent will make multi page posts
  *
  * @return array
  */
 	public function getParentPosts() {
-		return array_filter($this->find(
-			'list',
-			array(
-				'conditions' => array(
-					$this->alias . '.parent_id' => null
-				)
+		return array_filter($this->find('list', array(
+			'conditions' => array(
+				$this->alias . '.parent_id' => null
 			)
-		));
+		)));
 	}
 
+/**
+ * BeforeFind callback
+ *
+ * @param array $queryData
+ *
+ * @return array
+ */
 	public function beforeFind($queryData) {
-		if($this->findQueryType == 'count') {
+		if ($this->findQueryType == 'count') {
 			return $queryData;
 		}
 
@@ -157,32 +174,32 @@ class BlogPost extends BlogAppModel {
 	}
 
 /**
+ * Get view data
+ *
  * General method for the view pages. Gets the required data and relations
  * and can be used for the admin preview also.
  *
  * @param array $conditions conditions for the find
- * @return array the data that was found
+ *
+ * @return array
  */
 	public function getViewData($conditions = array()) {
-		if(!$conditions) {
+		if (!$conditions) {
 			return false;
 		}
 
 		if (!empty($post['ParentPost']['id'])) {
-			$post['ParentPost']['ChildPost'] = $this->find(
-				'all',
-				array(
-					'conditions' => array(
-						$this->alias . '.parent_id' => $post['ParentPost']['id']
-					),
-					'fields' => array(
-						$this->alias . '.id',
-						$this->alias . '.title',
-						$this->alias . '.slug',
-					),
-					'contain' => false
-				)
-			);
+			$post['ParentPost']['ChildPost'] = $this->find('all', array(
+				'conditions' => array(
+					$this->alias . '.parent_id' => $post['ParentPost']['id']
+				),
+				'fields' => array(
+					$this->alias . '.id',
+					$this->alias . '.title',
+					$this->alias . '.slug',
+				),
+				'contain' => false
+			));
 		}
 
 		return $post;
@@ -193,32 +210,30 @@ class BlogPost extends BlogAppModel {
  *
  * returns a list of the latest addes posts
  *
- * @param int $limit the number of posts to return
- * @param int $active if the posts should be active or not
- * @return array $dates an array or years and months
+ * @param integer $limit the number of posts to return
+ * @param integer $active if the posts should be active or not
+ *
+ * @return array
  */
 	public function getLatest($limit = 5, $active = 1) {
 		$cacheName = cacheName('posts_latest', array($limit, $active));
 		$posts = Cache::read($cacheName, 'blog');
-		if($posts !== false) {
+		if ($posts !== false) {
 			return $posts;
 		}
 
-		$posts = $this->find(
-			'all',
-			array(
-				'fields' => array(
-					$this->alias . '.id'
-				),
-				'conditions' => array(
-					$this->alias . '.active' => $active
-				),
-				'limit' => $limit,
-				'order' => array(
-					$this->alias . '.created' => 'desc'
-				)
+		$posts = $this->find('all', array(
+			'fields' => array(
+				$this->alias . '.id'
+			),
+			'conditions' => array(
+				$this->alias . '.active' => $active
+			),
+			'limit' => $limit,
+			'order' => array(
+				$this->alias . '.created' => 'desc'
 			)
-		);
+		));
 
 		Cache::write($cacheName, $posts, 'blog');
 
@@ -234,29 +249,23 @@ class BlogPost extends BlogAppModel {
  */
 	public function getCounts() {
 		$counts = Cache::read('posts_count', 'blog');
-		if($counts !== false) {
+		if ($counts !== false) {
 			return $counts;
 		}
 
-		$counts['active'] = $this->find(
-			'count',
-			array(
-				'conditions' => array(
-					$this->alias . '.active' => 1
-				),
-				'contain' => false
-			)
-		);
+		$counts['active'] = $this->find('count', array(
+			'conditions' => array(
+				$this->alias . '.active' => 1
+			),
+			'contain' => false
+		));
 
-		$counts['pending'] = $this->find(
-			'count',
-			array(
-				'conditions' => array(
-					$this->alias . '.active' => 0
-				),
-				'contain' => false
-			)
-		);
+		$counts['pending'] = $this->find('count', array(
+			'conditions' => array(
+				$this->alias . '.active' => 0
+			),
+			'contain' => false
+		));
 
 		Cache::write('posts_count', $counts, 'blog');
 
@@ -270,36 +279,31 @@ class BlogPost extends BlogAppModel {
  * to the end of the list
  *
  * @param integer $limit how many items to return
- * @return array the list of pending posts
+ *
+ * @return array
  */
 	public function getPending($limit = 10) {
 		$cacheName = cacheName('posts_pending', $limit);
 		$pending = Cache::read($cacheName, 'blog');
-		if($pending !== false) {
+		if ($pending !== false) {
 			return $pending;
 		}
 
-		$pending = $this->find(
-			'list',
-			array(
-				'conditions' => array(
-					$this->alias . '.active' => 0
-				),
-				'order' => array(
-					$this->alias . '.modified' => 'ASC'
-				),
-				'limit' => $limit
-			)
-		);
+		$pending = $this->find('list', array(
+			'conditions' => array(
+				$this->alias . '.active' => 0
+			),
+			'order' => array(
+				$this->alias . '.modified' => 'ASC'
+			),
+			'limit' => $limit
+		));
 
-		$count = $this->find(
-			'count',
-			array(
-				'conditions' => array(
-					$this->alias . '.active' => 0
-				)
+		$count = $this->find('count', array(
+			'conditions' => array(
+				$this->alias . '.active' => 0
 			)
-		);
+		));
 
 		if ($count > count($pending)) {
 			$pending[] = __d('blog', 'And More...');
@@ -314,36 +318,34 @@ class BlogPost extends BlogAppModel {
  * find posts with a certain tag.
  *
  * @param string $tag the tag to search for
- * @return array the ids of the posts that were found
+ *
+ * @return array
  */
 	public function findPostsByTag($tag) {
 		$cacheName = cacheName('posts_by_tag', $tag);
 		$tags = Cache::read($cacheName, 'blog');
-		if($tags !== false) {
+		if ($tags !== false) {
 			return $tags;
 		}
 
-		$tags = $this->GlobalTag->find(
-			'all',
-			array(
-				'conditions' => array(
-					'or' => array(
-						'GlobalTag.id' => $tag,
-						'GlobalTag.name' => $tag
-					)
-				),
-				'fields' => array(
-					'GlobalTag.id'
-				),
-				'contain' => array(
-					$this->alias => array(
-						'fields' => array(
-							$this->alias . '.id'
-						)
+		$tags = $this->GlobalTag->find('all', array(
+			'conditions' => array(
+				'or' => array(
+					'GlobalTag.id' => $tag,
+					'GlobalTag.name' => $tag
+				)
+			),
+			'fields' => array(
+				'GlobalTag.id'
+			),
+			'contain' => array(
+				$this->alias => array(
+					'fields' => array(
+						$this->alias . '.id'
 					)
 				)
 			)
-		);
+		));
 
 		$tags = Set::extract(sprintf('/%s/%s', $this->alias, $this->primaryKey), $tags);
 		Cache::write($cacheName, $pending, 'blog');
@@ -352,17 +354,21 @@ class BlogPost extends BlogAppModel {
 	}
 
 /**
+ * pagination options
+ *
  * Adds BETWEEN conditions for $year and $month to any array.
  * You can pass a custom Model and a custom created field, too.
  *
  * @param array $paginate the pagination array to be processed
  * @param array $options
+ *
  * 	###	possible options:
  * 			- year (int) year of the format YYYY (defaults null)
  * 			- month (int) month of the year in the format 01 - 12 (defaults null)
  * 			- model (string) custom Model Alias to pass (defaults calling Model)
  * 			- created (string) the name of the field to use in the Between statement (defaults 'created')
- * @todo take just reference parameter?
+ *
+ * @return array
  */
 	public function setPaginateDateOptions($options = array()) {
 		$default = array(
@@ -395,11 +401,11 @@ class BlogPost extends BlogAppModel {
 		}
 
 		$options['conditions'] += array(
-			$model . '.' . $created.' BETWEEN ? AND ?' => array($begin, $end)
+			$model . '.' . $created . ' BETWEEN ? AND ?' => array($begin, $end)
 		);
 
-
-		unset($options['conditions']['year'], $options['conditions']['month'], $options['year'], $options['month'], $options['created'], $options['model']);
+		unset($options['conditions']['year'], $options['conditions']['month'], $options['year'],
+				$options['month'], $options['created'], $options['model']);
 
 		return $options;
 	}
@@ -408,7 +414,7 @@ class BlogPost extends BlogAppModel {
 		if ($state === 'before') {
 			$query = $this->setPaginateDateOptions($query);
 
-			if(empty($query['fields'])) {
+			if (empty($query['fields'])) {
 				$query['fields'] = array($this->alias . '.*');
 			}
 
@@ -443,12 +449,10 @@ class BlogPost extends BlogAppModel {
 	}
 
 /**
- * @brief Get years and months of all posts.
+ * Get years and months of all posts.
  *
  * This is used to get all the dates that posts are available in. It can then
  * be used to generate links to archived posts etc.
- *
- * @access protected
  *
  * @param string $state before or after
  * @param array $query the details of the find being done
@@ -476,8 +480,8 @@ class BlogPost extends BlogAppModel {
 			);
 
 			$query = array_merge_recursive($conditions, $query);
-			foreach($query as $k => &$v) {
-				if(!is_array($v)) {
+			foreach ($query as $k => &$v) {
+				if (!is_array($v)) {
 					continue;
 				}
 
@@ -487,9 +491,9 @@ class BlogPost extends BlogAppModel {
 		}
 
 		$return = array();
-		foreach(Set::extract('/' . $this->alias . '/year_month', $results) as $date) {
+		foreach (Set::extract('/' . $this->alias . '/year_month', $results) as $date) {
 			$date = explode('_', $date);
-			if(empty($return[$date[0]]) || !in_array($date[1], $return[$date[0]])) {
+			if (empty($return[$date[0]]) || !in_array($date[1], $return[$date[0]])) {
 				$return[$date[0]][] = $date[1];
 			}
 		}
@@ -498,12 +502,10 @@ class BlogPost extends BlogAppModel {
 	}
 
 /**
- * @brief Get the data that is used in when viewing a post
+ * Get the data that is used in when viewing a post
  *
  * This gets all the required data to view a post. Including things like
  * comments and other relations.
- *
- * @access protected
  *
  * @param string $state before or after
  * @param array $query the details of the find being done
@@ -513,26 +515,23 @@ class BlogPost extends BlogAppModel {
  */
 	protected function _findViewData($state, $query, $results = array()) {
 		if ($state === 'before') {
-			$query['fields'] = array_merge(
-				(array)$query['fields'],
-				array(
-					$this->alias . '.id',
-					$this->alias . '.active',
-					$this->alias . '.views',
-					$this->alias . '.comment_count',
-					$this->alias . '.rating',
-					$this->alias . '.rating_count',
-					$this->alias . '.created',
-					$this->alias . '.modified'
-				)
-			);
+			$query['fields'] = array_merge((array)$query['fields'], array(
+				$this->alias . '.id',
+				$this->alias . '.active',
+				$this->alias . '.views',
+				$this->alias . '.comment_count',
+				$this->alias . '.rating',
+				$this->alias . '.rating_count',
+				$this->alias . '.created',
+				$this->alias . '.modified'
+			));
 
 			$query['joins'][] = array(
 				'table' => 'blog_posts',
 				'alias' => 'ChildPost',
 				'type' => 'LEFT',
 				'conditions' => array(
-					'ChildPost.parent_id = '. $this->alias . '.id'
+					'ChildPost.parent_id = ' . $this->alias . '.id'
 				)
 			);
 
@@ -553,7 +552,6 @@ class BlogPost extends BlogAppModel {
 					'ChildPostGlobalCategory.id = ChildPostGlobalContent.global_category_id'
 				)
 			);
-
 
 			$query['joins'][] = array(
 				'table' => 'blog_posts',

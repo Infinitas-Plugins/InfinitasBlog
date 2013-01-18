@@ -44,22 +44,22 @@ class BlogPostsController extends BlogAppController {
 			)
 		);
 
-		if(!empty($this->request->params['year'])) {
+		if (!empty($this->request->params['year'])) {
 			$year = $this->request->params['year'];
 			$titleForLayout = sprintf(__d('blog', 'Posts for the year %s'), $year);
 			$url['year'] = $year;
 
 			$month = !empty($this->request->params['pass'][1]) ? $this->request->params['pass'][1] : null;
-			if(!empty($this->request->params['month'])) {
+			if (!empty($this->request->params['month'])) {
 				$month = $this->request->params['month'];
 			}
-			if((int)$month > 0 && (int)$month < 13) {
+			if ((int)$month > 0 && (int)$month < 13) {
 				$titleForLayout = sprintf(__d('blog', 'Posts in %s, %s'), __(date('F', mktime(0, 0, 0, $month))), $year);
 				$url[] = $month;
 			}
-		} else if(!empty($this->request->params['tag'])) {
+		} else if (!empty($this->request->params['tag'])) {
 			$tag = $this->request->params['tag'];
-			if(empty($titleForLayout)) {
+			if (empty($titleForLayout)) {
 				$titleForLayout = __d('blog', 'Posts');
 			}
 
@@ -69,11 +69,11 @@ class BlogPostsController extends BlogAppController {
 
 			$url['tag'] = $tag;
 
-			if(!empty($tagData['GlobalTag']['meta_keywords'])) {
+			if (!empty($tagData['GlobalTag']['meta_keywords'])) {
 				$this->set('seoMetaKeywords', $tagData['GlobalTag']['meta_keywords']);
 			}
 
-			if(!empty($tagData['GlobalTag']['meta_description'])) {
+			if (!empty($tagData['GlobalTag']['meta_description'])) {
 				$this->set('seoMetaDescription', $tagData['GlobalTag']['meta_description']);
 			}
 		}

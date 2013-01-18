@@ -6,6 +6,7 @@
  * @since 0.9b1
  */
 class BlogPostFixture extends CakeTestFixture {
+
 	public $name = 'BlogPost';
 
 	public $table = 'blog_posts';
