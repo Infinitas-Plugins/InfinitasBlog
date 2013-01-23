@@ -500,7 +500,7 @@ class BlogPost extends BlogAppModel {
 				$conditions[$this->alias . '.month'] = str_pad($query['request']['month'], 2, '0', STR_PAD_LEFT);
 			}
 
-			if (empty($conditions)) {
+			if (!$query['request']['tag'] && empty($conditions)) {
 				throw new InvalidArgumentException(__d('blog', 'unable to find the content'));
 			}
 			$query['conditions'] = $conditions;

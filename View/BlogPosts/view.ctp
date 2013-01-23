@@ -45,15 +45,13 @@
 	$post['BlogPost']['module_tags_list'] = $this->ModuleLoader->loadDirect('Contents.tag_cloud', array(
 		'tags' => $post['GlobalTagged'],
 		'title' => 'Tags',
-		'model' => 'Blog.BlogPost',
-		'id' => $post['BlogPost']['id'],
-		'box' => false
+		'box' => false,
+		'category' => $post['GlobalCategory']['slug']
 	));
 	$post['BlogPost']['module_tags'] = $this->ModuleLoader->loadDirect('Contents.tag_cloud', array(
 		'tags' => $post['GlobalTagged'],
 		'title' => 'Tags',
-		'model' => 'Blog.BlogPost',
-		'id' => $post['BlogPost']['id']
+		'category' => $post['GlobalCategory']['slug']
 	));
 
 	$post['BlogPost']['author_link'] = $this->GlobalContents->author($post);
