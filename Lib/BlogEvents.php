@@ -95,7 +95,8 @@ class BlogEvents extends AppEvents {
 			}
 			return false;
 		}
-		if (empty($requestData['named']) && empty($requestData['pass'])) {
+
+		if ((empty($requestData['named']) && empty($requestData['pass'])) || !empty($requestData['named']['page'])) {
 			return $requestData;
 		}
 		$return = ClassRegistry::init('Blog.BlogPost')->find('routingInfo', array(
