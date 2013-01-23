@@ -8,7 +8,7 @@
  * functionality. look at {@see BlogAppModel::afterSave} for an example
  *
  * @copyright Copyright (c) 2009 Carl Sutton ( dogmatic69 )
- * 
+ *
  * @link http://infinitas-cms.org
  * @package Blog.Model
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
@@ -22,6 +22,10 @@ class BlogPost extends BlogAppModel {
 	public $lockable = true;
 
 	public $contentable = true;
+
+	public $findMethods = array(
+		'routingInfo' => true
+	);
 
 	public $actsAs = array(
 		'Feed.Feedable',
@@ -446,6 +450,78 @@ class BlogPost extends BlogAppModel {
 		}
 
 		return $results;
+	}
+
+	protected function _findRoutingInfo($state, array $query, array $results = array()) {
+		if ($state == 'before') {
+			$query['request'] = array_merge(array(
+				'category' => null,
+				'slug' => null,
+				'tag' => null,
+				'year' => null,
+				'month' => null,
+				'pass' => array()
+			), $query['request']);
+
+			if (!empty($query['request']['year'])) {
+				if (!empty($query['request']['pass'][1])) {
+					$query['request']['month'] = $query['request']['pass'][1];
+					unset($query['request']['pass'][1]);
+				}
+				unset($query['request']['pass'][0]);
+			}
+
+			$conditions = array();
+			if ($query['request']['category']) {
+				$conditions['GlobalCategoryContent.slug'] = $query['request']['category'];
+			}
+			if ($query['request']['slug']) {
+				$conditions[$this->GlobalContent->fullFieldName('slug')] = $query['request']['slug'];
+			}
+			if ($query['request']['pass']) {
+				$id = $this->field('id', array(
+					$this->alias . '.' . $this->primaryKey => $query['request']['pass']
+				));
+				if ($id) {
+					$conditions['or'] = array(
+						$this->alias . '.' . $this->primaryKey => $id
+					);
+				}
+			}
+			if ($query['request']['tag']) {
+				//$conditions[$this->GlobalContent->GlobalTaggged->fullFieldName('keyname')] = $request['tag'];
+			}
+			if ($query['request']['year']) {
+				$this->virtualFields['year'] = sprintf('YEAR(%s.created)', $this->alias);
+				$conditions[$this->alias . '.year'] = $query['request']['year'];
+			}
+			if ($query['request']['month']) {
+				$this->virtualFields['month'] = sprintf('MONTH(%s.created)', $this->alias);
+				$conditions[$this->alias . '.month'] = str_pad($query['request']['month'], 2, '0', STR_PAD_LEFT);
+			}
+
+			if (empty($conditions)) {
+				throw new InvalidArgumentException(__d('blog', 'unable to find the content'));
+			}
+			$query['conditions'] = $conditions;
+
+			$query['limit'] = 1;
+
+			return $query;
+		}
+
+		if (empty($results)) {
+			return false;
+		}
+		$results = $results[0];
+
+		return array(
+			$this->alias . '.' . $this->primaryKey => $results[$this->alias][$this->primaryKey],
+			$this->alias . '.slug' => $results[$this->alias]['slug'],
+			$this->alias . '.year' => $query['request']['year'] ? date('Y', strtotime($results[$this->alias]['created'])) : null,
+			$this->alias . '.month' => $query['request']['month'] ? date('m', strtotime($results[$this->alias]['created'])) : null,
+			'GlobalCategoryContent.slug' => $results['GlobalCategoryContent']['slug'],
+		);
 	}
 
 /**

@@ -88,20 +88,22 @@ class BlogEvents extends AppEvents {
 		));
 	}
 
-	public function onRouteParse(Event $Event, $data = null) {
-		$count = 0;
-		if (!empty($data['slug']) && ($data['controller'] == 'blog_posts' && $data['action'] == 'view')) {
-			$count = ClassRegistry::init('Blog.BlogPost')->find('count', array(
-				'conditions' => array(
-					'GlobalContent.slug' => $data['slug']
-				)
-			));
-
-			if ($count < 1) {
-				return false;
-			}
-
-			return $data;
+	public function onRouteParse(Event $Event, $requestData = null) {
+		if ($requestData['controller'] != 'blog_posts' || !in_array($requestData['action'], array('index', 'view'))) {
+			return false;
 		}
+		if (empty($requestData['named']) && empty($requestData['pass'])) {
+			return $requestData;
+		}
+		$return = ClassRegistry::init('Blog.BlogPost')->find('routingInfo', array(
+			'request' => InfinitasRouter::requestParams((array)$requestData)
+		));
+
+		if (!$return) {
+			return false;
+		}
+
+		$requestData['infinitas'] = $return;
+		return $requestData;
 	}
 }

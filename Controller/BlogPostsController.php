@@ -131,14 +131,14 @@ class BlogPostsController extends BlogAppController {
  * @return void
  */
 	public function view() {
-		if (!isset($this->request->params['slug'])) {
+		if (!isset($this->request->params['infinitas'][$this->modelClass . '.id'])) {
 			$this->notice('invalid');
 		}
 
 		$post = $this->{$this->modelClass}->find('viewData', array(
 			'conditions' => array(
-				'GlobalContent.slug' => $this->request->params['slug'],
-				$this->modelClass . '.active' => 1
+				$this->modelClass . '.active' => 1,
+				$this->modelClass . '.id' => $this->request->params['infinitas'][$this->modelClass . '.id']
 			)
 		));
 
