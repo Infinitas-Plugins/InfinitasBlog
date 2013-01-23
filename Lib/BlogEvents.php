@@ -90,6 +90,9 @@ class BlogEvents extends AppEvents {
 
 	public function onRouteParse(Event $Event, $requestData = null) {
 		if ($requestData['controller'] != 'blog_posts' || !in_array($requestData['action'], array('index', 'view'))) {
+			if ($requestData['action'] == 'comment')  {
+				return $requestData;
+			}
 			return false;
 		}
 		if (empty($requestData['named']) && empty($requestData['pass'])) {
