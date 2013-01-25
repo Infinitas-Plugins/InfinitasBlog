@@ -24,7 +24,8 @@ class BlogPost extends BlogAppModel {
 	public $contentable = true;
 
 	public $findMethods = array(
-		'routingInfo' => true
+		'routingInfo' => true,
+		'related' => true
 	);
 
 	public $actsAs = array(
@@ -522,6 +523,30 @@ class BlogPost extends BlogAppModel {
 			$this->alias . '.month' => $query['request']['month'] ? date('m', strtotime($results[$this->alias]['created'])) : null,
 			'GlobalCategoryContent.slug' => $results['GlobalCategoryContent']['slug'],
 		);
+	}
+
+	protected function _findRelated($state, array $query, array $results = array()) {
+		if ($state == 'before') {
+			return $query;
+		}
+
+		if(empty($results)) {
+			return array();
+		}
+
+		foreach($results as &$result) {
+			$url = current(EventCore::trigger($this, $this->plugin . '.slugUrl', array(
+				'data' => $result
+			)));
+			$result = array(
+				'pk' => $result[$this->alias][$this->primaryKey],
+				'text' => $result[$this->GlobalContent->alias][$this->GlobalContent->displayField],
+				'url' => $url[$this->plugin],
+				'tags' => Hash::extract($result, 'GlobalTagged.{n}.GlobalTag.name')
+			);
+		}
+
+		return $results;
 	}
 
 /**

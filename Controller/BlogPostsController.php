@@ -238,7 +238,10 @@ class BlogPostsController extends BlogAppController {
 
 		$parents = $this->{$this->modelClass}->getParentPosts();
 		$contentTags = $this->{$this->modelClass}->GlobalTag->find('all');
-		$this->set(compact('contentTags', 'parents'));
+		$relatedContent = $this->{$this->modelClass}->find('related', array(
+			'admin' => true
+		));
+		$this->set(compact('contentTags', 'parents', 'relatedContent'));
 	}
 
 	public function admin_edit($id = null) {
@@ -246,7 +249,10 @@ class BlogPostsController extends BlogAppController {
 
 		$parents = $this->{$this->modelClass}->getParentPosts();
 		$contentTags = $this->{$this->modelClass}->GlobalTag->find('all');
-		$this->set(compact('contentTags', 'parents'));
+		$relatedContent = $this->{$this->modelClass}->find('related', array(
+			'admin' => true
+		));
+		$this->set(compact('contentTags', 'parents', 'relatedContent'));
 	}
 
 	public function admin_view($slug = null) {
