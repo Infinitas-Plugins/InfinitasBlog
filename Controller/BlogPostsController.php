@@ -237,14 +237,16 @@ class BlogPostsController extends BlogAppController {
 		parent::admin_add();
 
 		$parents = $this->{$this->modelClass}->getParentPosts();
-		$this->set(compact('tags', 'parents'));
+		$contentTags = $this->{$this->modelClass}->GlobalTag->find('all');
+		$this->set(compact('contentTags', 'parents'));
 	}
 
 	public function admin_edit($id = null) {
 		parent::admin_edit($id);
 
 		$parents = $this->{$this->modelClass}->getParentPosts();
-		$this->set(compact('parents'));
+		$contentTags = $this->{$this->modelClass}->GlobalTag->find('all');
+		$this->set(compact('contentTags', 'parents'));
 	}
 
 	public function admin_view($slug = null) {
