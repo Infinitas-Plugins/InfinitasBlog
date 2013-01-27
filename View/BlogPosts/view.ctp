@@ -56,18 +56,15 @@
 
 	$post['BlogPost']['author_link'] = $this->GlobalContents->author($post);
 	$post['BlogPost']['module_comment_count'] = $this->Html->link(
-		sprintf(__d('comments', '%d Comments'), $post['BlogPostComment']['comment_count']),
-		'#comments-top'
+		sprintf(__d('comments', '%s Comments'), $post['BlogPost']['comment_count']),
+		'#comment'
 	);
 
-	$post['BlogPost']['module_comments'] = $this->element(
-		'Comments.modules/comment',
-		array(
-			'content' => $post,
-			'modelName' => 'BlogPost',
-			'foreign_id' => $post['BlogPost']['id']
-		)
-	);
+	$post['BlogPost']['module_comments'] = $this->ModuleLoader->loadDirect('Comments.comment', array(
+		'content' => $post,
+		'modelName' => 'BlogPost',
+		'foreignId' => $post['BlogPost']['id']
+	));
 
 	// need to overwrite the stuff in the viewVars for mustache
 	$this->set('post', $post);
