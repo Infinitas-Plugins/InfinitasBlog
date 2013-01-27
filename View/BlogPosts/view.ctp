@@ -56,7 +56,7 @@
 
 	$post['BlogPost']['author_link'] = $this->GlobalContents->author($post);
 	$post['BlogPost']['module_comment_count'] = $this->Html->link(
-		sprintf(__d('comments', '%d Comments'), count($post['BlogPostComment'])),
+		sprintf(__d('comments', '%d Comments'), $post['BlogPostComment']['comment_count']),
 		'#comments-top'
 	);
 
