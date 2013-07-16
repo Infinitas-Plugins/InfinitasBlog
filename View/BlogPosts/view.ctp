@@ -54,6 +54,8 @@
 		'category' => $post['GlobalCategory']['slug']
 	));
 
+	$post['BlogPost']['author_gravatar'] = $this->GlobalContents->gravatar($post);
+	$post['BlogPost']['author_gravatar_ulr'] = $this->Gravatar->url($post['ContentAuthor']['email']);
 	$post['BlogPost']['author_link'] = $this->GlobalContents->author($post);
 	$post['BlogPost']['module_comment_count'] = $this->Html->link(
 		sprintf(__d('comments', '%s Comments'), $post['BlogPost']['comment_count']),
